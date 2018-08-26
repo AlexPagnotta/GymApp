@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_me"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="Me"/>
+
+    <item
+        android:id="@+id/navigation_schedule"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="Schedule"/>
+
+    <item
+        android:id="@+id/navigation_weights"
+        android:icon="@drawable/ic_scale_24dp"
+        android:title="Weights"/>
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings"/>
+
+</menu>
