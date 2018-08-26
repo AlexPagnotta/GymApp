@@ -21,26 +21,28 @@ class MeFragment : Fragment() {
 
         val realm = Realm.getDefaultInstance()
 
-        val persons = realm.where<Weight>().findAll()
+        val weights = realm.where<Weight>().findAll()
 
         //TODO check if there is at least one weight
-        lastWeight = persons.max("weight")!!.toDouble()
-
-
+        if(weights.count() != 0){
+            lastWeight = weights.max("weight")!!.toDouble()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.fragment_me, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_me, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        weightTW.text = lastWeight.toString()
 
+        weightTW.text = String.format("%1$,.2f Kg", lastWeight);
+
+        //Get navigation view from activity
         val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
 
+        //Go to weights o fab click
         show_weights_fab.setOnClickListener{
             navigationView.setSelectedItemId(R.id.navigation_weights)
         }
