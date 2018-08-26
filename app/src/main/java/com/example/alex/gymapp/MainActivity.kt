@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar
 import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import io.realm.kotlin.where
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         //Start Realm
         Realm.init(this)
 
-        toolbar = supportActionBar!!
         val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
@@ -59,9 +59,18 @@ class MainActivity : AppCompatActivity() {
         //TEST
         realm.executeTransaction { realm ->
             // Add a person
-            val weight = realm.createObject<Weight>(0)
+            val currentIdNum = realm.where<Weight>().max("id")
+            val nextId: Int
+            if (currentIdNum == null) {
+                nextId = 1
+            } else {
+                nextId = currentIdNum!!.toInt() + 1
+            }
+            val weight = realm.createObject<Weight>(nextId)
             weight.weight = 123.0
         }
+
+
     }
 
     private fun openFragment(fragment: Fragment) {
