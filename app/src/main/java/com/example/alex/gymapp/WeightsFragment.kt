@@ -35,9 +35,22 @@ class WeightsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context!!)
 
         recyclerView.adapter = WeightAdapter(weights, context!!)
+
+        //Go to weights o fab click
+        add_weight_fab.setOnClickListener{
+            val ft = fragmentManager!!.beginTransaction()
+            val prev = fragmentManager!!.findFragmentByTag("dialog")
+            if (prev != null) {
+                ft.remove(prev)
+            }
+            ft.addToBackStack(null)
+            val dialogFragment = AddWeightFragmentDialog()
+            dialogFragment.show(ft, "dialog")
+        }
     }
 
     companion object {
         fun newInstance(): WeightsFragment = WeightsFragment()
     }
 }
+
