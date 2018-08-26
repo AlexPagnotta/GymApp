@@ -53,24 +53,6 @@ class MainActivity : AppCompatActivity() {
         //Start first fragment
         val meFragment = MeFragment.newInstance()
         openFragment(meFragment)
-
-        val realm = Realm.getDefaultInstance()
-
-        //TEST
-        realm.executeTransaction { realm ->
-            // Add a person
-            val currentIdNum = realm.where<Weight>().max("id")
-            val nextId: Int
-            if (currentIdNum == null) {
-                nextId = 1
-            } else {
-                nextId = currentIdNum!!.toInt() + 1
-            }
-            val weight = realm.createObject<Weight>(nextId)
-            weight.weight = 123.0
-        }
-
-
     }
 
     private fun openFragment(fragment: Fragment) {
