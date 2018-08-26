@@ -1,6 +1,7 @@
 package com.example.alex.gymapp
 
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,9 @@ import android.widget.TextView
 import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.where
+import kotlinx.android.synthetic.main.fragment_me.*
 
 class MeFragment : Fragment() {
-
-    lateinit var weightTW: TextView
 
     var lastWeight: Double = 0.0
 
@@ -37,8 +37,13 @@ class MeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        weightTW = view.findViewById(R.id.weightTW)
         weightTW.text = lastWeight.toString()
+
+        val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
+
+        show_weights_fab.setOnClickListener{
+            navigationView.setSelectedItemId(R.id.navigation_weights)
+        }
     }
 
     companion object {
