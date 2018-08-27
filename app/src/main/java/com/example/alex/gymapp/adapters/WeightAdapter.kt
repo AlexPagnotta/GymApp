@@ -10,6 +10,7 @@ import com.example.alex.gymapp.model.Weight
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.weights_item.view.*
+import java.text.SimpleDateFormat
 
 
 class WeightAdapter(
@@ -23,6 +24,11 @@ class WeightAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder?.weight?.text = items.get(position)!!.weight.toString()
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val date = items.get(position)!!.dateOfWeight
+        val dateString = dateFormat.format(date)
+        holder?.date?.text = dateString
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,5 +40,6 @@ class WeightAdapter(
 class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     // Holds the TextView
     val weight = view.weightTW
+    val date = view.dateTW
 }
 

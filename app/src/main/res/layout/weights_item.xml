@@ -7,8 +7,11 @@
     <TextView
         android:id="@+id/weightTW"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:padding="20dp"/>
+        android:layout_height="28dp"/>
+
+    <TextView
+        android:id="@+id/dateTW"
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
 
 </LinearLayout>

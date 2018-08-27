@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_add_weight_fragment_dialog.*
+import java.util.*
 
 class AddWeightFragmentDialog : DialogFragment() {
 
@@ -34,22 +34,32 @@ class AddWeightFragmentDialog : DialogFragment() {
             dialog.dismiss()
         }
 
+        //Set current date
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        datePicker.init(year,month,day,null)
+
         confirmBtn.setOnClickListener{
 
             val realm = Realm.getDefaultInstance()
 
-            var value: Double = 0.0
+            var weightValue: Double = 0.0
 
             val text = weightET.text.toString()
             if (!text.isEmpty()) {
                 try {
-                    value = java.lang.Double.parseDouble(text)
+                    weightValue = java.lang.Double.parseDouble(text)
                     // it means it is double
                 } catch (e1: Exception) {
                     // this means it is not double
                     e1.printStackTrace()
                 }
             }
+
+            val dateOfWeight = Date(datePicker.year,datePicker.month,datePicker.dayOfMonth)
 
             realm.executeTransaction { realm ->
                 // Add a person
@@ -61,7 +71,8 @@ class AddWeightFragmentDialog : DialogFragment() {
                     nextId = currentIdNum!!.toInt() + 1
                 }
                 val weight = realm.createObject<Weight>(nextId)
-                weight.weight = value
+                weight.weight = weightValue
+                weight.dateOfWeight = dateOfWeight
             }
 
             dialog.dismiss()
