@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/weightTW"
-        android:layout_width="match_parent"
-        android:layout_height="28dp"/>
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/dateTW"
-        android:layout_width="match_parent"
-        android:layout_height="28dp" />
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".5"
+        android:textSize="18sp"
+        android:paddingLeft="24dp"
+        android:gravity="center_vertical|start"/>
+
+    <TextView
+        android:id="@+id/weightTW"
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".5"
+
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:paddingRight="24dp"
+        android:gravity="center_vertical|end"/>
 
 </LinearLayout>

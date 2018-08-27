@@ -23,7 +23,8 @@ class WeightAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.weight?.text = items.get(position)!!.weight.toString()
+       val weightString = String.format("%1$,.2f Kg", items.get(position)!!.weight);
+        holder?.weight?.text = weightString;
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val date = items.get(position)!!.dateOfWeight
