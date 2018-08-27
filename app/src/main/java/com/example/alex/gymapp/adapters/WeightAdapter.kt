@@ -7,16 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.alex.gymapp.R
 import com.example.alex.gymapp.model.Weight
+import io.realm.RealmRecyclerViewAdapter
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.weights_item.view.*
 
-class WeightAdapter(val items : List<Weight>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
+class WeightAdapter(
+            val items : RealmResults<Weight>,
+            val context: Context
+    ) : RealmRecyclerViewAdapter<Weight, ViewHolder>(items, true)
+{
     override fun getItemCount(): Int {
         return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.tvAnimalType?.text = items.get(position).weight.toString()
+        holder?.weight?.text = items.get(position)!!.weight.toString()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +32,7 @@ class WeightAdapter(val items : List<Weight>, val context: Context) : RecyclerVi
 }
 
 class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-    // Holds the TextView that will add each animal to
-    val tvAnimalType = view.weightTW
+    // Holds the TextView
+    val weight = view.weightTW
 }
+

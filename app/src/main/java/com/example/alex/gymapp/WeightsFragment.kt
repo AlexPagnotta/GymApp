@@ -28,7 +28,7 @@ class WeightsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val realm = Realm.getDefaultInstance()
 
-        val weights = realm.where<Weight>().findAll().toList()
+        val weights = realm.where<Weight>().findAll()
 
         var recyclerView = view.findViewById(R.id.weightsRW) as RecyclerView
 
