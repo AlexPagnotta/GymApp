@@ -32,8 +32,15 @@ class WeightsFragment : Fragment() {
 
         var recyclerView = view.findViewById(R.id.weightsRW) as RecyclerView
 
-        recyclerView.layoutManager = LinearLayoutManager(context!!)
+        var lm = LinearLayoutManager(context!!)
 
+        //Reverse the recycler view
+        lm.reverseLayout = true
+        lm.stackFromEnd = true
+
+        recyclerView.layoutManager = lm
+
+        recyclerView
         recyclerView.adapter = WeightAdapter(weights, context!!)
 
         //Go to weights o fab click

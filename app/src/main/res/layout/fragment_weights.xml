@@ -14,7 +14,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
+        app:layout_constraintTop_toBottomOf="@+id/weightTW"
+        android:scrollbars="vertical" />
 
     <ru.dimorinny.floatingtextbutton.FloatingTextButton
         android:id="@+id/add_weight_fab"
