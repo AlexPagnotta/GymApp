@@ -8,81 +8,89 @@
     android:background="@drawable/dialog_bg">
 
     <TextView
-        android:id="@+id/titleTW"
-        android:layout_width="161dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="72dp"
+        android:id="@+id/weightTW"
+        android:layout_width="84dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
         android:text="Weight:"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weighTW" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTW" />
 
     <TextView
-        android:id="@+id/weighTW"
-        android:layout_width="233dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/weightTW2"
+        android:layout_width="111dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Select date:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
+
+    <TextView
+        android:id="@+id/titleTW"
+        android:layout_width="319dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="Add your weight"
         android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/weightET"
-        android:layout_width="118dp"
+        android:layout_width="72dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:text="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.771"
-        app:layout_constraintStart_toEndOf="@+id/titleTW"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
+        app:layout_constraintStart_toEndOf="@+id/weightTW" />
 
     <DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="341dp"
+        android:layout_width="0dp"
         android:layout_height="192dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTW"
-        app:layout_constraintVertical_bias="0.559" />
+        app:layout_constraintTop_toBottomOf="@+id/weightTW2" />
 
     <Button
         android:id="@+id/confirmBtn"
-        android:layout_width="88dp"
+        style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
         android:layout_height="51dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:text="Confirm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simpleDatePicker" />
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cancelBtn"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/cancelBtn"
+        style="@android:style/Widget.Material.Light.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="Cancel"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/confirmBtn"
-        app:layout_constraintTop_toBottomOf="@+id/simpleDatePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
 
 </android.support.constraint.ConstraintLayout>
