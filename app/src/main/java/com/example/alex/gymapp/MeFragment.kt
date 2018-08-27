@@ -18,15 +18,6 @@ class MeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val realm = Realm.getDefaultInstance()
-
-        val weights = realm.where<Weight>().findAll()
-
-        //TODO check if there is at least one weight
-        if(weights.count() != 0){
-            lastWeight = weights.max("weight")!!.toDouble()
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +28,7 @@ class MeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        weightTW.text = String.format("%1$,.2f Kg", lastWeight);
+        updateLastWeight()
 
         //Get navigation view from activity
         val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
@@ -46,6 +37,28 @@ class MeFragment : Fragment() {
         show_weights_fab.setOnClickListener{
             navigationView.setSelectedItemId(R.id.navigation_weights)
         }
+    }
+
+    //Update last weight when fragment is visible
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            updateLastWeight();
+        }
+    }
+
+    private fun updateLastWeight(){
+
+        val realm = Realm.getDefaultInstance()
+
+        val weights = realm.where<Weight>().findAll()
+
+        //TODO check if there is at least one weight
+        if(weights.count() != 0){
+            lastWeight = weights.last()!!.weight
+        }
+
+        weightTW.text = String.format("%1$,.2f Kg", lastWeight);
     }
 
     companion object {
