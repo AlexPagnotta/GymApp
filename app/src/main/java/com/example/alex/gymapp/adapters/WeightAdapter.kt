@@ -14,45 +14,49 @@ import java.text.SimpleDateFormat
 import android.support.v4.content.ContextCompat
 
 class WeightAdapter(
-            val items : RealmResults<Weight>,
-            val context: Context
+        private val items : RealmResults<Weight>,
+        private val context: Context
     ) : RealmRecyclerViewAdapter<Weight, ViewHolder>(items, true)
 {
-    val selectedItems: ArrayList<Weight> = ArrayList()
-    var isSelectionMode: Boolean = false
+    private val selectedItems: ArrayList<Weight> = ArrayList()
+    private var isSelectionMode: Boolean = false
 
     override fun getItemCount(): Int {
         return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items.get(position)
-        val weightString = String.format("%1$,.2f Kg", item!!.weight);
-        holder?.weight?.text = weightString;
 
+        //Show Weight
+        val item = items.get(position)
+        val weightString = String.format("%1$,.2f Kg", item!!.weight)
+        holder?.weightTw?.text = weightString;
+
+        //Show Date
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val date = item!!.dateOfWeight
         val dateString = dateFormat.format(date)
-        holder?.date?.text = dateString
+        holder?.dateTw?.text = dateString
 
-        //Selection
+        //Manage Selection
+
         holder.itemView.setOnLongClickListener {
             if(!isSelectionMode){
                 isSelectionMode = true
                 selectedItems.add(item)
-                highlightView(holder)
+                selectView(holder)
             }
             true
         }
 
-        holder.itemView.setOnClickListener() {
+        holder.itemView.setOnClickListener {
             if(isSelectionMode){
                 if (selectedItems.contains(item)) {
                     selectedItems.remove(item)
-                    unhighlightView(holder)
+                    deselectView(holder)
                 } else {
                     selectedItems.add(item)
-                    highlightView(holder)
+                    selectView(holder)
                 }
 
                 if(selectedItems.count() == 0)
@@ -65,19 +69,23 @@ class WeightAdapter(
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.weights_item, parent, false))
     }
 
-    private fun highlightView(holder: ViewHolder) {
+    private fun selectView(holder: ViewHolder) {
         holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorSelection))
     }
 
-    private fun unhighlightView(holder: ViewHolder) {
+    private fun deselectView(holder: ViewHolder) {
         holder.itemView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
+    }
+
+    fun getSelectedItems(): ArrayList<Weight> {
+        return selectedItems
     }
 
 }
 
 class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-    // Holds the TextView
-    val weight = view.weightTW
-    val date = view.dateTW
+    // Holds the TextViews
+    val weightTw = view.weightTW!!
+    val dateTw = view.dateTW!!
 }
 
