@@ -20,6 +20,11 @@ class WeightAdapter(
 {
     private val selectedItems: ArrayList<Weight> = ArrayList()
     private var isSelectionMode: Boolean = false
+    private lateinit var receiver: OnClickAction
+
+    interface OnClickAction {
+        fun onClickAction()
+    }
 
     override fun getItemCount(): Int {
         return items.size
@@ -45,6 +50,8 @@ class WeightAdapter(
                 isSelectionMode = true
                 selectedItems.add(item)
                 selectView(holder)
+
+                receiver.onClickAction()
             }
             true
         }
@@ -79,6 +86,10 @@ class WeightAdapter(
 
     fun getSelectedItems(): ArrayList<Weight> {
         return selectedItems
+    }
+
+    fun setActionModeReceiver(receiver: OnClickAction) {
+       this.receiver = receiver
     }
 
 }
