@@ -13,9 +13,11 @@ import kotlinx.android.synthetic.main.fragment_weights.*
 import android.widget.Toast
 import com.example.alex.gymapp.adapters.WeightAdapter.OnClickAction
 import android.app.Activity
+import io.realm.RealmList
 
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
+    lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: WeightAdapter
 
@@ -30,7 +32,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val realm = Realm.getDefaultInstance()
+        realm = Realm.getDefaultInstance()
 
         val weights = realm.where<Weight>().findAll()
 
@@ -77,12 +79,31 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
         }
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.menu_delete -> {
+            var selectedItems = adapter.getSelectedItems()
+
+            var realmSelectedItems = RealmList<Weight>()
+
+            for (item in selectedItems) {
+                var realmItem = realm.where<Weight>().equalTo("id", item.id).findFirst()
+                realmSelectedItems.add(realmItem)
+            }
+
+            return when (item.itemId) {
+                R.id.menu_delete ->
+                {
                     mode.finish()
-                    return true
+
+                    realm.executeTransaction(Realm.Transaction {
+                        for (realmItem in realmSelectedItems) {
+                            realmItem.deleteFromRealm()
+                        }
+                    })
+
+                    adapter.isSelectionMode = false
+
+                    true
                 }
-                else -> return false
+                else -> false
             }
         }
 
