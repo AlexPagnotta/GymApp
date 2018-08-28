@@ -11,29 +11,66 @@ import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.weights_item.view.*
 import java.text.SimpleDateFormat
-
+import android.support.v4.content.ContextCompat
 
 class WeightAdapter(
             val items : RealmResults<Weight>,
             val context: Context
     ) : RealmRecyclerViewAdapter<Weight, ViewHolder>(items, true)
 {
+    val selectedItems: ArrayList<Weight> = ArrayList()
+    var isSelectionMode: Boolean = false
+
     override fun getItemCount(): Int {
         return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val weightString = String.format("%1$,.2f Kg", items.get(position)!!.weight);
+        val item = items.get(position)
+        val weightString = String.format("%1$,.2f Kg", item!!.weight);
         holder?.weight?.text = weightString;
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val date = items.get(position)!!.dateOfWeight
+        val date = item!!.dateOfWeight
         val dateString = dateFormat.format(date)
         holder?.date?.text = dateString
+
+        //Selection
+        holder.itemView.setOnLongClickListener {
+            if(!isSelectionMode){
+                isSelectionMode = true
+                selectedItems.add(item)
+                highlightView(holder)
+            }
+            true
+        }
+
+        holder.itemView.setOnClickListener() {
+            if(isSelectionMode){
+                if (selectedItems.contains(item)) {
+                    selectedItems.remove(item)
+                    unhighlightView(holder)
+                } else {
+                    selectedItems.add(item)
+                    highlightView(holder)
+                }
+
+                if(selectedItems.count() == 0)
+                    isSelectionMode = false
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.weights_item, parent, false))
+    }
+
+    private fun highlightView(holder: ViewHolder) {
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorSelection))
+    }
+
+    private fun unhighlightView(holder: ViewHolder) {
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
     }
 
 }
