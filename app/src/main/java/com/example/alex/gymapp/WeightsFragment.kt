@@ -92,7 +92,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
     }
 
     override fun onClickAction() {
-        val selected = adapter.getSelectedItems().size
+        val selected = adapter.getSelectedItems().count()
         if (actionMode == null) {
             actionMode = (context as Activity).startActionMode(actionModeCallback)
             actionMode?.title = "Selected: $selected"
@@ -104,7 +104,6 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
             }
         }
     }
-
 
     companion object {
         fun newInstance(): WeightsFragment = WeightsFragment()

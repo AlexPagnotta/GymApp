@@ -68,6 +68,8 @@ class WeightAdapter(
 
                 if(selectedItems.count() == 0)
                     isSelectionMode = false
+
+                receiver.onClickAction()
             }
         }
     }
