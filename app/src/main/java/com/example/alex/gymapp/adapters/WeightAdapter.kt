@@ -19,7 +19,7 @@ class WeightAdapter(
     ) : RealmRecyclerViewAdapter<Weight, ViewHolder>(items, true)
 {
     private val selectedItems: ArrayList<Weight> = ArrayList()
-    public var isSelectionMode: Boolean = false
+    private var isSelectionMode: Boolean = false
     private lateinit var receiver: OnClickAction
 
     interface OnClickAction {
@@ -48,7 +48,6 @@ class WeightAdapter(
         holder.itemView.setOnLongClickListener {
             if(!isSelectionMode){
                 isSelectionMode = true
-                selectedItems.clear()
                 selectedItems.add(item)
                 selectView(holder)
 
@@ -73,6 +72,11 @@ class WeightAdapter(
                 receiver.onClickAction()
             }
         }
+
+        if (selectedItems.contains(item))
+            selectView(holder)
+        else
+            deselectView(holder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -93,6 +97,12 @@ class WeightAdapter(
 
     fun setActionModeReceiver(receiver: OnClickAction) {
        this.receiver = receiver
+    }
+
+    fun clearSelected() {
+        selectedItems.clear()
+        notifyDataSetChanged()
+        isSelectionMode = false
     }
 
 }

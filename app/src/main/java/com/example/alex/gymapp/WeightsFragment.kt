@@ -23,7 +23,6 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +98,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
                         }
                     })
 
-                    adapter.isSelectionMode = false
+                    adapter.clearSelected()
 
                     true
                 }
@@ -109,6 +108,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
         override fun onDestroyActionMode(mode: ActionMode) {
             actionMode = null
+            adapter.clearSelected()
         }
     }
 
