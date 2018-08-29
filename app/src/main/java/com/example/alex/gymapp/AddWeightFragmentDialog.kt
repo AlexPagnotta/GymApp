@@ -3,6 +3,7 @@ package com.example.alex.gymapp
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_add_weight_fragment_dialog.*
 import java.util.*
 
-class AddWeightFragmentDialog : DialogFragment() {
+class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class AddWeightFragmentDialog : DialogFragment() {
 
             val realm = Realm.getDefaultInstance()
 
-            var weightValue: Double = 0.0
+            var weightValue = 0.0
 
             val text = weightET.text.toString()
             if (!text.isEmpty()) {
