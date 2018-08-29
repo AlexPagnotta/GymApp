@@ -8,6 +8,40 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:fontFamily">@font/google_sans_regular</item>
+
+        <!-- Style Action Mode Bar-->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeSplitBackground">@color/white</item>
+        <item name="android:actionModeBackground">@color/white</item>
+        <item name="actionModeCloseButtonStyle">@style/closeActionStyle</item>
+        <item name="actionModeStyle">@style/AppTheme.ActionMode</item>
     </style>
 
+    <!-- Style Tool Bar-->
+    <style name="ToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <!-- Style Tool Bar Text-->
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Style Action Mode Bar-->
+    <style name="AppTheme.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="height">96dp</item>
+        <item name="titleTextStyle">@style/actionTitleStyle</item>
+    </style>
+
+    <!-- Style Action Mode Bar Close Icon-->
+    <style name="closeActionStyle" parent="Widget.AppCompat.Light.ActionButton.CloseMode">
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
+
+    <!-- Style Action Mode Bar Text-->
+    <style name="actionTitleStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
 </resources>

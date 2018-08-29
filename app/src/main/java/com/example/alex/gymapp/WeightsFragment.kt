@@ -13,7 +13,11 @@ import kotlinx.android.synthetic.main.fragment_weights.*
 import android.widget.Toast
 import com.example.alex.gymapp.adapters.WeightAdapter.OnClickAction
 import android.app.Activity
+import android.widget.Toolbar
 import io.realm.RealmList
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.view.ActionMode;
+
 
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
@@ -66,6 +70,12 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+    }
+
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             val inflater = mode.getMenuInflater()
@@ -115,7 +125,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
     override fun onClickAction() {
         val selected = adapter.getSelectedItems().count()
         if (actionMode == null) {
-            actionMode = (context as Activity).startActionMode(actionModeCallback)
+            actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
             actionMode?.title = "Selected: $selected"
         } else {
             if (selected == 0) {
