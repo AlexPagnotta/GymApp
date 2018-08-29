@@ -15,6 +15,10 @@ import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_add_weight_fragment_dialog.*
 import java.util.*
 
+import android.widget.DatePicker
+
+
+
 class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +64,7 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
                 }
             }
 
-            val dateOfWeight = Date(datePicker.year,datePicker.month,datePicker.dayOfMonth)
+            val dateOfWeight = getDateFromDatePicket(datePicker)
 
             realm.executeTransaction { realm ->
                 // Add a person
@@ -78,6 +82,17 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
             dialog.dismiss()
         }
+    }
+
+    fun getDateFromDatePicket(datePicker: DatePicker): Date {
+        val day = datePicker.dayOfMonth
+        val month = datePicker.month
+        val year = datePicker.year
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+
+        return calendar.time
     }
 
 
