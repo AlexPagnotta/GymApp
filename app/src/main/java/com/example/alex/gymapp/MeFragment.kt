@@ -11,12 +11,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
+import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_me.*
 
 class MeFragment : Fragment() {
 
     var lastWeight: Double = 0.0
+    var weightLost: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,7 @@ class MeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        updateLastWeight()
+        updateWeights()
 
         //Get navigation view from activity
         val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
@@ -56,22 +58,27 @@ class MeFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            updateLastWeight();
+            updateWeights();
         }
     }
 
-    private fun updateLastWeight(){
+    private fun updateWeights(){
 
         val realm = Realm.getDefaultInstance()
 
-        val weights = realm.where<Weight>().findAll()
+        val weights = realm.where<Weight>().sort("dateOfWeight", Sort.DESCENDING).findAll()
 
         //TODO check if there is at least one weight
         if(weights.count() != 0){
-            lastWeight = weights.last()!!.weight
+            lastWeight = weights.first()!!.weight
+            val secondLastWeight = weights[1]!!.weight
+
+            weightLost = lastWeight - secondLastWeight
         }
 
-        weightTW.text = String.format("%1$,.2f Kg", lastWeight);
+        weightTW.text = String.format("%1$,.2f Kg", lastWeight)
+
+        weightLostTW.text = String.format("You Have Lost %1$,.2f Kg", weightLost)
     }
 
     companion object {
