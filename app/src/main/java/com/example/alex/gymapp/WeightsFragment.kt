@@ -17,6 +17,9 @@ import android.widget.Toolbar
 import io.realm.RealmList
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode;
+import android.text.Html
+
+
 
 
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {

@@ -3,6 +3,8 @@ package com.example.alex.gymapp
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +40,17 @@ class MeFragment : Fragment() {
             navigationView.setSelectedItemId(R.id.navigation_weights)
         }
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        //Set colored title
+        val text = "<font color=#279AFF>Gym</font><font color=#757575>App</font>"
+        toolbar.setTitle(Html.fromHtml(text))
+    }
+
 
     //Update last weight when fragment is visible
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

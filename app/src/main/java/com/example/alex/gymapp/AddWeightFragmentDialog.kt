@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import kotlinx.android.synthetic.main.fragment_add_weight_fragment_dialog.*
 import java.util.*
 
 import android.widget.DatePicker
-
-
 
 class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
@@ -94,7 +91,6 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
         return calendar.time
     }
-
 
     companion object {
         fun newInstance(): ScheduleFragment = ScheduleFragment()
