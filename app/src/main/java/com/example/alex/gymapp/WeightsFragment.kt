@@ -56,8 +56,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
         recyclerView.adapter = adapter
 
-        var oco = this as WeightAdapter.OnClickAction
-        adapter.setActionModeReceiver(oco)
+        adapter.setActionModeReceiver(this as WeightAdapter.OnClickAction)
 
         //Recycler view elevation on scroll
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -77,7 +76,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
             }
         })
 
-        //Go to weights o fab click
+        //Fab click
         add_weight_fab.setOnClickListener{
             val ft = fragmentManager!!.beginTransaction()
             val prev = fragmentManager!!.findFragmentByTag("dialog")

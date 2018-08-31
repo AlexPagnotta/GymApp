@@ -17,6 +17,19 @@
         app:title="Schedule"
         />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/scheduleRW"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="56dp"
+        android:layout_marginTop="96dp"
+        android:background="@color/white"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ru.dimorinny.floatingtextbutton.FloatingTextButton
         android:id="@+id/add_schedule_fab"
         android:layout_width="0dp"

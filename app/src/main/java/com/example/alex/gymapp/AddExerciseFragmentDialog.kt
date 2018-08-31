@@ -9,14 +9,15 @@ import android.widget.AdapterView
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
 import java.util.*
 import android.widget.ArrayAdapter
-
+import com.example.alex.gymapp.model.Exercise
+import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
 
 
 class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
+    lateinit var selectedExecutionDay : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,7 +31,7 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnIte
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        //executionDaySpinner.onItemClickListener = this as AdapterView.OnItemClickListener
+       // executionDaySpinner.onItemClickListener = this as AdapterView.OnItemClickListener
 
         val weekDays = ArrayList<String>()
         weekDays.add("Monday")
@@ -41,50 +42,93 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnIte
         weekDays.add("Saturday")
         weekDays.add("Sunday ")
 
+        selectedExecutionDay = weekDays[0]
+
         val dataAdapter = ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,weekDays)
 
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         executionDaySpinner.adapter = dataAdapter
 
-        /*cancelBtn.setOnClickListener{
+        cancelBtn.setOnClickListener{
             dialog.dismiss()
         }
-
-        //Set current date
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-
-        datePicker.init(year,month,day,null)
 
         confirmBtn.setOnClickListener{
 
             val realm = Realm.getDefaultInstance()
 
+            var name = nameET.text.toString()
+
+            var weightValue = 0.0
+            var restTimeValue = 0.0
+            var seriesValue = 0
+            var repetionsValue = 0
+
+
+            val weight = weightET.text.toString()
+            if (!weight.isEmpty()) {
+                try {
+                    weightValue = java.lang.Double.parseDouble(weight)
+                } catch (e1: Exception) {
+                    e1.printStackTrace()
+                }
+            }
+
+            val restTime = restTimeET.text.toString()
+            if (!restTime.isEmpty()) {
+                try {
+                    restTimeValue = java.lang.Double.parseDouble(restTime)
+                } catch (e1: Exception) {
+                    e1.printStackTrace()
+                }
+            }
+
+            val series = weightET.text.toString()
+            if (!series.isEmpty()) {
+                try {
+                    seriesValue = java.lang.Integer.parseInt(series)
+                } catch (e1: Exception) {
+                    e1.printStackTrace()
+                }
+            }
+
+            val repetitions = restTimeET.text.toString()
+            if (!repetitions.isEmpty()) {
+                try {
+                    repetionsValue = java.lang.Integer.parseInt(repetitions)
+                } catch (e1: Exception) {
+                    e1.printStackTrace()
+                }
+            }
+
             realm.executeTransaction { realm ->
                 // Add a person
-                val currentIdNum = realm.where<Weight>().max("id")
+                val currentIdNum = realm.where<Exercise>().max("id")
                 val nextId: Int
                 if (currentIdNum == null) {
                     nextId = 1
                 } else {
                     nextId = currentIdNum!!.toInt() + 1
                 }
-                val weight = realm.createObject<Weight>(nextId)
-                weight.weight = weightValue
-                weight.dateOfWeight = dateOfWeight
+                val exercise = realm.createObject<Exercise>(nextId)
+                exercise.name = name
+                exercise.weight = weightValue
+                exercise.restTime = restTimeValue
+                exercise.series = seriesValue
+                exercise.repetitions = repetionsValue
+                exercise.executionDay = selectedExecutionDay
             }
 
             dialog.dismiss()
-        }*/
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        selectedExecutionDay = parent?.getItemAtPosition(position).toString()
     }
 
     companion object {
