@@ -13,11 +13,15 @@ import java.util.*
 import android.widget.ArrayAdapter
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
+import android.widget.TextView
 
 
-class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+
+
+class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
 
     lateinit var selectedExecutionDay : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,7 +35,6 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnIte
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-       // executionDaySpinner.onItemClickListener = this as AdapterView.OnItemClickListener
 
         val weekDays = ArrayList<String>()
         weekDays.add("Monday")
@@ -49,6 +52,16 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnIte
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         executionDaySpinner.adapter = dataAdapter
+
+        executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>,
+                                        selectedItemView: View, position: Int, id: Long) {
+                selectedExecutionDay = parentView.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+            }
+        }
 
         cancelBtn.setOnClickListener{
             dialog.dismiss()
@@ -122,13 +135,6 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment(), AdapterView.OnIte
 
             dialog.dismiss()
         }
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        selectedExecutionDay = parent?.getItemAtPosition(position).toString()
     }
 
     companion object {
