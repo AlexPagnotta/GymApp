@@ -22,10 +22,6 @@ import com.example.alex.gymapp.R.id.toolbar
 import android.support.v4.view.ViewCompat.setElevation
 
 
-
-
-
-
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
     lateinit var realm: Realm
