@@ -24,6 +24,14 @@ class ScheduleFragment : Fragment() {
 
         //Fab click
         add_schedule_fab.setOnClickListener{
+            val ft = fragmentManager!!.beginTransaction()
+            val prev = fragmentManager!!.findFragmentByTag("dialog")
+            if (prev != null) {
+                ft.remove(prev)
+            }
+            ft.addToBackStack(null)
+            val dialogFragment = AddExerciseFragmentDialog()
+            dialogFragment.show(ft, "dialog")
         }
     }
 

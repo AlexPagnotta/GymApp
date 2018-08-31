@@ -7,30 +7,8 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/weightTW"
-        android:layout_width="84dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Weight:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTW" />
-
-    <TextView
-        android:id="@+id/weightTW2"
-        android:layout_width="111dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Select date:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
-
-    <TextView
         android:id="@+id/titleTW"
-        android:layout_width="319dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
@@ -40,6 +18,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/weightTW"
+        android:layout_width="84dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Weight:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTW" />
 
     <EditText
         android:id="@+id/weightET"
@@ -53,6 +42,18 @@
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
         app:layout_constraintStart_toEndOf="@+id/weightTW" />
+
+
+    <TextView
+        android:id="@+id/weightTW2"
+        android:layout_width="111dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Select date:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
 
     <DatePicker
         android:id="@+id/datePicker"
