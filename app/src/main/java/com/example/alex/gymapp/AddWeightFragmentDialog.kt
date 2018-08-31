@@ -52,32 +52,30 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
             val text = weightET.text.toString()
             if (!text.isEmpty()) {
-                try {
-                    weightValue = java.lang.Double.parseDouble(text)
-                    // it means it is double
-                } catch (e1: Exception) {
-                    // this means it is not double
-                    e1.printStackTrace()
+                weightValue = java.lang.Double.parseDouble(text)
+
+                val dateOfWeight = getDateFromDatePicket(datePicker)
+
+                realm.executeTransaction { realm ->
+                    // Add a person
+                    val currentIdNum = realm.where<Weight>().max("id")
+                    val nextId: Int
+                    if (currentIdNum == null) {
+                        nextId = 1
+                    } else {
+                        nextId = currentIdNum!!.toInt() + 1
+                    }
+                    val weight = realm.createObject<Weight>(nextId)
+                    weight.weight = weightValue
+                    weight.dateOfWeight = dateOfWeight
                 }
+
+                dialog.dismiss()
             }
 
-            val dateOfWeight = getDateFromDatePicket(datePicker)
-
-            realm.executeTransaction { realm ->
-                // Add a person
-                val currentIdNum = realm.where<Weight>().max("id")
-                val nextId: Int
-                if (currentIdNum == null) {
-                    nextId = 1
-                } else {
-                    nextId = currentIdNum!!.toInt() + 1
-                }
-                val weight = realm.createObject<Weight>(nextId)
-                weight.weight = weightValue
-                weight.dateOfWeight = dateOfWeight
+            else{
+                weightIL.error = "Cannot be empty"
             }
-
-            dialog.dismiss()
         }
     }
 
