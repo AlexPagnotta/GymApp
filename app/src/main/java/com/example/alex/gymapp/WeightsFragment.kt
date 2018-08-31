@@ -18,6 +18,10 @@ import io.realm.RealmList
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode;
 import android.text.Html
+import com.example.alex.gymapp.R.id.toolbar
+import android.support.v4.view.ViewCompat.setElevation
+
+
 
 
 
@@ -59,6 +63,23 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
         var oco = this as WeightAdapter.OnClickAction
         adapter.setActionModeReceiver(oco)
 
+        //Recycler view elevation on scroll
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            private val SCROLL_DIRECTION_UP = -1
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (recyclerView.canScrollVertically(SCROLL_DIRECTION_UP)){
+                    toolbar.elevation = 20F
+                }
+                else{
+                    toolbar.elevation = 0F
+                }
+
+            }
+        })
 
         //Go to weights o fab click
         add_weight_fab.setOnClickListener{
