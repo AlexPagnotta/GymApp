@@ -13,6 +13,7 @@ import com.example.alex.gymapp.adapters.ExerciseAdapter
 import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
@@ -21,6 +22,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: ExerciseAdapter
+    lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -33,79 +35,32 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        //Get exercises from realm
         realm = Realm.getDefaultInstance()
 
         val exercises = realm.where<Exercise>().findAll()
 
-        var recyclerView = view.findViewById(R.id.scheduleRW) as RecyclerView
+        setupRecyclerView()
 
-        var lm = LinearLayoutManager(context!!)
+        //Setup Spinner
+        val distinctDays = getExistingDays(exercises)
 
-        //Reverse the recycler view
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
+        val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item,distinctDays)
 
-        recyclerView.layoutManager = lm
+        dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
 
-        adapter = ExerciseAdapter(exercises, context!!)
+        days_spinner.adapter = dataAdapter
 
-        recyclerView.adapter = adapter
+        days_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>,
+                                        selectedItemView: View, position: Int, id: Long) {
+                var selectedExecutionDay = parentView.getItemAtPosition(position).toString()
 
-        adapter.setActionModeReceiver(this as ExerciseAdapter.OnClickAction)
-
-        //Recycler view elevation on scroll
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            private val SCROLL_DIRECTION_UP = -1
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                if (recyclerView.canScrollVertically(SCROLL_DIRECTION_UP)){
-                    toolbar.elevation = 20F
-                }
-                else{
-                    toolbar.elevation = 0F
-                }
-
+                changeSchedule(selectedExecutionDay)
             }
-        })
 
-        //Spinner
-        var distinctDays : ArrayList<String> = arrayListOf()
-
-        for (exercise in exercises) {
-            val dayOfWeek = exercise.executionDay
-
-            if(!distinctDays.contains(dayOfWeek)){
-                distinctDays.add(dayOfWeek)
+            override fun onNothingSelected(parentView: AdapterView<*>) {
             }
-        }
-
-        if(distinctDays.count() > 0){
-            var selectedExecutionDay = distinctDays[0]
-
-            val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item,distinctDays)
-
-            dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
-
-            days_spinner.adapter = dataAdapter
-
-            days_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parentView: AdapterView<*>,
-                                            selectedItemView: View, position: Int, id: Long) {
-                    selectedExecutionDay = parentView.getItemAtPosition(position).toString()
-                    val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
-
-                    recyclerView.swapAdapter(ExerciseAdapter(exercisesOfDay, context!!),false)
-                }
-
-                override fun onNothingSelected(parentView: AdapterView<*>) {
-                }
-            }
-        }
-        else{
-            //TODO Set visibility false
         }
 
         //Fab click
@@ -120,6 +75,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
             dialogFragment.show(ft, "dialog")
         }
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -161,6 +117,12 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
 
                     adapter.clearSelected()
 
+                    var itemCount = adapter.itemCount
+
+                    if(itemCount == 0){
+                        changeSchedule(days_spinner.getItemAtPosition(0).toString())
+                    }
+
                     true
                 }
                 else -> false
@@ -185,6 +147,60 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
                 actionMode?.title = "Selected: $selected"
             }
         }
+    }
+
+    private fun setupRecyclerView(){
+
+        //Setup RecyclerView
+        recyclerView = view!!.findViewById(R.id.scheduleRW) as RecyclerView
+
+        var lm = LinearLayoutManager(context!!)
+
+        //Reverse the recycler view
+        lm.reverseLayout = true
+        lm.stackFromEnd = true
+
+        recyclerView.layoutManager = lm
+
+        //Recycler view elevation on scroll
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            private val SCROLL_DIRECTION_UP = -1
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (recyclerView.canScrollVertically(SCROLL_DIRECTION_UP)){
+                    toolbar.elevation = 20F
+                }
+                else{
+                    toolbar.elevation = 0F
+                }
+
+            }
+        })
+    }
+
+    private fun changeSchedule(selectedExecutionDay:String){
+        val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
+
+        adapter = ExerciseAdapter(exercisesOfDay, context!!)
+        recyclerView.swapAdapter(adapter,false)
+        adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
+    }
+
+    private fun getExistingDays (exercises: RealmResults<Exercise>) : ArrayList<String>{
+
+        var distinctDays : ArrayList<String> = arrayListOf()
+
+        for (exercise in exercises) {
+            val dayOfWeek = exercise.executionDay
+
+            if(!distinctDays.contains(dayOfWeek)){
+                distinctDays.add(dayOfWeek)
+            }
+        }
+        return distinctDays
     }
 
     companion object {
