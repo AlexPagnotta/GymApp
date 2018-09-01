@@ -35,15 +35,7 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-        val weekDays = ArrayList<String>()
-        weekDays.add("Monday")
-        weekDays.add("Tuesday")
-        weekDays.add("Wednesday")
-        weekDays.add("Thursday")
-        weekDays.add("Friday")
-        weekDays.add("Saturday")
-        weekDays.add("Sunday ")
+        val weekDays = resources.getStringArray(R.array.days_of_week)
 
         selectedExecutionDay = weekDays[0]
 

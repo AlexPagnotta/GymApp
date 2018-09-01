@@ -7,6 +7,8 @@ import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.alex.gymapp.adapters.ExerciseAdapter
 import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
@@ -68,6 +70,43 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
 
             }
         })
+
+        //Spinner
+        var distinctDays : ArrayList<String> = arrayListOf()
+
+        for (exercise in exercises) {
+            val dayOfWeek = exercise.executionDay
+
+            if(!distinctDays.contains(dayOfWeek)){
+                distinctDays.add(dayOfWeek)
+            }
+        }
+
+        if(distinctDays.count() > 0){
+            var selectedExecutionDay = distinctDays[0]
+
+            val dataAdapter = ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,distinctDays)
+
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            days_spinner.adapter = dataAdapter
+
+            days_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parentView: AdapterView<*>,
+                                            selectedItemView: View, position: Int, id: Long) {
+                    selectedExecutionDay = parentView.getItemAtPosition(position).toString()
+                    val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
+
+                    recyclerView.swapAdapter(ExerciseAdapter(exercisesOfDay, context!!),false)
+                }
+
+                override fun onNothingSelected(parentView: AdapterView<*>) {
+                }
+            }
+        }
+        else{
+            //TODO Set visibility false
+        }
 
         //Fab click
         add_schedule_fab.setOnClickListener{

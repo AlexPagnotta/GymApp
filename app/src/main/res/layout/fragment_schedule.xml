@@ -14,8 +14,16 @@
         app:titleTextColor="@color/colorPrimary"
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:contentInsetStart="24dp"
-        app:title="Schedule"
-        />
+        app:title="Schedule of "
+        >
+
+        <Spinner
+            app:contentInsetStart="24dp"
+            android:id="@+id/days_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/scheduleRW"
