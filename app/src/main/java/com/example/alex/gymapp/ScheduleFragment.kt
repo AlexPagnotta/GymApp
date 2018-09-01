@@ -85,9 +85,9 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
         if(distinctDays.count() > 0){
             var selectedExecutionDay = distinctDays[0]
 
-            val dataAdapter = ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,distinctDays)
+            val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item,distinctDays)
 
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
 
             days_spinner.adapter = dataAdapter
 
