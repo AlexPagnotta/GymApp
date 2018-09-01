@@ -1,5 +1,6 @@
 package com.example.alex.gymapp
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
@@ -14,17 +15,19 @@ import android.widget.ArrayAdapter
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
 import android.widget.TextView
-
-
+import javax.security.auth.callback.Callback
 
 
 class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
 
     lateinit var selectedExecutionDay : String
 
+    lateinit var parent : ScheduleFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        parent = parentFragment as ScheduleFragment
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -107,6 +110,8 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
                 }
             }
 
+            var exerciseAdded : Exercise? = null
+
             realm.executeTransaction { realm ->
                 // Add a person
                 val currentIdNum = realm.where<Exercise>().max("id")
@@ -116,14 +121,19 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
                 } else {
                     nextId = currentIdNum!!.toInt() + 1
                 }
-                val exercise = realm.createObject<Exercise>(nextId)
+
+                var exercise = realm.createObject<Exercise>(nextId)
                 exercise.name = name
                 exercise.weight = weightValue
                 exercise.restTime = restTimeValue
                 exercise.series = seriesValue
                 exercise.repetitions = repetionsValue
                 exercise.executionDay = selectedExecutionDay
+
+                exerciseAdded = exercise
             }
+
+            parent.exerciseAdded(exerciseAdded!!)
 
             dialog.dismiss()
         }

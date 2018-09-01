@@ -1,5 +1,6 @@
 package com.example.alex.gymapp
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -16,13 +17,19 @@ import io.realm.RealmList
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_schedule.*
+import android.app.Activity
+import android.content.Intent
+import io.realm.RealmChangeListener
 
-class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
+
+class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: ExerciseAdapter
     lateinit var recyclerView: RecyclerView
+
+    val DIALOG_FRAGMENT = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,21 +42,14 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        //Get exercises from realm
         realm = Realm.getDefaultInstance()
-
-        val exercises = realm.where<Exercise>().findAll()
 
         setupRecyclerView()
 
         //Setup Spinner
-        val distinctDays = getExistingDays(exercises)
+        val existingDays = getExistingDays()
 
-        val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item,distinctDays)
-
-        dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
-
-        days_spinner.adapter = dataAdapter
+        setSpinneritems(existingDays)
 
         days_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>,
@@ -65,17 +65,27 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
 
         //Fab click
         add_schedule_fab.setOnClickListener{
-            val ft = fragmentManager!!.beginTransaction()
-            val prev = fragmentManager!!.findFragmentByTag("dialog")
-            if (prev != null) {
-                ft.remove(prev)
-            }
-            ft.addToBackStack(null)
+           // val ft = fragmentManager!!.beginTransaction()
+           // val prev = fragmentManager!!.findFragmentByTag("dialog")
+            //if (prev != null) {
+                //ft.remove(prev)
+            //}
+            //ft.addToBackStack(null)
             val dialogFragment = AddExerciseFragmentDialog()
-            dialogFragment.show(ft, "dialog")
+            dialogFragment.show(this.childFragmentManager, "dialog")
         }
     }
 
+    fun exerciseAdded(addedExercise : Exercise){
+
+        var existingDays = getExistingDays()
+        setSpinneritems(existingDays)
+
+        var addedExerciseDay = addedExercise.executionDay
+
+        var itemId = existingDays.indexOf(addedExerciseDay)
+        days_spinner.setSelection(itemId)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -120,6 +130,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
                     var itemCount = adapter.itemCount
 
                     if(itemCount == 0){
+
+                        var existingDays = getExistingDays()
+
+                        setSpinneritems(existingDays)
+
                         changeSchedule(days_spinner.getItemAtPosition(0).toString())
                     }
 
@@ -181,6 +196,14 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
         })
     }
 
+    private fun setSpinneritems(existingDays: ArrayList<String>){
+        val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item, existingDays)
+
+        dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
+
+        days_spinner.adapter = dataAdapter
+    }
+
     private fun changeSchedule(selectedExecutionDay:String){
         val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
 
@@ -189,7 +212,10 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction {
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
     }
 
-    private fun getExistingDays (exercises: RealmResults<Exercise>) : ArrayList<String>{
+    private fun getExistingDays () : ArrayList<String>{
+
+        //Get exercises from realm
+        val exercises = realm.where<Exercise>().findAll()
 
         var distinctDays : ArrayList<String> = arrayListOf()
 
