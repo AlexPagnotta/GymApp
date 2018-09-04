@@ -10,7 +10,9 @@ open class Exercise(
 
         var weight: Double = 0.0,
 
-        var restTime: Double = 0.0,
+        var minutesOfRest: Int = 0,
+
+        var secondsOfRest: Int = 0,
 
         var series: Int = 1,
 

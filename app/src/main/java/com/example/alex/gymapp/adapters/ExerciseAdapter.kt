@@ -41,7 +41,7 @@ class ExerciseAdapter(
         holder?.seriesRepetitionTV?.text = seriesRepetitionsString
 
         //Show Weight
-        val restString = String.format("%1$,.2f Min.", item!!.restTime)
+        val restString = String.format("%dM %dS", item!!.minutesOfRest, item!!.secondsOfRest)
         holder?.restTimeTV?.text = restString
 
         //Show Weight

@@ -69,7 +69,8 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
             var name = nameET.text.toString()
 
             var weightValue = 0.0
-            var restTimeValue = 0.0
+            var minutesOfRestValue = 0
+            var secondOfRestValue = 0
             var seriesValue = 0
             var repetionsValue = 0
 
@@ -83,16 +84,25 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
                 }
             }
 
-            val restTime = restTimeET.text.toString()
-            if (!restTime.isEmpty()) {
+            val minutesOfRest = minutesRestET.text.toString()
+            if (!minutesOfRest.isEmpty()) {
                 try {
-                    restTimeValue = java.lang.Double.parseDouble(restTime)
+                    minutesOfRestValue = java.lang.Integer.parseInt(minutesOfRest)
                 } catch (e1: Exception) {
                     e1.printStackTrace()
                 }
             }
 
-            val series = weightET.text.toString()
+            val secondsOfRest = secondsRestET.text.toString()
+            if (!secondsOfRest.isEmpty()) {
+                try {
+                    secondOfRestValue = java.lang.Integer.parseInt(secondsOfRest)
+                } catch (e1: Exception) {
+                    e1.printStackTrace()
+                }
+            }
+
+            val series = seriesET.text.toString()
             if (!series.isEmpty()) {
                 try {
                     seriesValue = java.lang.Integer.parseInt(series)
@@ -101,7 +111,7 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
                 }
             }
 
-            val repetitions = restTimeET.text.toString()
+            val repetitions = repetitionsET.text.toString()
             if (!repetitions.isEmpty()) {
                 try {
                     repetionsValue = java.lang.Integer.parseInt(repetitions)
@@ -125,7 +135,8 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
                 var exercise = realm.createObject<Exercise>(nextId)
                 exercise.name = name
                 exercise.weight = weightValue
-                exercise.restTime = restTimeValue
+                exercise.minutesOfRest = minutesOfRestValue
+                exercise.secondsOfRest = secondOfRestValue
                 exercise.series = seriesValue
                 exercise.repetitions = repetionsValue
                 exercise.executionDay = selectedExecutionDay
