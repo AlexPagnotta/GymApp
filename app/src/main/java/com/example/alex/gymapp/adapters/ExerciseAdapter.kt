@@ -1,6 +1,7 @@
 package com.example.alex.gymapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import com.example.alex.gymapp.R
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
+import com.example.alex.gymapp.ExerciseActivity
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
@@ -74,6 +77,11 @@ class ExerciseAdapter(
                     isSelectionMode = false
 
                 receiver.onClickAction()
+            }
+            else{
+                val intent = Intent(context, ExerciseActivity::class.java)
+                intent.putExtra("exerciseId", item.id)
+                context.startActivity(intent)
             }
         }
 
