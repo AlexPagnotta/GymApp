@@ -16,6 +16,12 @@ import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
 import android.widget.TextView
 import javax.security.auth.callback.Callback
+import android.text.Editable
+import android.text.TextWatcher
+
+
+
+
 
 
 class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
@@ -57,6 +63,29 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
             override fun onNothingSelected(parentView: AdapterView<*>) {
             }
         }
+
+        secondsRestET.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                try {
+                    val `val` = Integer.parseInt(s.toString())
+                    if (`val` > 60) {
+                        s.replace(0, s.length, "60", 0, 2)
+                    } else if (`val` < 1) {
+                        s.replace(0, s.length, "0", 0, 1)
+                    }
+                } catch (ex: NumberFormatException) {
+                    s.replace(0, s.length, "0", 0, 1)
+                }
+
+            }
+        })
 
         cancelBtn.setOnClickListener{
             dialog.dismiss()
