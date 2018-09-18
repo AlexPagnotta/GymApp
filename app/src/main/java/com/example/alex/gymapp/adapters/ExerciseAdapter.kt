@@ -34,7 +34,7 @@ class ExerciseAdapter(
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
 
-        val item = items.get(position)
+        val item = items[position]
 
         //Show Name
         holder?.nameTV.text = item!!.name
@@ -80,7 +80,8 @@ class ExerciseAdapter(
             }
             else{
                 val intent = Intent(context, ExerciseActivity::class.java)
-                intent.putExtra("exerciseId", item.id)
+                val item = items.get(position)
+                intent.putExtra("exerciseId", item!!.id)
                 context.startActivity(intent)
             }
         }

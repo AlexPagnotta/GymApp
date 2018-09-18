@@ -22,7 +22,7 @@ class ExerciseActivity : AppCompatActivity() {
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
         getSupportActionBar()!!.setDisplayShowHomeEnabled(true)
 
-        val exerciseId = intent.getIntExtra("exerciseId",0)
+        val exerciseId = intent.getLongExtra("exerciseId",0)
 
         realm = Realm.getDefaultInstance()
 
