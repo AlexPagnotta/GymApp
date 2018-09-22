@@ -69,7 +69,11 @@ class MeFragment : Fragment() {
         val weights = realm.where<Weight>().sort("dateOfWeight", Sort.DESCENDING).findAll()
 
         //TODO check if there is at least one weight
-        if(weights.count() != 0){
+        if(weights.count() == 1){
+            lastWeight = weights.first()!!.weight
+            weightLost = lastWeight
+        }
+        else if(weights.count() != 0){
             lastWeight = weights.first()!!.weight
             val secondLastWeight = weights[1]!!.weight
 

@@ -1,6 +1,5 @@
 package com.example.alex.gymapp
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
@@ -10,19 +9,11 @@ import android.widget.AdapterView
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import java.util.*
 import android.widget.ArrayAdapter
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.fragment_add_exercise_fragment_dialog.*
-import android.widget.TextView
-import javax.security.auth.callback.Callback
 import android.text.Editable
 import android.text.TextWatcher
-
-
-
-
-
 
 class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
 
