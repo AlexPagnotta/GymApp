@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/nameIL"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -47,7 +47,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/nameIL">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
@@ -61,6 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Weight"
+                android:text="0"
                 android:inputType="numberDecimal" />
 
         </android.support.design.widget.TextInputLayout>
@@ -123,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Series"
+                android:text="1"
                 android:inputType="number" />
 
         </android.support.design.widget.TextInputLayout>
@@ -139,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Repetitions"
+                android:text="1"
                 android:inputType="number" />
 
         </android.support.design.widget.TextInputLayout>
