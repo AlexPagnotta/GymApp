@@ -93,7 +93,7 @@ class ExerciseAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
-        return ExerciseViewHolder(LayoutInflater.from(context).inflate(R.layout.exercise_item, parent, false))
+        return com.example.alex.gymapp.adapters.ExerciseViewHolder(LayoutInflater.from(context).inflate(R.layout.exercise_item, parent, false))
     }
 
     private fun selectView(holder: ExerciseViewHolder) {

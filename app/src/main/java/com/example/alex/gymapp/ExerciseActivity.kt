@@ -1,13 +1,9 @@
 package com.example.alex.gymapp
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.MenuItem
-import android.view.View
 import com.example.alex.gymapp.model.Exercise
-import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_exercise.*
@@ -22,15 +18,21 @@ class ExerciseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
 
-        setSupportActionBar(toolbar)
-
+        //Get Exercise
         val exerciseId = intent.getLongExtra("exerciseId",0)
-
         realm = Realm.getDefaultInstance()
-
         exercise = realm.where<Exercise>().equalTo("id",exerciseId).findFirst()!!
 
+        //Show exercise data
         titleTw.text = exercise.name
+        weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
+        restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
+        seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
+        executionDayTw.text = exercise.executionDay
+
+        backBtn.setOnClickListener{
+            finish()
+        }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId === android.R.id.home) {
