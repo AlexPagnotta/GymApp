@@ -196,6 +196,6 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): ScheduleFragment = ScheduleFragment()
+        fun newInstance(): AddExerciseFragmentDialog = AddExerciseFragmentDialog()
     }
 }

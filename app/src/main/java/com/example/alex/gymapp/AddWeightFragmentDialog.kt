@@ -108,6 +108,6 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): ScheduleFragment = ScheduleFragment()
+        fun newInstance(): AddWeightFragmentDialog = AddWeightFragmentDialog()
     }
 }

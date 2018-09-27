@@ -6,17 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ExerciseActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="96dp"
-        style="@style/ToolbarStyle"
-        app:titleTextColor="@color/colorPrimary"
-        app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:contentInsetStart="24dp"
-        app:title=""
-        >
 
-    </android.support.v7.widget.Toolbar>
-
+    <TextView
+        android:id="@+id/titleTw"
+        android:layout_width="373dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Title"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="81dp" />
 </android.support.constraint.ConstraintLayout>
