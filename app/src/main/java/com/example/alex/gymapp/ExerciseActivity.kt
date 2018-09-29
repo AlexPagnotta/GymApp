@@ -1,5 +1,6 @@
 package com.example.alex.gymapp
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +9,9 @@ import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.fragment_weights.*
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
+
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -32,6 +36,26 @@ class ExerciseActivity : AppCompatActivity() {
 
         backBtn.setOnClickListener{
             finish()
+        }
+
+        deleteBtn.setOnClickListener{
+            val builder = AlertDialog.Builder(this)
+
+            //builder.setTitle("Delete ");
+            builder.setMessage("Delete this exercise?")
+                    .setCancelable(false)
+                    .setPositiveButton("CONFIRM"
+                    ) { _, _ ->
+
+                        realm.executeTransaction(Realm.Transaction {
+                            exercise.deleteFromRealm();
+                        })
+
+                        finish()
+                    }
+                    .setNegativeButton("CANCEL") { _, _ ->}
+
+            builder.show()
         }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
