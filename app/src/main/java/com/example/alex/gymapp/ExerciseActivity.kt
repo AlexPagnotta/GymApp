@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.fragment_weights.*
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
-
+import android.content.Intent
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -36,6 +36,12 @@ class ExerciseActivity : AppCompatActivity() {
 
         backBtn.setOnClickListener{
             finish()
+        }
+
+        editBtn.setOnClickListener{
+            val intent = Intent(this, EditExerciseActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra("exerciseId", exercise.id)
+            this.startActivity(intent)
         }
 
         deleteBtn.setOnClickListener{
