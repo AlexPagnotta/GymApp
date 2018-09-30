@@ -80,7 +80,7 @@ class WeightAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.weights_item, parent, false))
+        return com.example.alex.gymapp.adapters.ViewHolder(LayoutInflater.from(context).inflate(R.layout.weights_item, parent, false))
     }
 
     private fun selectView(holder: ViewHolder) {

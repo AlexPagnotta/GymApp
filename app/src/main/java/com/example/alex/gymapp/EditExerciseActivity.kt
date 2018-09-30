@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_edit_exercise.*
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import io.realm.kotlin.createObject
 
 
 class EditExerciseActivity : AppCompatActivity() {
@@ -19,6 +20,8 @@ class EditExerciseActivity : AppCompatActivity() {
     lateinit var realm: Realm
     lateinit var exercise: Exercise
     lateinit var selectedExecutionDay : String
+
+    var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,8 @@ class EditExerciseActivity : AppCompatActivity() {
             seriesET.setText(exercise.series.toString())
             repetitionsET.setText(exercise.repetitions.toString())
             selectedExecutionDay = exercise.executionDay
+
+            isEditMode = true
         }
 
         setupExecutionDaySpinner()
@@ -65,8 +70,9 @@ class EditExerciseActivity : AppCompatActivity() {
         }
 
         saveBtn.setOnClickListener {
-            save()
+            Save()
             val returnIntent = Intent()
+            returnIntent.putExtra("executionDay",exercise.executionDay)
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
             overridePendingTransition(0, 0)
@@ -95,7 +101,7 @@ class EditExerciseActivity : AppCompatActivity() {
         }
     }
 
-    private fun save(){
+    private fun Save(){
         //Get data
         var name = nameET.text.toString()
         var weightValue = java.lang.Double.parseDouble(weightET.text.toString())
@@ -104,19 +110,44 @@ class EditExerciseActivity : AppCompatActivity() {
         var seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
         var repetitionsValue =  java.lang.Integer.parseInt(repetitionsET.text.toString())
 
-        //Update on DB
         val realm = Realm.getDefaultInstance()
-        realm.executeTransaction { realm ->
-            //Update Exercise
-            exercise.name = name
-            exercise.weight = weightValue
-            exercise.minutesOfRest = minutesOfRestValue
-            exercise.secondsOfRest = secondOfRestValue
-            exercise.series = seriesValue
-            exercise.repetitions = repetitionsValue
-            exercise.executionDay = selectedExecutionDay
 
-            realm.insertOrUpdate(exercise)
+        if(isEditMode){
+            //Update on DB
+            realm.executeTransaction { realm ->
+                //Update Exercise
+                exercise.name = name
+                exercise.weight = weightValue
+                exercise.minutesOfRest = minutesOfRestValue
+                exercise.secondsOfRest = secondOfRestValue
+                exercise.series = seriesValue
+                exercise.repetitions = repetitionsValue
+                exercise.executionDay = selectedExecutionDay
+
+                realm.insertOrUpdate(exercise)
+            }
+        }
+        else{
+            realm.executeTransaction { realm ->
+                val currentIdNum = realm.where<Exercise>().max("id")
+                val nextId: Int
+                if (currentIdNum == null) {
+                    nextId = 1
+                } else {
+                    nextId = currentIdNum!!.toInt() + 1
+                }
+
+                var newExercise = realm.createObject<Exercise>(nextId)
+                newExercise.name = name
+                newExercise.weight = weightValue
+                newExercise.minutesOfRest = minutesOfRestValue
+                newExercise.secondsOfRest = secondOfRestValue
+                newExercise.series = seriesValue
+                newExercise.repetitions = repetitionsValue
+                newExercise.executionDay = selectedExecutionDay
+
+                exercise = newExercise
+            }
         }
     }
 }

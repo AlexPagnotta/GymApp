@@ -33,13 +33,16 @@ class ExerciseActivity : AppCompatActivity() {
         reloadUI()
 
         backBtn.setOnClickListener{
+            val returnIntent = Intent()
+            returnIntent.putExtra("executionDay",exercise.executionDay)
+            setResult(Activity.RESULT_OK, returnIntent)
             finish()
         }
 
         editBtn.setOnClickListener{
             val intent = Intent(this, EditExerciseActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             intent.putExtra("exerciseId", exercise.id)
-            this.startActivityForResult(intent, 1)
+            this.startActivityForResult(intent, 3)
         }
 
         deleteBtn.setOnClickListener{
@@ -55,6 +58,8 @@ class ExerciseActivity : AppCompatActivity() {
                             exercise.deleteFromRealm();
                         })
 
+                        val returnIntent = Intent()
+                        setResult(Activity.RESULT_CANCELED, returnIntent)
                         finish()
                     }
                     .setNegativeButton("CANCEL") { _, _ ->}
@@ -74,7 +79,7 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == 1) {
+        if (requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
                 reloadUI()
             }

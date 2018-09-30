@@ -192,7 +192,7 @@ class AddExerciseFragmentDialog : BottomSheetDialogFragment() {
             exerciseAdded = exercise
         }
 
-        parent.exerciseAdded(exerciseAdded!!)
+        //parent.exerciseAdded(exerciseAdded!!)
     }
 
     companion object {
