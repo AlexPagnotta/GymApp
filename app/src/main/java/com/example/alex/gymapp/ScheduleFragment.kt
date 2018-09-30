@@ -49,7 +49,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
         //Fab click
         add_schedule_fab.setOnClickListener{
-            val intent = Intent(context, EditExerciseActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val intent = Intent(context, EditExerciseActivity::class.java)
             this.startActivityForResult(intent, 1)
         }
     }

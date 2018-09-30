@@ -14,8 +14,6 @@ import android.support.v7.app.AlertDialog
 import android.content.Intent
 import android.app.Activity
 
-
-
 class ExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
@@ -70,7 +68,11 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun reloadUI(){
         //Show exercise data
-        titleTw.text = exercise.name
+        var name = exercise.name
+        if(name.isEmpty()){
+            name = "No Exercise Name"
+        }
+        titleTw.text = name
         weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
         restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
         seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )

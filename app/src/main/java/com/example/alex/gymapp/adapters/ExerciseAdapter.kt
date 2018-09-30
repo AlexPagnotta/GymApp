@@ -40,19 +40,23 @@ class ExerciseAdapter(
         val item = items[position]
 
         //Show Name
-        holder?.nameTV.text = item!!.name
+        var name = item!!.name
+        if(name.isEmpty()){
+            name = "No Exercise Name"
+        }
+        holder.nameTV.text = name
 
         //Show Series Repetition
-        val seriesRepetitionsString = String.format("%dx%d ", item!!.series,item!!.repetitions )
-        holder?.seriesRepetitionTV?.text = seriesRepetitionsString
+        val seriesRepetitionsString = String.format("%dx%d", item.series, item.repetitions )
+        holder.seriesRepetitionTV.text = seriesRepetitionsString
 
         //Show Weight
-        val restString = String.format("%dM %dS", item!!.minutesOfRest, item!!.secondsOfRest)
-        holder?.restTimeTV?.text = restString
+        val restString = String.format("%d Min.\n%d Sec.", item.minutesOfRest, item.secondsOfRest)
+        holder.restTimeTV.text = restString
 
         //Show Weight
-        val weightString = String.format("%1$,.2f Kg", item!!.weight)
-        holder?.weightTV?.text = weightString
+        val weightString = String.format("%1$,.2f\nKg", item.weight)
+        holder.weightTV.text = weightString
 
         //Manage Selection
         holder.itemView.setOnLongClickListener {

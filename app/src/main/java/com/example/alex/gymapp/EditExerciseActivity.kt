@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_edit_exercise.*
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import com.example.alex.gymapp.extensions.onChange
 import io.realm.kotlin.createObject
 
 
@@ -49,6 +50,8 @@ class EditExerciseActivity : AppCompatActivity() {
         }
 
         setupExecutionDaySpinner()
+
+        setEditTextsMinMax()
 
         cancelBtn.setOnClickListener {
             //TODO pending changes check
@@ -101,14 +104,92 @@ class EditExerciseActivity : AppCompatActivity() {
         }
     }
 
+    private fun setEditTextsMinMax(){
+        //Weight ET
+        weightET.onChange {
+            if(!it.isEmpty()) {
+                val number = java.lang.Double.parseDouble(it)
+                if (number > 1000) {
+                    weightET.text!!.replace(0, it.length, "999", 0, 3)
+                }
+            }
+        }
+
+        //MinutesRest ET
+        minutesRestET.onChange {
+            if(!it.isEmpty()){
+                val number = java.lang.Integer.parseInt(it)
+                if (number > 60) {
+                    minutesRestET.text!!.replace(0, it.length, "60", 0, 2)
+                }
+            }
+        }
+
+        //SecondsRest ET
+        secondsRestET.onChange {
+            if (!it.isEmpty()) {
+                val number = java.lang.Integer.parseInt(it)
+                if (number > 60) {
+                    secondsRestET.text!!.replace(0, it.length, "59", 0, 2)
+                }
+            }
+        }
+
+        //series ET
+        seriesET.onChange {
+            if (!it.isEmpty()) {
+                val number = java.lang.Integer.parseInt(it)
+                if (number > 100) {
+                    seriesET.text!!.replace(0, it.length, "99", 0, 2)
+                }
+            }
+        }
+
+        //repetitions ET
+        repetitionsET.onChange {
+            if (!it.isEmpty()) {
+                val number = java.lang.Integer.parseInt(it)
+                if (number > 100) {
+                    repetitionsET.text!!.replace(0, it.length, "99", 0, 2)
+                }
+            }
+        }
+    }
+
     private fun Save(){
+
         //Get data
-        var name = nameET.text.toString()
-        var weightValue = java.lang.Double.parseDouble(weightET.text.toString())
-        var minutesOfRestValue = java.lang.Integer.parseInt(minutesRestET.text.toString())
-        var secondOfRestValue = java.lang.Integer.parseInt(secondsRestET.text.toString())
-        var seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
-        var repetitionsValue =  java.lang.Integer.parseInt(repetitionsET.text.toString())
+        val name = nameET.text.toString()
+
+        var weightValue = 0.0
+        try{
+            weightValue = java.lang.Double.parseDouble(weightET.text.toString())
+        }
+        catch (e: Exception){ }
+
+        var minutesOfRestValue = 0
+        try{
+            minutesOfRestValue = java.lang.Integer.parseInt(minutesRestET.text.toString())
+        }
+        catch (e: Exception){ }
+
+        var secondOfRestValue = 0
+        try{
+            secondOfRestValue = java.lang.Integer.parseInt(secondsRestET.text.toString())
+        }
+        catch (e: Exception){ }
+
+        var seriesValue = 0
+        try{
+            seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
+        }
+        catch (e: Exception){ }
+
+        var repetitionsValue = 0
+        try{
+            repetitionsValue = java.lang.Integer.parseInt(repetitionsET.text.toString())
+        }
+        catch (e: Exception){ }
 
         val realm = Realm.getDefaultInstance()
 
@@ -137,7 +218,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     nextId = currentIdNum!!.toInt() + 1
                 }
 
-                var newExercise = realm.createObject<Exercise>(nextId)
+                val newExercise = realm.createObject<Exercise>(nextId)
                 newExercise.name = name
                 newExercise.weight = weightValue
                 newExercise.minutesOfRest = minutesOfRestValue
