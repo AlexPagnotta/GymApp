@@ -1,56 +1,101 @@
 package com.example.alex.gymapp
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.example.alex.gymapp.R
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_edit_exercise.*
+import android.app.Activity
+import android.content.Intent
+import android.support.v7.app.AlertDialog
+
 
 class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
+    lateinit var selectedExecutionDay : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exercise)
 
-        //Get Exercise
-        val exerciseId = intent.getLongExtra("exerciseId", 0)
-        realm = Realm.getDefaultInstance()
-        exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
+        val weekDays = resources.getStringArray(R.array.days_of_week)
+        selectedExecutionDay = weekDays[0]
 
-        //Set exercise data
-        nameET.setText(exercise.name)
-        weightET.setText(exercise.weight.toString())
-        minutesRestET.setText(exercise.minutesOfRest.toString())
-        secondsRestET.setText(exercise.secondsOfRest.toString())
-        seriesET.setText(exercise.series.toString())
-        repetitionsET.setText(exercise.repetitions.toString())
-        //executionDaySpinner2.text = exercise.executionDay
+        if(intent.hasExtra("exerciseId")){
+            //Get Exercise
+            val exerciseId = intent.getLongExtra("exerciseId", 0)
+            realm = Realm.getDefaultInstance()
+            exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
+
+            //Set exercise data
+            nameET.setText(exercise.name)
+            weightET.setText(exercise.weight.toString())
+            minutesRestET.setText(exercise.minutesOfRest.toString())
+            secondsRestET.setText(exercise.secondsOfRest.toString())
+            seriesET.setText(exercise.series.toString())
+            repetitionsET.setText(exercise.repetitions.toString())
+            selectedExecutionDay = exercise.executionDay
+        }
+
+        setupExecutionDaySpinner()
 
         cancelBtn.setOnClickListener {
-            finish()
-            overridePendingTransition(0, 0)
-            //TODO add popup for confirmation and pending changes
+            //TODO pending changes check
+
+            val builder = AlertDialog.Builder(this)
+            //builder.setTitle("");
+            builder.setMessage("Are you sure you want to discard these changes?")
+                    .setCancelable(false)
+                    .setPositiveButton("CONFIRM"
+                    ) { _, _ ->
+                        val returnIntent = Intent()
+                        setResult(Activity.RESULT_CANCELED, returnIntent)
+                        finish()
+                        overridePendingTransition(0, 0)
+                    }
+                    .setNegativeButton("CANCEL") { _, _ ->}
+
+            builder.show()
         }
 
         saveBtn.setOnClickListener {
-            Save()
+            save()
+            val returnIntent = Intent()
+            setResult(Activity.RESULT_OK, returnIntent)
             finish()
             overridePendingTransition(0, 0)
-            //TODO Add Callback or intent with result dont know
         }
     }
 
-    private fun Save(){
+    private fun setupExecutionDaySpinner(){
+        val weekDays = resources.getStringArray(R.array.days_of_week)
+        val position = weekDays.indexOf(selectedExecutionDay)
 
-        //TODO Execution day
+        val dataAdapter = ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                weekDays)
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        executionDaySpinner.adapter = dataAdapter
 
+        executionDaySpinner.setSelection(position)
+
+        executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
+                selectedExecutionDay = parentView.getItemAtPosition(position).toString()
+            }
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+            }
+        }
+    }
+
+    private fun save(){
         //Get data
         var name = nameET.text.toString()
         var weightValue = java.lang.Double.parseDouble(weightET.text.toString())
@@ -69,10 +114,9 @@ class EditExerciseActivity : AppCompatActivity() {
             exercise.secondsOfRest = secondOfRestValue
             exercise.series = seriesValue
             exercise.repetitions = repetitionsValue
-            //exercise.executionDay = selectedExecutionDay
+            exercise.executionDay = selectedExecutionDay
+
             realm.insertOrUpdate(exercise)
         }
-
-
     }
 }

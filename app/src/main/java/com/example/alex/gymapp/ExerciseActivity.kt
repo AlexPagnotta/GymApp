@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.fragment_weights.*
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.content.Intent
+import android.app.Activity
+
+
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -27,12 +30,7 @@ class ExerciseActivity : AppCompatActivity() {
         realm = Realm.getDefaultInstance()
         exercise = realm.where<Exercise>().equalTo("id",exerciseId).findFirst()!!
 
-        //Show exercise data
-        titleTw.text = exercise.name
-        weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
-        restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
-        seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
-        executionDayTw.text = exercise.executionDay
+        reloadUI()
 
         backBtn.setOnClickListener{
             finish()
@@ -41,7 +39,7 @@ class ExerciseActivity : AppCompatActivity() {
         editBtn.setOnClickListener{
             val intent = Intent(this, EditExerciseActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             intent.putExtra("exerciseId", exercise.id)
-            this.startActivity(intent)
+            this.startActivityForResult(intent, 1)
         }
 
         deleteBtn.setOnClickListener{
@@ -64,6 +62,27 @@ class ExerciseActivity : AppCompatActivity() {
             builder.show()
         }
     }
+
+    private fun reloadUI(){
+        //Show exercise data
+        titleTw.text = exercise.name
+        weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
+        restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
+        seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
+        executionDayTw.text = exercise.executionDay
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                reloadUI()
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId === android.R.id.home) {
             finish()

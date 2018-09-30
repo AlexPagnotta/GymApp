@@ -8,7 +8,7 @@
     tools:context=".EditExerciseActivity">
 
     <Spinner
-        android:id="@+id/executionDaySpinner2"
+        android:id="@+id/executionDaySpinner"
         android:layout_width="171dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
