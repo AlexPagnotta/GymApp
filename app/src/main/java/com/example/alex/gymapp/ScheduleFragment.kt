@@ -183,9 +183,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
                         var existingDays = getExistingDays()
 
-                        setSpinnerItems(existingDays)
+                        if(existingDays.count() != 0){
+                            setSpinnerItems(existingDays)
+                            changeSchedule(days_spinner.getItemAtPosition(0).toString())
+                        }
 
-                        changeSchedule(days_spinner.getItemAtPosition(0).toString())
                     }
 
                     true
