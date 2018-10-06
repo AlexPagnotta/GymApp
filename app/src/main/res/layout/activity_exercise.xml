@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/white"
+    tools:context=".ExerciseActivity">
+
+
+    <TextView
+        android:id="@+id/restTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="1 Min. 32 sec."
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/restTextTw"
+        app:layout_constraintStart_toEndOf="@+id/restTextTw" />
+
+    <TextView
+        android:id="@+id/weightTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="30 Kg"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/weightTextTw"
+        app:layout_constraintStart_toEndOf="@+id/weightTextTw" />
+
+    <TextView
+        android:id="@+id/executionDayTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Monday"
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/executionDayTextTw"
+        app:layout_constraintStart_toEndOf="@+id/executionDayTextTw" />
+
+    <TextView
+        android:id="@+id/seriesTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="2 Series 10 Rep."
+        android:textSize="24sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/seriesTextTw"
+        app:layout_constraintStart_toEndOf="@+id/seriesTextTw" />
+
+    <TextView
+        android:id="@+id/executionDayTextTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Execution Day"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seriesTextTw" />
+
+    <TextView
+        android:id="@+id/seriesTextTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Series"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restTextTw" />
+
+    <TextView
+        android:id="@+id/restTextTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Rest Time"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightTextTw" />
+
+    <TextView
+        android:id="@+id/weightTextTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Weight"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTw" />
+
+    <TextView
+        android:id="@+id/titleTw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Title"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/colorAccent"
+        android:clickable="true"
+        android:foreground="@drawable/ripple_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/editBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/round_background"
+        android:clickable="true"
+        android:foreground="@drawable/ripple_circle"
+        app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_outline_edit_24px" />
+
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/round_background"
+        android:clickable="true"
+        android:foreground="@drawable/ripple_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_outline_delete_24px" />
+
+</android.support.constraint.ConstraintLayout>

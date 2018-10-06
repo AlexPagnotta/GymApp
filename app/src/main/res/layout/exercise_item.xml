@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true">
+
+    <TextView
+        android:id="@+id/nameTV"
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".4"
+        android:textSize="18sp"
+        android:paddingLeft="24dp"
+        android:gravity="center_vertical|start"/>
+
+    <TextView
+        android:id="@+id/restTimeTV"
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".2"
+        android:textSize="14sp"
+        android:paddingLeft="24dp"
+        android:gravity="center_vertical|start"/>
+
+    <TextView
+        android:id="@+id/seriesRepetitionsTV"
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".2"
+        android:textSize="14sp"
+        android:paddingLeft="24dp"
+        android:gravity="center_vertical|start"/>
+
+    <TextView
+        android:id="@+id/weightTV"
+        android:layout_width="0dip"
+        android:layout_height="72dp"
+        android:layout_weight=".2"
+
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"
+        android:paddingRight="24dp"
+        android:gravity="center_vertical|end"/>
+
+</LinearLayout>

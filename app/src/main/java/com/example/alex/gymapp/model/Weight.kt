@@ -11,8 +11,4 @@ open class Weight(
 
         var weight: Double = 0.0
 
-) : RealmObject() {
-        // The Kotlin compiler generates standard getters and setters.
-        // Realm will overload them and code inside them is ignored.
-        // So if you prefer you can also just have empty abstract methods.
-}
+) : RealmObject()
