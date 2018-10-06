@@ -62,7 +62,8 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
             override fun onItemSelected(parentView: AdapterView<*>,
                                         selectedItemView: View, position: Int, id: Long) {
 
-                val selectedExecutionDay = parentView.getItemAtPosition(position).toString()
+                val existingDays = getExistingDays()
+                val selectedExecutionDay = existingDays[position]
                 changeSchedule(selectedExecutionDay)
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {
@@ -70,7 +71,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         }
     }
 
-    private fun exerciseAdded(executionDay : String){
+    private fun exerciseAdded(executionDay : Int){
         val existingDays = getExistingDays()
         setSpinnerItems(existingDays)
         val itemId = existingDays.indexOf(executionDay)
@@ -109,15 +110,22 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         })
     }
 
-    private fun setSpinnerItems(existingDays: ArrayList<String>){
-        val dataAdapter = ArrayAdapter<String>(context,R.layout.spinner_toolbar_item, existingDays)
+    private fun setSpinnerItems(existingDays: ArrayList<Int>){
 
+        val daysStrings : ArrayList<String> = arrayListOf()
+        val weekDaysArray = resources.getStringArray(R.array.days_of_week)
+
+        for (day in existingDays) {
+           daysStrings.add(weekDaysArray[day])
+        }
+
+        val dataAdapter = ArrayAdapter<String>(context!!,R.layout.spinner_toolbar_item, daysStrings)
         dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
-
         days_spinner.adapter = dataAdapter
+
     }
 
-    private fun changeSchedule(selectedExecutionDay:String){
+    private fun changeSchedule(selectedExecutionDay:Int){
         val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
 
         adapter = ExerciseAdapter(exercisesOfDay, context!!,this)
@@ -125,20 +133,21 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
     }
 
-    private fun getExistingDays () : ArrayList<String>{
+    private fun getExistingDays () : ArrayList<Int>{
 
         //Get exercises from realm
         val exercises = realm.where<Exercise>().findAll()
 
-        var distinctDays : ArrayList<String> = arrayListOf()
-
+        //Get distinct days
+        val distinctDays : ArrayList<Int> = arrayListOf()
         for (exercise in exercises) {
             val dayOfWeek = exercise.executionDay
-
             if(!distinctDays.contains(dayOfWeek)){
                 distinctDays.add(dayOfWeek)
             }
         }
+
+        //TODo Reorder days
         return distinctDays
     }
 
@@ -185,7 +194,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
                         if(existingDays.count() != 0){
                             setSpinnerItems(existingDays)
-                            changeSchedule(days_spinner.getItemAtPosition(0).toString())
+                            changeSchedule(0)
                         }
 
                     }
@@ -219,7 +228,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 || requestCode == 2) {
             if (resultCode == Activity.RESULT_OK) {
-                val executionDay = data!!.getStringExtra("executionDay")
+                val executionDay = data!!.getIntExtra("executionDay",0)
                 exerciseAdded(executionDay)
             }
             //Exercise deleted
@@ -232,7 +241,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
                     setSpinnerItems(existingDays)
 
-                    changeSchedule(days_spinner.getItemAtPosition(0).toString())
+                    changeSchedule(0)
                 }
             }
         }

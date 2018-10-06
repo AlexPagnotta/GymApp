@@ -76,7 +76,8 @@ class ExerciseActivity : AppCompatActivity() {
         weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
         restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
         seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
-        executionDayTw.text = exercise.executionDay
+        val weekDays = resources.getStringArray(R.array.days_of_week)
+        executionDayTw.text = weekDays[exercise.executionDay]
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

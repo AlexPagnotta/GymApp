@@ -19,6 +19,6 @@ open class Exercise(
 
         var repetitions : Int = 1,
 
-        var executionDay : Days = Days.MONDAY
+        var executionDay : Int = 0
 
 ) : RealmObject()

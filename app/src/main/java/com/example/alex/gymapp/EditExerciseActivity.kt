@@ -20,7 +20,7 @@ class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
-    lateinit var selectedExecutionDay : String
+    var selectedExecutionDay = 0
 
     var isEditMode = false
 
@@ -28,8 +28,7 @@ class EditExerciseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exercise)
 
-        val weekDays = resources.getStringArray(R.array.days_of_week)
-        selectedExecutionDay = weekDays[0]
+        selectedExecutionDay = 0
 
         if(intent.hasExtra("exerciseId")){
             //Get Exercise
@@ -84,7 +83,7 @@ class EditExerciseActivity : AppCompatActivity() {
 
     private fun setupExecutionDaySpinner(){
         val weekDays = resources.getStringArray(R.array.days_of_week)
-        val position = weekDays.indexOf(selectedExecutionDay)
+        val position =selectedExecutionDay
 
         val dataAdapter = ArrayAdapter<String>(
                 this,
@@ -97,7 +96,7 @@ class EditExerciseActivity : AppCompatActivity() {
 
         executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
-                selectedExecutionDay = parentView.getItemAtPosition(position).toString()
+                selectedExecutionDay = position
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {
             }
