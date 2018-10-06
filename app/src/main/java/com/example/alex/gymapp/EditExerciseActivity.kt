@@ -51,19 +51,7 @@ class EditExerciseActivity : AppCompatActivity() {
         setEditTextsMinMax()
 
         cancelBtn.setOnClickListener {
-            //TODO pending changes check
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage("Are you sure you want to discard these changes?")
-                    .setCancelable(false)
-                    .setPositiveButton("CONFIRM"
-                    ) { _, _ ->
-                        val returnIntent = Intent()
-                        setResult(Activity.RESULT_CANCELED, returnIntent)
-                        finish()
-                        overridePendingTransition(0, 0)
-                    }
-                    .setNegativeButton("CANCEL") { _, _ ->}
-            builder.show()
+            showConfirmDialog()
         }
 
         saveBtn.setOnClickListener {
@@ -74,6 +62,22 @@ class EditExerciseActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(0, 0)
         }
+    }
+
+    private fun showConfirmDialog(){
+        //TODO pending changes check
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Are you sure you want to discard these changes?")
+                .setCancelable(false)
+                .setPositiveButton("CONFIRM"
+                ) { _, _ ->
+                    val returnIntent = Intent()
+                    setResult(Activity.RESULT_CANCELED, returnIntent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                }
+                .setNegativeButton("CANCEL") { _, _ ->}
+        builder.show()
     }
 
     private fun setupExecutionDaySpinner(){
@@ -226,5 +230,9 @@ class EditExerciseActivity : AppCompatActivity() {
                 exercise = newExercise
             }
         }
+    }
+
+    override fun onBackPressed() {
+        showConfirmDialog()
     }
 }
