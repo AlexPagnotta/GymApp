@@ -15,21 +15,20 @@ import android.support.v7.app.AlertDialog
 import com.example.alex.gymapp.extensions.onChange
 import io.realm.kotlin.createObject
 
-
 class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
     var selectedExecutionDay = 0
 
+    //Bool to indicate if it's a new exercise on an existing one
     var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exercise)
 
-        selectedExecutionDay = 0
-
+        //If the id is present is an existing note
         if(intent.hasExtra("exerciseId")){
             //Get Exercise
             val exerciseId = intent.getLongExtra("exerciseId", 0)
@@ -49,14 +48,11 @@ class EditExerciseActivity : AppCompatActivity() {
         }
 
         setupExecutionDaySpinner()
-
         setEditTextsMinMax()
 
         cancelBtn.setOnClickListener {
             //TODO pending changes check
-
             val builder = AlertDialog.Builder(this)
-            //builder.setTitle("");
             builder.setMessage("Are you sure you want to discard these changes?")
                     .setCancelable(false)
                     .setPositiveButton("CONFIRM"
@@ -67,12 +63,11 @@ class EditExerciseActivity : AppCompatActivity() {
                         overridePendingTransition(0, 0)
                     }
                     .setNegativeButton("CANCEL") { _, _ ->}
-
             builder.show()
         }
 
         saveBtn.setOnClickListener {
-            Save()
+            saveExercise()
             val returnIntent = Intent()
             returnIntent.putExtra("executionDay",exercise.executionDay)
             setResult(Activity.RESULT_OK, returnIntent)
@@ -82,17 +77,16 @@ class EditExerciseActivity : AppCompatActivity() {
     }
 
     private fun setupExecutionDaySpinner(){
+        //Set spinner items with strings
         val weekDays = resources.getStringArray(R.array.days_of_week)
-        val position =selectedExecutionDay
-
         val dataAdapter = ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_item,
                 weekDays)
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         executionDaySpinner.adapter = dataAdapter
-
-        executionDaySpinner.setSelection(position)
+        //Set spinner selected item
+        executionDaySpinner.setSelection(selectedExecutionDay)
 
         executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
@@ -103,6 +97,7 @@ class EditExerciseActivity : AppCompatActivity() {
         }
     }
 
+    //Set minimum and maximum value of edit texts
     private fun setEditTextsMinMax(){
         //Weight ET
         weightET.onChange {
@@ -155,7 +150,7 @@ class EditExerciseActivity : AppCompatActivity() {
         }
     }
 
-    private fun Save(){
+    private fun saveExercise(){
 
         //Get data
         val name = nameET.text.toString()
@@ -192,6 +187,7 @@ class EditExerciseActivity : AppCompatActivity() {
 
         val realm = Realm.getDefaultInstance()
 
+        //Update the edited exercise
         if(isEditMode){
             //Update on DB
             realm.executeTransaction { realm ->
@@ -207,6 +203,7 @@ class EditExerciseActivity : AppCompatActivity() {
                 realm.insertOrUpdate(exercise)
             }
         }
+        //Save the new exercise
         else{
             realm.executeTransaction { realm ->
                 val currentIdNum = realm.where<Exercise>().max("id")
@@ -214,7 +211,7 @@ class EditExerciseActivity : AppCompatActivity() {
                 if (currentIdNum == null) {
                     nextId = 1
                 } else {
-                    nextId = currentIdNum!!.toInt() + 1
+                    nextId = currentIdNum.toInt() + 1
                 }
 
                 val newExercise = realm.createObject<Exercise>(nextId)

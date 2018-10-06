@@ -1,6 +1,5 @@
 package com.example.alex.gymapp
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,8 +7,6 @@ import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_exercise.*
-import kotlinx.android.synthetic.main.fragment_weights.*
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.content.Intent
 import android.app.Activity
@@ -27,7 +24,7 @@ class ExerciseActivity : AppCompatActivity() {
         val exerciseId = intent.getLongExtra("exerciseId",0)
         realm = Realm.getDefaultInstance()
         exercise = realm.where<Exercise>().equalTo("id",exerciseId).findFirst()!!
-
+        //Reload UI With Data
         reloadUI()
 
         backBtn.setOnClickListener{
@@ -46,7 +43,6 @@ class ExerciseActivity : AppCompatActivity() {
         deleteBtn.setOnClickListener{
             val builder = AlertDialog.Builder(this)
 
-            //builder.setTitle("Delete ");
             builder.setMessage("Delete this exercise?")
                     .setCancelable(false)
                     .setPositiveButton("CONFIRM"
@@ -81,9 +77,9 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         if (requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
+                //Reload ui when exercise has been edited
                 reloadUI()
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -92,7 +88,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId === android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             finish()
         }
 
