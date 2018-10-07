@@ -33,9 +33,14 @@ class ExerciseAdapter(
     private val selectedItems: ArrayList<Exercise> = ArrayList()
     private var isSelectionMode: Boolean = false
     private lateinit var receiver: OnClickAction
+    private lateinit var dragStartListener: OnStartDragListener
 
     interface OnClickAction {
         fun onClickAction()
+    }
+
+    interface OnStartDragListener {
+        fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 
     override fun getItemCount(): Int {
@@ -106,6 +111,13 @@ class ExerciseAdapter(
             selectView(holder)
         else
             deselectView(holder)
+
+        holder.handleImg.setOnTouchListener(OnTouchListener { v, event ->
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                dragStartListener.onStartDrag(holder)
+            }
+            false
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
@@ -126,6 +138,10 @@ class ExerciseAdapter(
 
     fun setActionModeReceiver(receiver: OnClickAction) {
        this.receiver = receiver
+    }
+
+    fun setDragStartListener(dragStartListener: OnStartDragListener) {
+        this.dragStartListener = dragStartListener
     }
 
     fun clearSelected() {
@@ -158,4 +174,6 @@ class ExerciseViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     val weightTV = view.weightTV!!
     val handleImg = view.handleImg!!
 }
+
+
 

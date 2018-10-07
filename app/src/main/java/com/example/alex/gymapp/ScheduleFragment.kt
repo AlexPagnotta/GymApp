@@ -22,12 +22,13 @@ import com.example.alex.gymapp.helpers.SimpleItemTouchHelperCallback
 
 
 
-class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
+class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAdapter.OnStartDragListener {
 
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: ExerciseAdapter
     lateinit var recyclerView: RecyclerView
+    lateinit var ItemTouchHelper : ItemTouchHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,13 +137,14 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
         //Set them to recycler view
         adapter = ExerciseAdapter(exercisesOfDay, context!!,this)
+        adapter.setDragStartListener(this)
         recyclerView.swapAdapter(adapter,false)
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
 
         //Set adapter for drag drop
         val callback = SimpleItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
+        ItemTouchHelper = ItemTouchHelper(callback)
+        ItemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun getExistingDays () : ArrayList<Int>{
@@ -172,6 +174,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         val dayIndex = existingDays.indexOf(executionDay)
         //Set spinner position
         days_spinner.setSelection(dayIndex)
+    }
+
+    //Drag Drop
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        ItemTouchHelper.startDrag(viewHolder);
     }
 
     //Action mode callback

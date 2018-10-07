@@ -30,11 +30,11 @@ public class SimpleItemTouchHelperCallback(adapter: ItemTouchHelperAdapter) : It
     }
 
     override fun isLongPressDragEnabled(): Boolean {
-        return true
+        return false//TODO Set true if implement long press on item
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {
-        return false //TODO Set true if implement swype
+        return false //TODO Set true if implement swipe
     }
 
 
