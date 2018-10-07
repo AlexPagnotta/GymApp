@@ -23,6 +23,7 @@ import java.util.Collections.swap
 import android.view.MotionEvent
 import android.support.v4.view.MotionEventCompat
 import android.view.View.OnTouchListener
+import io.realm.Realm
 
 class ExerciseAdapter(
         private val items : RealmResults<Exercise>,
@@ -151,16 +152,15 @@ class ExerciseAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        /*if (fromPosition < toPosition) {
+        if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(items, i, i + 1)
-                items.move()
+
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(items, i, i - 1)
+
             }
-        }*/
+        }
         notifyItemMoved(fromPosition, toPosition)
     }
 

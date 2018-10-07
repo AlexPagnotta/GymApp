@@ -19,7 +19,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.helper.ItemTouchHelper
 import com.example.alex.gymapp.helpers.SimpleItemTouchHelperCallback
-
+import io.realm.Sort
 
 
 class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAdapter.OnStartDragListener {
@@ -133,7 +133,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
 
     private fun changeSchedule(selectedExecutionDay:Int){
         //Get exercises of the selected day
-        val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
+        val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
 
         //Set them to recycler view
         adapter = ExerciseAdapter(exercisesOfDay, context!!,this)

@@ -210,12 +210,20 @@ class EditExerciseActivity : AppCompatActivity() {
         //Save the new exercise
         else{
             realm.executeTransaction { realm ->
-                val currentIdNum = realm.where<Exercise>().max("id")
+                val lastId = realm.where<Exercise>().max("id")
                 val nextId: Int
-                if (currentIdNum == null) {
+                if (lastId == null) {
                     nextId = 1
                 } else {
-                    nextId = currentIdNum.toInt() + 1
+                    nextId = lastId.toInt() + 1
+                }
+
+                val lastPos = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).max("position")
+                val nextPos: Int
+                if (lastPos == null) {
+                    nextPos = 0
+                } else {
+                    nextPos = lastPos.toInt() + 1
                 }
 
                 val newExercise = realm.createObject<Exercise>(nextId)
@@ -226,6 +234,7 @@ class EditExerciseActivity : AppCompatActivity() {
                 newExercise.series = seriesValue
                 newExercise.repetitions = repetitionsValue
                 newExercise.executionDay = selectedExecutionDay
+                newExercise.position = nextPos
 
                 exercise = newExercise
             }
