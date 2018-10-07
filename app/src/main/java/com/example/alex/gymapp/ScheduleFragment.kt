@@ -66,8 +66,8 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
         var lm = LinearLayoutManager(context!!)
 
         //Reverse the recycler view
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
+        lm.reverseLayout = false
+        lm.stackFromEnd = false
 
         recyclerView.layoutManager = lm
 
@@ -133,10 +133,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
 
     private fun changeSchedule(selectedExecutionDay:Int){
         //Get exercises of the selected day
-        val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
+        val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
+        val exercisesOfDay = realm.copyFromRealm(exercisesOfDayRealm)
 
         //Set them to recycler view
-        adapter = ExerciseAdapter(exercisesOfDay, context!!,this)
+        adapter = ExerciseAdapter(exercisesOfDay as ArrayList<Exercise>, context!!,this)
         adapter.setDragStartListener(this)
         recyclerView.swapAdapter(adapter,false)
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
@@ -178,7 +179,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
 
     //Drag Drop
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        ItemTouchHelper.startDrag(viewHolder);
+        ItemTouchHelper.startDrag(viewHolder)
     }
 
     //Action mode callback

@@ -24,12 +24,16 @@ import android.view.MotionEvent
 import android.support.v4.view.MotionEventCompat
 import android.view.View.OnTouchListener
 import io.realm.Realm
+import kotlin.collections.ArrayList
+import java.util.Collections.swap
+import android.content.ClipData.Item
+import io.realm.kotlin.where
 
 class ExerciseAdapter(
-        private val items : RealmResults<Exercise>,
+        private val items : ArrayList<Exercise>,
         private val context: Context,
         private val parentFragment: Fragment
-    ) : RealmRecyclerViewAdapter<Exercise, ExerciseViewHolder>(items, true), ItemTouchHelperAdapter
+    ) : RecyclerView.Adapter<ExerciseViewHolder>(), ItemTouchHelperAdapter
 {
     private val selectedItems: ArrayList<Exercise> = ArrayList()
     private var isSelectionMode: Boolean = false
@@ -152,15 +156,41 @@ class ExerciseAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
+        /*if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-
+                Collections.swap(items, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-
+                Collections.swap(items, i, i - 1)
             }
         }
+        notifyItemMoved(fromPosition, toPosition)*/
+        val realm = Realm.getDefaultInstance()
+        val item= items[fromPosition]
+        val index = item.position
+        realm.executeTransaction(Realm.Transaction { realm ->
+            val item = realm.where<Exercise>().equalTo("position", index).findFirst()
+            if (fromPosition < toPosition) {
+                val results = realm.where<Exercise>()
+                        .greaterThan("position", fromPosition)
+                        .lessThanOrEqualTo("position", toPosition)
+                        .findAll()
+                for (i in results.indices) {
+                    results.get(i)!!.position -= 1
+                }
+            } else {
+                val results = realm.where<Exercise>()
+                        .greaterThanOrEqualTo("position", toPosition)
+                        .lessThan("position", fromPosition)
+                        .findAll()
+                for (i in results.indices) {
+                    results.get(i)!!.position += 1
+                }
+            }
+            item!!.position = toPosition
+        })
+
         notifyItemMoved(fromPosition, toPosition)
     }
 
