@@ -17,6 +17,10 @@ import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import android.app.Activity
 import android.content.Intent
+import android.support.v7.widget.helper.ItemTouchHelper
+import com.example.alex.gymapp.helpers.SimpleItemTouchHelperCallback
+
+
 
 class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
@@ -58,7 +62,6 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
         //Setup RecyclerView
         recyclerView = view!!.findViewById(R.id.scheduleRW) as RecyclerView
-
         var lm = LinearLayoutManager(context!!)
 
         //Reverse the recycler view
@@ -100,7 +103,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
                 //Get selected day
                 val selectedExecutionDay = existingDays[position]
 
-                //Chang the schedule
+                //Change the schedule
                 changeSchedule(selectedExecutionDay)
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {
@@ -135,6 +138,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         adapter = ExerciseAdapter(exercisesOfDay, context!!,this)
         recyclerView.swapAdapter(adapter,false)
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
+
+        //Set adapter for drag drop
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun getExistingDays () : ArrayList<Int>{

@@ -44,4 +44,12 @@
         android:paddingRight="24dp"
         android:gravity="center_vertical|end"/>
 
+    <ImageView
+        android:id="@+id/handleImg"
+        android:layout_width="?listPreferredItemHeight"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|end"
+        android:scaleType="center"
+        android:src="@drawable/ic_reorder_black_24dp" />
+
 </LinearLayout>
