@@ -29,6 +29,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
     lateinit var adapter: ExerciseAdapter
     lateinit var recyclerView: RecyclerView
     lateinit var ItemTouchHelper : ItemTouchHelper
+    var selectedExecutionDay = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +103,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
                 existingDays = getExistingDays()
 
                 //Get selected day
-                val selectedExecutionDay = existingDays[position]
+                selectedExecutionDay = existingDays[position]
 
                 //Change the schedule
                 changeSchedule(selectedExecutionDay)
@@ -132,6 +133,23 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
     }
 
     private fun changeSchedule(selectedExecutionDay:Int){
+        //Get exercises of the selected day
+        val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
+        val exercisesOfDay = realm.copyFromRealm(exercisesOfDayRealm)
+
+        //Set them to recycler view
+        adapter = ExerciseAdapter(exercisesOfDay as ArrayList<Exercise>, context!!,this)
+        adapter.setDragStartListener(this)
+        recyclerView.swapAdapter(adapter,false)
+        adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
+
+        //Set adapter for drag drop
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        ItemTouchHelper = ItemTouchHelper(callback)
+        ItemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun reloadSchedule(){
         //Get exercises of the selected day
         val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
         val exercisesOfDay = realm.copyFromRealm(exercisesOfDayRealm)
@@ -222,13 +240,18 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
                     //If the selected day has 0 exercises left, Remove day from spinner
                     //and change schedule
                     val itemCount = adapter.itemCount
-                    if(itemCount == 0){
+                    if(itemCount - realmSelectedItems.count() == 0){
                         var existingDays = getExistingDays()
                         if(existingDays.count() != 0){
                             setSpinnerItems(existingDays)
                             changeSchedule(0)
                         }
+                        else{
+                            reloadSchedule()
+                        }
                     }
+                    else{
+                        reloadSchedule()}
                     true
                 } else -> false
             }
@@ -268,13 +291,14 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
                 val itemCount = adapter.itemCount
                 //If the selected day has 0 exercises left, Remove day from spinner
                 //and change schedule
-                if(itemCount == 0){
+                if(itemCount == 1){
                     val existingDays = getExistingDays()
                     if(existingDays.count() != 0){
                         setSpinnerItems(existingDays)
                         changeSchedule(0)
                     }
                 }
+                else{reloadSchedule()}
             }
         }
     }

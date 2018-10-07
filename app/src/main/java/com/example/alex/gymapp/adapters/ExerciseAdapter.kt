@@ -169,10 +169,12 @@ class ExerciseAdapter(
         val realm = Realm.getDefaultInstance()
         val item= items[fromPosition]
         val index = item.position
+        val selectedDay = item.executionDay
         realm.executeTransaction(Realm.Transaction { realm ->
-            val item = realm.where<Exercise>().equalTo("position", index).findFirst()
+            val realmitem = realm.where<Exercise>().equalTo("executionDay", selectedDay).equalTo("position", index).findFirst()
             if (fromPosition < toPosition) {
                 val results = realm.where<Exercise>()
+                        .equalTo("executionDay", selectedDay)
                         .greaterThan("position", fromPosition)
                         .lessThanOrEqualTo("position", toPosition)
                         .findAll()
@@ -181,6 +183,7 @@ class ExerciseAdapter(
                 }
             } else {
                 val results = realm.where<Exercise>()
+                        .equalTo("executionDay", selectedDay)
                         .greaterThanOrEqualTo("position", toPosition)
                         .lessThan("position", fromPosition)
                         .findAll()
@@ -188,7 +191,7 @@ class ExerciseAdapter(
                     results.get(i)!!.position += 1
                 }
             }
-            item!!.position = toPosition
+            realmitem!!.position = toPosition
         })
 
         notifyItemMoved(fromPosition, toPosition)
