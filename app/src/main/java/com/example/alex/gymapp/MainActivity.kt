@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         //Start first fragment
-        bottomNavigation.selectedItemId = 0
         val meFragment = MeFragment.newInstance()
         openFragment(meFragment)
     }

@@ -140,6 +140,9 @@ class EditExerciseActivity : AppCompatActivity() {
                 if (number > 100) {
                     seriesET.text!!.replace(0, it.length, "99", 0, 2)
                 }
+                else if(number < 1){
+                    seriesET.text!!.replace(0, it.length, "1", 0, 1)
+                }
             }
         }
 
@@ -149,6 +152,9 @@ class EditExerciseActivity : AppCompatActivity() {
                 val number = java.lang.Integer.parseInt(it)
                 if (number > 100) {
                     repetitionsET.text!!.replace(0, it.length, "99", 0, 2)
+                }
+                else if(number < 1){
+                    repetitionsET.text!!.replace(0, it.length, "1", 0, 1)
                 }
             }
         }
@@ -177,13 +183,13 @@ class EditExerciseActivity : AppCompatActivity() {
         }
         catch (e: Exception){ }
 
-        var seriesValue = 0
+        var seriesValue = 1
         try{
             seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
         }
         catch (e: Exception){ }
 
-        var repetitionsValue = 0
+        var repetitionsValue = 1
         try{
             repetitionsValue = java.lang.Integer.parseInt(repetitionsET.text.toString())
         }
