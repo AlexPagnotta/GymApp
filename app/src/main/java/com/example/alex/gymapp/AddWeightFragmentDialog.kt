@@ -18,6 +18,7 @@ import android.widget.DatePicker
 import com.example.alex.gymapp.extensions.onChange
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.support.v4.content.ContextCompat.getSystemService
 import android.view.inputmethod.InputMethodManager
 import android.support.v4.content.ContextCompat.getSystemService
@@ -104,6 +105,14 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
             val weight = realm.createObject<Weight>(nextId)
             weight.weight = weightValue
             weight.dateOfWeight = dateOfWeight
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        val parentFragment = parentFragment
+        if (parentFragment is DialogInterface.OnDismissListener) {
+            (parentFragment as DialogInterface.OnDismissListener).onDismiss(dialog)
         }
     }
 

@@ -1,6 +1,8 @@
 package com.example.alex.gymapp
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,19 +12,12 @@ import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_weights.*
-import android.widget.Toast
-import com.example.alex.gymapp.adapters.WeightAdapter.OnClickAction
-import android.app.Activity
-import android.widget.Toolbar
 import io.realm.RealmList
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode;
-import android.text.Html
-import com.example.alex.gymapp.R.id.toolbar
-import android.support.v4.view.ViewCompat.setElevation
+import android.support.v7.view.ActionMode
 
 
-class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
+class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface.OnDismissListener{
 
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
@@ -42,24 +37,24 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
         val weights = realm.where<Weight>().findAll()
 
-        var recyclerView = view.findViewById(R.id.weightsRW) as RecyclerView
-
         var lm = LinearLayoutManager(context!!)
 
         //Reverse the recycler view
         lm.reverseLayout = true
         lm.stackFromEnd = true
 
-        recyclerView.layoutManager = lm
+        weightsRW.layoutManager = lm
 
         adapter = WeightAdapter(weights, context!!)
 
-        recyclerView.adapter = adapter
+        weightsRW.adapter = adapter
 
         adapter.setActionModeReceiver(this as WeightAdapter.OnClickAction)
 
+        reloadUi()
+
         //Recycler view elevation on scroll
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        weightsRW.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             private val SCROLL_DIRECTION_UP = -1
 
@@ -78,8 +73,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
         //Fab click
         add_weight_fab.setOnClickListener{
-            val ft = fragmentManager!!.beginTransaction()
-            val prev = fragmentManager!!.findFragmentByTag("dialog")
+            val ft = childFragmentManager!!.beginTransaction()
+            val prev = childFragmentManager!!.findFragmentByTag("dialog")
             if (prev != null) {
                 ft.remove(prev)
             }
@@ -89,6 +84,20 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
         }
     }
 
+    public fun reloadUi(){
+        if(weightsRW.adapter!!.itemCount==0){
+            toolbar.visibility = View.GONE
+            weightsRW.visibility = View.GONE
+            recyclerEmptyTW.visibility = View.VISIBLE
+            return
+        }
+        else
+        {
+            toolbar.visibility = View.VISIBLE
+            weightsRW.visibility = View.VISIBLE
+            recyclerEmptyTW.visibility = View.GONE
+        }
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -129,6 +138,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
 
                     adapter.clearSelected()
 
+                    reloadUi()
+
                     true
                 }
                 else -> false
@@ -153,6 +164,10 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction {
                 actionMode?.title = "Selected: $selected"
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        reloadUi()
     }
 
     companion object {
