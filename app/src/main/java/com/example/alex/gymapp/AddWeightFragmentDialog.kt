@@ -22,8 +22,12 @@ import android.content.DialogInterface
 import android.support.v4.content.ContextCompat.getSystemService
 import android.view.inputmethod.InputMethodManager
 import android.support.v4.content.ContextCompat.getSystemService
+import com.example.alex.gymapp.R.id.datePicker
 
 class AddWeightFragmentDialog : BottomSheetDialogFragment() {
+
+    lateinit var realm: Realm
+    lateinit var weight: Weight
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,8 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        setEditTextsMinMax();
+
         confirmBtn.setOnClickListener{
             saveToRealm()
             dialog.dismiss()
@@ -45,22 +51,19 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
             dialog.dismiss()
         }
 
-        //Set 0 if empty
+        setTimePickerCurrentDate()
+    }
+
+    private fun setEditTextsMinMax(){
+        //Weight ET
         weightET.onChange {
-            if(it.isNullOrEmpty()){
-                weightET.setText("0")
-                weightET.selectAll()
+            if(!it.isEmpty()) {
+                val number = java.lang.Double.parseDouble(it)
+                if (number > 1000) {
+                    weightET.text!!.replace(0, it.length, "999", 0, 3)
+                }
             }
         }
-
-        weightET.setSelectAllOnFocus(true)
-
-        // Open the soft keyboard at start
-        weightET.requestFocus()
-        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
-        setTimePickerCurrentDate()
     }
 
     private fun setTimePickerCurrentDate(){
@@ -69,7 +72,7 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        datePicker.init(year,month,day,null)
+        dateSPicker.init(year,month,day,null)
     }
 
     private fun getDateFromDatePicker(datePicker: DatePicker): Date {
@@ -87,10 +90,12 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
         val realm = Realm.getDefaultInstance()
 
-        var weightValue: Double
+        var weightValue = 0.0
+        try{
+            weightValue = java.lang.Double.parseDouble(weightET.text.toString())
+        }
+        catch (e: Exception){ }
 
-        val text = weightET.text.toString()
-        weightValue = java.lang.Double.parseDouble(text)
 
         val dateOfWeight = getDateFromDatePicker(datePicker)
 
@@ -102,6 +107,7 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
             } else {
                 nextId = currentIdNum!!.toInt() + 1
             }
+
             val weight = realm.createObject<Weight>(nextId)
             weight.weight = weightValue
             weight.dateOfWeight = dateOfWeight
