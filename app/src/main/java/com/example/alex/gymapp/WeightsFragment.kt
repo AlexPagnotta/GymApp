@@ -72,8 +72,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
 
         //Fab click
         add_weight_fab.setOnClickListener{
-            val ft = childFragmentManager!!.beginTransaction()
-            val prev = childFragmentManager!!.findFragmentByTag("dialog")
+            val ft = childFragmentManager.beginTransaction()
+            val prev = childFragmentManager.findFragmentByTag("dialog")
             if (prev != null) {
                 ft.remove(prev)
             }

@@ -11,7 +11,6 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_edit_weight_fragment_dialog.*
 import java.util.*
-
 import android.widget.DatePicker
 import com.example.alex.gymapp.extensions.onChange
 import android.content.DialogInterface
@@ -20,6 +19,9 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
     lateinit var realm: Realm
     lateinit var weight: Weight
+
+    //Bool to indicate if it's a new weight on an existing one
+    var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,20 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        //If the id is present is an existing note
+        if(!arguments!!.isEmpty){
+            //Get Exercise
+            val weightId = arguments!!.getLong("weightId", 0)
+            realm = Realm.getDefaultInstance()
+            weight = realm.where<Weight>().equalTo("id", weightId).findFirst()!!
+
+            //Set exercise data
+            weightET.setText(weight.weight.toString())
+
+            //TODO Set Data
+            isEditMode = true
+        }
 
         setEditTextsMinMax();
 

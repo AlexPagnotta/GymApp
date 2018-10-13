@@ -1,6 +1,8 @@
 package com.example.alex.gymapp.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,13 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.weights_item.view.*
 import java.text.SimpleDateFormat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
+import com.example.alex.gymapp.EditWeightFragmentDialog
+import com.example.alex.gymapp.MainActivity
+import com.example.alex.gymapp.WeightsFragment
+import android.os.Bundle
+
+
 
 class WeightAdapter(
         private val items : RealmResults<Weight>,
@@ -70,6 +79,19 @@ class WeightAdapter(
                     isSelectionMode = false
 
                 receiver.onClickAction()
+            }
+            else{
+                val ft = (context as MainActivity).supportFragmentManager.beginTransaction()
+                val prev = (context).supportFragmentManager.findFragmentByTag("dialog")
+                if (prev != null) {
+                    ft.remove(prev)
+                }
+                ft.addToBackStack(null)
+                val dialogFragment = EditWeightFragmentDialog()
+                val args = Bundle()
+                args.putLong("weightId", item.id)
+                dialogFragment.arguments = args
+                dialogFragment.show(ft, "dialog")
             }
         }
 
