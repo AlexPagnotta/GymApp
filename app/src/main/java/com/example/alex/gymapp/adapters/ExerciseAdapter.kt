@@ -1,5 +1,6 @@
 package com.example.alex.gymapp.adapters
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,27 +15,44 @@ import io.realm.RealmResults
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.startActivity
 import com.example.alex.gymapp.ExerciseActivity
+import com.example.alex.gymapp.helpers.ItemTouchHelperAdapter
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.exercise_item.view.*
+import java.util.*
+import java.util.Collections.swap
+import android.view.MotionEvent
+import android.support.v4.view.MotionEventCompat
+import android.view.View.OnTouchListener
+import io.realm.Realm
+import kotlin.collections.ArrayList
+import java.util.Collections.swap
+import android.content.ClipData.Item
+import io.realm.kotlin.where
 
 class ExerciseAdapter(
-        private val items : RealmResults<Exercise>,
+        private val items : ArrayList<Exercise>,
         private val context: Context,
         private val parentFragment: Fragment
-    ) : RealmRecyclerViewAdapter<Exercise, ExerciseViewHolder>(items, true)
+    ) : RecyclerView.Adapter<ExerciseViewHolder>(), ItemTouchHelperAdapter
 {
     private val selectedItems: ArrayList<Exercise> = ArrayList()
     private var isSelectionMode: Boolean = false
     private lateinit var receiver: OnClickAction
+    private lateinit var dragStartListener: OnStartDragListener
 
     interface OnClickAction {
         fun onClickAction()
+    }
+
+    interface OnStartDragListener {
+        fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
 
         val item = items[position]
@@ -98,6 +116,13 @@ class ExerciseAdapter(
             selectView(holder)
         else
             deselectView(holder)
+
+        holder.handleImg.setOnTouchListener(OnTouchListener { v, event ->
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                dragStartListener.onStartDrag(holder)
+            }
+            false
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
@@ -120,10 +145,56 @@ class ExerciseAdapter(
        this.receiver = receiver
     }
 
+    fun setDragStartListener(dragStartListener: OnStartDragListener) {
+        this.dragStartListener = dragStartListener
+    }
+
     fun clearSelected() {
         selectedItems.clear()
         notifyDataSetChanged()
         isSelectionMode = false
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        /*if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(items, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(items, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)*/
+        val realm = Realm.getDefaultInstance()
+        val item= items[fromPosition]
+        val index = item.position
+        val selectedDay = item.executionDay
+        realm.executeTransaction(Realm.Transaction { realm ->
+            val realmitem = realm.where<Exercise>().equalTo("executionDay", selectedDay).equalTo("position", index).findFirst()
+            if (fromPosition < toPosition) {
+                val results = realm.where<Exercise>()
+                        .equalTo("executionDay", selectedDay)
+                        .greaterThan("position", fromPosition)
+                        .lessThanOrEqualTo("position", toPosition)
+                        .findAll()
+                for (i in results.indices) {
+                    results.get(i)!!.position -= 1
+                }
+            } else {
+                val results = realm.where<Exercise>()
+                        .equalTo("executionDay", selectedDay)
+                        .greaterThanOrEqualTo("position", toPosition)
+                        .lessThan("position", fromPosition)
+                        .findAll()
+                for (i in results.indices) {
+                    results.get(i)!!.position += 1
+                }
+            }
+            realmitem!!.position = toPosition
+        })
+
+        notifyItemMoved(fromPosition, toPosition)
     }
 
 }
@@ -134,6 +205,8 @@ class ExerciseViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     val restTimeTV = view.restTimeTV!!
     val seriesRepetitionTV = view.seriesRepetitionsTV!!
     val weightTV = view.weightTV!!
-
+    val handleImg = view.handleImg!!
 }
+
+
 

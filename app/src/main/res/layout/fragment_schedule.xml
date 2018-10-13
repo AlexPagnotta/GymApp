@@ -4,24 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/ToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        style="@style/ToolbarStyle"
-        app:titleTextColor="@color/colorPrimary"
-        app:titleTextAppearance="@style/Toolbar.TitleText"
         app:contentInsetStart="24dp"
         app:title="Schedule of "
-        >
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@color/colorPrimary">
 
         <Spinner
-            app:contentInsetStart="24dp"
             android:id="@+id/days_spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:contentInsetStart="24dp" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -36,7 +36,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.v7.widget.RecyclerView>
 
     <ru.dimorinny.floatingtextbutton.FloatingTextButton
         android:id="@+id/add_schedule_fab"
@@ -48,6 +50,25 @@
         app:floating_title="Add an exercise"
         app:floating_title_color="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </ru.dimorinny.floatingtextbutton.FloatingTextButton>
+
+    <TextView
+        android:id="@+id/recyclerEmptyTW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="No Exercises"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </android.support.constraint.ConstraintLayout>

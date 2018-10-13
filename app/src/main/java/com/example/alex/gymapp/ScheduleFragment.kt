@@ -17,13 +17,18 @@ import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import android.app.Activity
 import android.content.Intent
+import android.support.v7.widget.helper.ItemTouchHelper
+import com.example.alex.gymapp.helpers.SimpleItemTouchHelperCallback
+import android.view.LayoutInflater
 
-class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
+class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAdapter.OnStartDragListener {
 
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: ExerciseAdapter
-    lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var itemTouchHelper : ItemTouchHelper
+    var selectedExecutionDay = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +45,12 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         realm = Realm.getDefaultInstance()
 
         setupRecyclerView()
         setupSpinner()
+        reloadSchedule()
 
         //Fab click
         add_schedule_fab.setOnClickListener{
@@ -58,12 +63,11 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
 
         //Setup RecyclerView
         recyclerView = view!!.findViewById(R.id.scheduleRW) as RecyclerView
-
         var lm = LinearLayoutManager(context!!)
 
         //Reverse the recycler view
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
+        lm.reverseLayout = false
+        lm.stackFromEnd = false
 
         recyclerView.layoutManager = lm
 
@@ -96,12 +100,10 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
                                         selectedItemView: View, position: Int, id: Long) {
                 //Update existing days
                 existingDays = getExistingDays()
-
                 //Get selected day
-                val selectedExecutionDay = existingDays[position]
-
-                //Chang the schedule
-                changeSchedule(selectedExecutionDay)
+                selectedExecutionDay = existingDays[position]
+                //Change the schedule
+                reloadSchedule()
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {
             }
@@ -109,32 +111,50 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
     }
 
     private fun setSpinnerItems(existingDays: ArrayList<Int>){
-
         //Days to show on spinner in strings
         val daysStrings : ArrayList<String> = arrayListOf()
         //Array of string, containing the days
         val weekDaysArray = resources.getStringArray(R.array.days_of_week)
-
         //Get days strings
         for (day in existingDays) {
             daysStrings.add(weekDaysArray[day])
         }
-
         //Set adapter
         val dataAdapter = ArrayAdapter<String>(context!!,R.layout.spinner_toolbar_item, daysStrings)
         dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
         days_spinner.adapter = dataAdapter
-
     }
 
-    private fun changeSchedule(selectedExecutionDay:Int){
+    private fun reloadSchedule(){
+        val realmExercise = realm.where<Exercise>().findAll()
+        //If there are no exercise left at all, show different ui
+        if(realmExercise.count()==0){
+            toolbar.visibility = View.GONE
+            recyclerView.visibility = View.GONE
+            recyclerEmptyTW.visibility = View.VISIBLE
+            return
+        }
+        else
+        {
+            toolbar.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
+            recyclerEmptyTW.visibility = View.GONE
+        }
+
         //Get exercises of the selected day
-        val exercisesOfDay = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
+        val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll().sort("position")
+        val exercisesOfDay = realm.copyFromRealm(exercisesOfDayRealm)
 
         //Set them to recycler view
-        adapter = ExerciseAdapter(exercisesOfDay, context!!,this)
+        adapter = ExerciseAdapter(exercisesOfDay as ArrayList<Exercise>, context!!,this)
+        adapter.setDragStartListener(this)
         recyclerView.swapAdapter(adapter,false)
         adapter.setActionModeReceiver(this@ScheduleFragment as ExerciseAdapter.OnClickAction)
+
+        //Set adapter for drag drop
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun getExistingDays () : ArrayList<Int>{
@@ -164,6 +184,25 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
         val dayIndex = existingDays.indexOf(executionDay)
         //Set spinner position
         days_spinner.setSelection(dayIndex)
+        //Reload Schedule
+        reloadSchedule()
+    }
+
+    private fun exerciseDeleted(){
+        val exercises= realm.where<Exercise>().equalTo("executionDay", selectedExecutionDay).findAll()
+        val existingDays = getExistingDays()
+        //If there are no exercise left in the selected day, change schedule to first
+        if(exercises.count() == 0 && existingDays.count() != 0){
+            setSpinnerItems(existingDays)
+            selectedExecutionDay = 0
+        }
+
+        reloadSchedule()
+    }
+
+    //Drag Drop
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
     }
 
     //Action mode callback
@@ -203,16 +242,8 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
                     })
                     //Clear Selected
                     adapter.clearSelected()
-                    //If the selected day has 0 exercises left, Remove day from spinner
-                    //and change schedule
-                    val itemCount = adapter.itemCount
-                    if(itemCount == 0){
-                        var existingDays = getExistingDays()
-                        if(existingDays.count() != 0){
-                            setSpinnerItems(existingDays)
-                            changeSchedule(0)
-                        }
-                    }
+
+                    exerciseDeleted()
                     true
                 } else -> false
             }
@@ -249,16 +280,7 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction{
             }
             //Exercise Deleted
             if (resultCode == Activity.RESULT_CANCELED) {
-                val itemCount = adapter.itemCount
-                //If the selected day has 0 exercises left, Remove day from spinner
-                //and change schedule
-                if(itemCount == 0){
-                    val existingDays = getExistingDays()
-                    if(existingDays.count() != 0){
-                        setSpinnerItems(existingDays)
-                        changeSchedule(0)
-                    }
-                }
+                exerciseDeleted()
             }
         }
     }

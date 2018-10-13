@@ -2,6 +2,7 @@ package com.example.alex.gymapp.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import java.text.FieldPosition
 
 open class Exercise(
 
@@ -19,6 +20,8 @@ open class Exercise(
 
         var repetitions : Int = 1,
 
-        var executionDay : Int = 0
+        var executionDay : Int = 0,
+
+        var position : Int = 0
 
 ) : RealmObject()
