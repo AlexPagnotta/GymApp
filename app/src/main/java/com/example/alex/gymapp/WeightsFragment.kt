@@ -17,17 +17,20 @@ import android.support.v7.view.ActionMode
 import io.realm.RealmResults
 import io.realm.Sort
 
-
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface.OnDismissListener{
 
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: WeightAdapter
-
     lateinit var weights: RealmResults<Weight>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,29 +39,25 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         realm = Realm.getDefaultInstance()
 
+        //Load weights
         weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
-
         setupRecyclerView()
-
-        reloadUi()
+        reloadWeights()
 
         //Recycler view elevation on scroll
         weightsRW.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
             private val SCROLL_DIRECTION_UP = -1
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 if (recyclerView.canScrollVertically(SCROLL_DIRECTION_UP)){
                     toolbar.elevation = 20F
                 }
                 else{
                     toolbar.elevation = 0F
                 }
-
             }
         })
 
@@ -76,21 +75,21 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     }
 
     private fun setupRecyclerView(){
-        var lm = LinearLayoutManager(context!!)
+        val lm = LinearLayoutManager(context!!)
 
         //Reverse the recycler view
         lm.reverseLayout = true
         lm.stackFromEnd = true
 
         weightsRW.layoutManager = lm
-
         adapter = WeightAdapter(weights, context!!)
         weightsRW.adapter = adapter
 
         adapter.setActionModeReceiver(this as WeightAdapter.OnClickAction)
     }
 
-    public fun reloadUi(){
+    fun reloadWeights(){
+        //If there are no weights left at all, show different ui
         if(weightsRW.adapter!!.itemCount==0){
             toolbar.visibility = View.GONE
             weightsRW.visibility = View.GONE
@@ -105,15 +104,10 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-    }
-
+    //Action mode
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            val inflater = mode.getMenuInflater()
+            val inflater = mode.menuInflater
             inflater.inflate(R.menu.weight_multi_selection, menu)
             return true
         }
@@ -123,12 +117,11 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
         }
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            var selectedItems = adapter.getSelectedItems()
+            val selectedItems = adapter.getSelectedItems()
+            val realmSelectedItems = RealmList<Weight>()
 
-            var realmSelectedItems = RealmList<Weight>()
-
-            for (item in selectedItems) {
-                var realmItem = realm.where<Weight>().equalTo("id", item.id).findFirst()
+            for (selectedItem in selectedItems) {
+                val realmItem = realm.where<Weight>().equalTo("id", selectedItem.id).findFirst()
                 realmSelectedItems.add(realmItem)
             }
 
@@ -142,11 +135,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
                             realmItem.deleteFromRealm()
                         }
                     })
-
                     adapter.clearSelected()
-
-                    reloadUi()
-
+                    reloadWeights()
                     true
                 }
                 else -> false
@@ -173,8 +163,9 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
         }
     }
 
+    //On dialog dismissed
     override fun onDismiss(dialog: DialogInterface?) {
-        reloadUi()
+        reloadWeights()
     }
 
     companion object {

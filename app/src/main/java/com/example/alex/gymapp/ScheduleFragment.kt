@@ -41,7 +41,6 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 

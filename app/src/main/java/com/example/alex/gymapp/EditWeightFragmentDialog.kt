@@ -46,7 +46,6 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
             //Set exercise data
             weightET.setText(weight.weight.toString())
-
             //Set date
             setTimePickerDate(weight.dateOfWeight)
 
@@ -92,6 +91,7 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         val day = c.get(Calendar.DAY_OF_MONTH)
         datePicker.updateDate(year,month,day)
     }
+
     private fun getDateFromDatePicker(datePicker: DatePicker): Date {
         val day = datePicker.dayOfMonth
         val month = datePicker.month
@@ -104,7 +104,6 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
     }
 
     private fun saveToRealm(){
-
         val realm = Realm.getDefaultInstance()
 
         var weightValue = 0.0
@@ -134,7 +133,7 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
                 if (currentIdNum == null) {
                     nextId = 1
                 } else {
-                    nextId = currentIdNum!!.toInt() + 1
+                    nextId = currentIdNum.toInt() + 1
                 }
 
                 val weight = realm.createObject<Weight>(nextId)
