@@ -34,6 +34,9 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        setTimePickerCurrentDate()
+        setEditTextsMinMax()
+
         //If the id is present is an existing note
         if(!arguments!!.isEmpty){
             //Get Exercise
@@ -44,11 +47,11 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
             //Set exercise data
             weightET.setText(weight.weight.toString())
 
-            //TODO Set Data
+            //Set date
+            setTimePickerDate(weight.dateOfWeight)
+
             isEditMode = true
         }
-
-        setEditTextsMinMax();
 
         confirmBtn.setOnClickListener{
             saveToRealm()
@@ -58,8 +61,6 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         cancelBtn.setOnClickListener{
             dialog.dismiss()
         }
-
-        setTimePickerCurrentDate()
     }
 
     private fun setEditTextsMinMax(){
@@ -83,6 +84,14 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         datePicker.init(year,month,day,null)
     }
 
+    private fun setTimePickerDate(date: Date){
+        val c = Calendar.getInstance()
+        c.time = date
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        datePicker.updateDate(year,month,day)
+    }
     private fun getDateFromDatePicker(datePicker: DatePicker): Date {
         val day = datePicker.dayOfMonth
         val month = datePicker.month
@@ -104,22 +113,36 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         }
         catch (e: Exception){ }
 
-
         val dateOfWeight = getDateFromDatePicker(datePicker)
 
-        realm.executeTransaction { realm ->
-            val currentIdNum = realm.where<Weight>().max("id")
-            val nextId: Int
-            if (currentIdNum == null) {
-                nextId = 1
-            } else {
-                nextId = currentIdNum!!.toInt() + 1
-            }
+        //Update the edited exercise
+        if(isEditMode){
+            //Update on DB
+            realm.executeTransaction { realm ->
+                //Update Weight
+                weight.weight = weightValue
+                weight.dateOfWeight = dateOfWeight
 
-            val weight = realm.createObject<Weight>(nextId)
-            weight.weight = weightValue
-            weight.dateOfWeight = dateOfWeight
+                realm.insertOrUpdate(weight)
+            }
         }
+        //Save the new weight
+        else{
+            realm.executeTransaction { realm ->
+                val currentIdNum = realm.where<Weight>().max("id")
+                val nextId: Int
+                if (currentIdNum == null) {
+                    nextId = 1
+                } else {
+                    nextId = currentIdNum!!.toInt() + 1
+                }
+
+                val weight = realm.createObject<Weight>(nextId)
+                weight.weight = weightValue
+                weight.dateOfWeight = dateOfWeight
+            }
+        }
+
     }
 
     override fun onDismiss(dialog: DialogInterface) {
