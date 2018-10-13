@@ -2,7 +2,6 @@ package com.example.alex.gymapp
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -79,7 +78,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
                 ft.remove(prev)
             }
             ft.addToBackStack(null)
-            val dialogFragment = AddWeightFragmentDialog()
+            val dialogFragment = EditWeightFragmentDialog()
             dialogFragment.show(ft, "dialog")
         }
     }

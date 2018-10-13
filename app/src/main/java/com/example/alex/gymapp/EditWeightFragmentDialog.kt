@@ -1,9 +1,7 @@
 package com.example.alex.gymapp
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +9,14 @@ import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.fragment_add_weight_fragment_dialog.*
+import kotlinx.android.synthetic.main.fragment_edit_weight_fragment_dialog.*
 import java.util.*
 
 import android.widget.DatePicker
 import com.example.alex.gymapp.extensions.onChange
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
-import android.support.v4.content.ContextCompat.getSystemService
-import android.view.inputmethod.InputMethodManager
-import android.support.v4.content.ContextCompat.getSystemService
-import com.example.alex.gymapp.R.id.datePicker
 
-class AddWeightFragmentDialog : BottomSheetDialogFragment() {
+class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
     lateinit var realm: Realm
     lateinit var weight: Weight
@@ -35,7 +27,7 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_weight_fragment_dialog, container, false)
+        return inflater.inflate(R.layout.fragment_edit_weight_fragment_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +64,7 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        dateSPicker.init(year,month,day,null)
+        datePicker.init(year,month,day,null)
     }
 
     private fun getDateFromDatePicker(datePicker: DatePicker): Date {
@@ -123,6 +115,6 @@ class AddWeightFragmentDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): AddWeightFragmentDialog = AddWeightFragmentDialog()
+        fun newInstance(): EditWeightFragmentDialog = EditWeightFragmentDialog()
     }
 }
