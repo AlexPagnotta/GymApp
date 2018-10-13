@@ -38,7 +38,7 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         setEditTextsMinMax()
 
         //If the id is present is an existing note
-        if(!arguments!!.isEmpty){
+        if(arguments != null){
             //Get Exercise
             val weightId = arguments!!.getLong("weightId", 0)
             realm = Realm.getDefaultInstance()

@@ -14,6 +14,8 @@ import kotlinx.android.synthetic.main.fragment_weights.*
 import io.realm.RealmList
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
+import io.realm.RealmResults
+import io.realm.Sort
 
 
 class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface.OnDismissListener{
@@ -21,6 +23,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     lateinit var realm: Realm
     var actionMode: ActionMode? = null
     lateinit var adapter: WeightAdapter
+
+    lateinit var weights: RealmResults<Weight>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,21 +38,9 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         realm = Realm.getDefaultInstance()
 
-        val weights = realm.where<Weight>().findAll()
+        weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
 
-        var lm = LinearLayoutManager(context!!)
-
-        //Reverse the recycler view
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
-
-        weightsRW.layoutManager = lm
-
-        adapter = WeightAdapter(weights, context!!)
-
-        weightsRW.adapter = adapter
-
-        adapter.setActionModeReceiver(this as WeightAdapter.OnClickAction)
+        setupRecyclerView()
 
         reloadUi()
 
@@ -83,6 +75,21 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
         }
     }
 
+    private fun setupRecyclerView(){
+        var lm = LinearLayoutManager(context!!)
+
+        //Reverse the recycler view
+        lm.reverseLayout = true
+        lm.stackFromEnd = true
+
+        weightsRW.layoutManager = lm
+
+        adapter = WeightAdapter(weights, context!!)
+        weightsRW.adapter = adapter
+
+        adapter.setActionModeReceiver(this as WeightAdapter.OnClickAction)
+    }
+
     public fun reloadUi(){
         if(weightsRW.adapter!!.itemCount==0){
             toolbar.visibility = View.GONE
@@ -97,6 +104,7 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
             recyclerEmptyTW.visibility = View.GONE
         }
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
