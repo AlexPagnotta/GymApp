@@ -79,10 +79,6 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     private fun setupRecyclerView(){
         val lm = LinearLayoutManager(context!!)
 
-        //Reverse the recycler view
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
-
         weightsRW.layoutManager = lm
         adapter = WeightAdapter(weights, context!!)
         weightsRW.adapter = adapter
