@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.fragment_me.*
 
 class MeFragment : Fragment() {
 
-    var lastWeight: Double = 0.0
-    var weightLost: Double = 0.0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -31,16 +28,6 @@ class MeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        updateWeights()
-
-        //Get navigation view from activity
-        val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
-
-        //Go to weights o fab click
-        show_weights_fab.setOnClickListener{
-            navigationView.setSelectedItemId(R.id.navigation_weights)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -51,38 +38,6 @@ class MeFragment : Fragment() {
         //Set colored title
         val text = "<font color=#279AFF>Gym</font><font color=#757575>App</font>"
         toolbar.setTitle(Html.fromHtml(text))
-    }
-
-
-    //Update last weight when fragment is visible
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            updateWeights();
-        }
-    }
-
-    private fun updateWeights(){
-
-        val realm = Realm.getDefaultInstance()
-
-        val weights = realm.where<Weight>().sort("dateOfWeight", Sort.DESCENDING).findAll()
-
-        //TODO check if there is at least one weight
-        if(weights.count() == 1){
-            lastWeight = weights.first()!!.weight
-            weightLost = lastWeight
-        }
-        else if(weights.count() != 0){
-            lastWeight = weights.first()!!.weight
-            val secondLastWeight = weights[1]!!.weight
-
-            weightLost = lastWeight - secondLastWeight
-        }
-
-        weightTW.text = String.format("%1$,.2f Kg", lastWeight)
-
-        weightLostTW.text = String.format("You Have Lost %1$,.2f Kg", weightLost)
     }
 
     companion object {

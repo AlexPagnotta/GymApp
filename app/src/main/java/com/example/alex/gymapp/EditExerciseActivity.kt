@@ -93,7 +93,12 @@ class EditExerciseActivity : AppCompatActivity() {
         executionDaySpinner.setSelection(selectedExecutionDay)
 
         executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
+            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
+
+                if(selectedItemView == null){
+                    return
+                }
+
                 selectedExecutionDay = position
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {

@@ -96,7 +96,10 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
 
         days_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>,
-                                        selectedItemView: View, position: Int, id: Long) {
+                                        selectedItemView: View?, position: Int, id: Long) {
+                if(selectedItemView == null){
+                    return
+                }
                 //Update existing days
                 existingDays = getExistingDays()
                 //Get selected day
