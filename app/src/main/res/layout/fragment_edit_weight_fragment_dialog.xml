@@ -1,107 +1,111 @@
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/titleTW"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Add your weight"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/weightTW"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Weight"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTW" />
+        <TextView
+            android:id="@+id/titleTW"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Add your weight"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/weightET"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="0"
-        android:inputType="numberDecimal"
-        android:textAlignment="textEnd"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
-        app:layout_constraintStart_toEndOf="@+id/weightTW" />
+        <TextView
+            android:id="@+id/weightTW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:text="Weight"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTW" />
 
-    <TextView
-        android:id="@+id/weightTW2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="KG"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightET"
-        app:layout_constraintStart_toEndOf="@+id/weightET" />
+        <EditText
+            android:id="@+id/weightET"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:hint="0"
+            android:inputType="numberDecimal"
+            android:textAlignment="textEnd"
+            android:textSize="24sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
+            app:layout_constraintStart_toEndOf="@+id/weightTW" />
+
+        <TextView
+            android:id="@+id/weightTW2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="KG"
+            android:textSize="24sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/weightET"
+            app:layout_constraintStart_toEndOf="@+id/weightET" />
 
 
-    <TextView
-        android:id="@+id/dateTW"
-        android:layout_width="111dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:text="Select date:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
+        <TextView
+            android:id="@+id/dateTW"
+            android:layout_width="111dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:text="Select date:"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weightTW" />
 
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="0dp"
-        android:layout_height="192dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTW" />
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="0dp"
+            android:layout_height="192dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateTW" />
 
-    <Button
-        android:id="@+id/confirmBtn"
-        style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="51dp"
-        android:layout_marginEnd="24dp"
-        android:text="Confirm"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/cancelBtn"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:id="@+id/confirmBtn"
+            style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_marginEnd="24dp"
+            android:text="Confirm"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/cancelBtn"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/cancelBtn"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/confirmBtn"
-        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+        <Button
+            android:id="@+id/cancelBtn"
+            style="@android:style/Widget.Material.Light.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Cancel"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/confirmBtn"
+            app:layout_constraintTop_toBottomOf="@+id/datePicker" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

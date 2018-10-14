@@ -14,6 +14,12 @@ import java.util.*
 import android.widget.DatePicker
 import com.example.alex.gymapp.extensions.onChange
 import android.content.DialogInterface
+import android.support.design.widget.BottomSheetBehavior
+import android.widget.FrameLayout
+import android.support.design.widget.BottomSheetDialog
+import android.view.ViewTreeObserver
+
+
 
 class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
@@ -33,6 +39,16 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        //Fix height problem on landscape
+        view.viewTreeObserver.addOnGlobalLayoutListener {
+            val dialog = dialog as BottomSheetDialog
+            val bottomSheet = dialog.findViewById<View>(android.support.design.R.id.design_bottom_sheet) as FrameLayout?
+            val behavior = BottomSheetBehavior.from(bottomSheet!!)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.peekHeight = 0
+        }
+
 
         setTimePickerCurrentDate()
         setEditTextsMinMax()
