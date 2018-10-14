@@ -2,9 +2,6 @@ package com.example.alex.gymapp
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -14,10 +11,18 @@ import java.util.*
 import android.widget.DatePicker
 import com.example.alex.gymapp.extensions.onChange
 import android.content.DialogInterface
+import android.graphics.Color
 import android.support.design.widget.BottomSheetBehavior
 import android.widget.FrameLayout
 import android.support.design.widget.BottomSheetDialog
-import android.view.ViewTreeObserver
+import android.view.Window.FEATURE_NO_TITLE
+import android.graphics.drawable.ColorDrawable
+import android.view.*
+import android.view.Window.FEATURE_NO_TITLE
+
+
+
+
 
 
 
@@ -31,11 +36,13 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         retainInstance = true
+
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(R.layout.fragment_edit_weight_fragment_dialog, container, false)
     }
 
