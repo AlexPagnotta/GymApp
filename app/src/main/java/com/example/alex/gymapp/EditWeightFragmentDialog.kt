@@ -1,5 +1,6 @@
 package com.example.alex.gymapp
 
+import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import com.example.alex.gymapp.model.Weight
@@ -17,14 +18,9 @@ import android.widget.FrameLayout
 import android.support.design.widget.BottomSheetDialog
 import android.view.Window.FEATURE_NO_TITLE
 import android.graphics.drawable.ColorDrawable
+import android.support.design.widget.CoordinatorLayout
 import android.view.*
 import android.view.Window.FEATURE_NO_TITLE
-
-
-
-
-
-
 
 class EditWeightFragmentDialog : BottomSheetDialogFragment() {
 
@@ -46,18 +42,24 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_edit_weight_fragment_dialog, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        //Fix height problem on landscape
-        view.viewTreeObserver.addOnGlobalLayoutListener {
-            val dialog = dialog as BottomSheetDialog
+    //Disable drag on dialog, and start expanded
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val d = super.onCreateDialog(savedInstanceState)
+        //view hierarchy is inflated after dialog is shown
+        d.setOnShowListener {
+            //this start dialog expanded
             val bottomSheet = dialog.findViewById<View>(android.support.design.R.id.design_bottom_sheet) as FrameLayout?
             val behavior = BottomSheetBehavior.from(bottomSheet!!)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            behavior.peekHeight = 0
+            //this disables outside touch
+            //d.window.findViewById<View>(R.id.touch_outside).setOnClickListener(null)
+            //this prevents dragging behavior
+            (d.window!!.findViewById<View>(R.id.design_bottom_sheet).layoutParams as CoordinatorLayout.LayoutParams).behavior = null
         }
+        return d
+    }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setTimePickerCurrentDate()
         setEditTextsMinMax()
 
@@ -167,6 +169,7 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
         }
 
     }
+
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
