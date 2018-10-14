@@ -38,7 +38,6 @@
         app:itemTextColor="@color/bottom_nav_color"
         app:itemIconTint="@color/bottom_nav_color"
         app:menu="@menu/navigation"
-        app:labelVisibilityMode="labeled"
         />
 
 </android.support.constraint.ConstraintLayout>

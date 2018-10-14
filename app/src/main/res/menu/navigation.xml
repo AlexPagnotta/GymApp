@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/navigation_me"
-        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:icon="@drawable/ic_outline_account_circle_24px"
         android:title="Me"/>
 
     <item
         android:id="@+id/navigation_schedule"
-        android:icon="@drawable/ic_assignment_black_24dp"
+        android:icon="@drawable/ic_outline_assignment_24px"
         android:title="Schedule"/>
 
     <item
         android:id="@+id/navigation_weights"
-        android:icon="@drawable/ic_scale_24dp"
+        android:icon="@drawable/ic_outline_trending_up_24px"
         android:title="Weights"/>
 
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_settings_black_24dp"
+        android:icon="@drawable/ic_outline_settings_24px"
         android:title="Settings"/>
 
 </menu>
