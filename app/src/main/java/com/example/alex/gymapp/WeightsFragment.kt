@@ -26,6 +26,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        retainInstance = true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,6 +91,8 @@ class WeightsFragment : Fragment(), WeightAdapter.OnClickAction, DialogInterface
     }
 
     fun reloadWeights(){
+        if(weightsRW == null) return
+
         //If there are no weights left at all, show different ui
         if(weightsRW.adapter!!.itemCount==0){
             toolbar.visibility = View.GONE
