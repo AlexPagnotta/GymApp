@@ -26,7 +26,7 @@
 
     <!-- Style Tool Bar Text-->
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">24sp</item>
     </style>
 
     <!-- Style Action Mode Bar-->
@@ -46,6 +46,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <!-- Dialog fragment-->
     <style name="AppBottomSheetDialogTheme"
         parent="Theme.Design.Light.BottomSheetDialog">
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -85,9 +85,9 @@ class EditExerciseActivity : AppCompatActivity() {
         val weekDays = resources.getStringArray(R.array.days_of_week)
         val dataAdapter = ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_toolbar_item,
                 weekDays)
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
         executionDaySpinner.adapter = dataAdapter
         //Set spinner selected item
         executionDaySpinner.setSelection(selectedExecutionDay)
