@@ -30,6 +30,7 @@ class EditWeightFragmentDialog : BottomSheetDialogFragment() {
     var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        retainInstance = true
         super.onCreate(savedInstanceState)
     }
 

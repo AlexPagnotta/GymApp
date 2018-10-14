@@ -49,6 +49,10 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        // Setting the very 1st item as home screen.
+        bottomNavigation.selectedItemId = R.id.navigation_me
+
     }
 
     private fun openFragment(fragment: Fragment) {
