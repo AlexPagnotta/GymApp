@@ -1,55 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:layout_height="80dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true">
 
     <TextView
         android:id="@+id/nameTV"
-        android:layout_width="0dip"
-        android:layout_height="72dp"
-        android:layout_weight=".4"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical|start"
         android:textSize="18sp"
-        android:paddingLeft="24dp"
-        android:gravity="center_vertical|start"/>
+        app:layout_constraintEnd_toStartOf="@+id/handleImg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name Exercise" />
 
     <TextView
         android:id="@+id/restTimeTV"
-        android:layout_width="0dip"
-        android:layout_height="72dp"
-        android:layout_weight=".2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:gravity="center_vertical|start"
+        android:text="0Min. 0Sec."
+        android:textAlignment="viewStart"
         android:textSize="14sp"
-        android:paddingLeft="24dp"
-        android:gravity="center_vertical|start"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
     <TextView
         android:id="@+id/seriesRepetitionsTV"
-        android:layout_width="0dip"
-        android:layout_height="72dp"
-        android:layout_weight=".2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical|start"
+        android:text="3x10"
+        android:textAlignment="viewStart"
         android:textSize="14sp"
-        android:paddingLeft="24dp"
-        android:gravity="center_vertical|start"/>
+        app:layout_constraintStart_toEndOf="@+id/restTimeTV"
+        app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
     <TextView
         android:id="@+id/weightTV"
-        android:layout_width="0dip"
-        android:layout_height="72dp"
-        android:layout_weight=".2"
-
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical|start"
+        android:text="50.25kg"
+        android:textAlignment="viewStart"
         android:textColor="@color/colorAccent"
         android:textSize="14sp"
-        android:paddingRight="24dp"
-        android:gravity="center_vertical|end"/>
+        app:layout_constraintStart_toEndOf="@+id/seriesRepetitionsTV"
+        app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
     <ImageView
         android:id="@+id/handleImg"
         android:layout_width="?listPreferredItemHeight"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center_vertical|end"
         android:scaleType="center"
-        android:src="@drawable/ic_reorder_black_24dp" />
+        android:src="@drawable/ic_reorder_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
