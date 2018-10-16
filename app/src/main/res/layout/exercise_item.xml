@@ -3,32 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="wrap_content"
     android:clickable="true">
 
     <TextView
         android:id="@+id/nameTV"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical|start"
+        android:lineSpacingExtra="3sp"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/handleImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Name Exercise" />
+        tools:text="Name Exercise"
+        android:minLines="1"
+        android:maxLines = "2"/>
 
     <TextView
         android:id="@+id/restTimeTV"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical|start"
         android:text="0Min. 0Sec."
         android:textAlignment="viewStart"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
@@ -36,11 +41,14 @@
         android:id="@+id/seriesRepetitionsTV"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical|start"
         android:text="3x10"
         android:textAlignment="viewStart"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/restTimeTV"
         app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
@@ -48,12 +56,15 @@
         android:id="@+id/weightTV"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical|start"
         android:text="50.25kg"
         android:textAlignment="viewStart"
         android:textColor="@color/colorAccent"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/seriesRepetitionsTV"
         app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
