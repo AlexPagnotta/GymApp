@@ -1,28 +1,23 @@
 package com.example.alex.gymapp
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.db.chart.model.ChartEntry
-import com.db.chart.model.ChartSet
 import com.db.chart.model.LineSet
 import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_me.*
-import android.R.attr.action
-import android.R.attr.action
 import android.graphics.Color
 import com.db.chart.animation.Animation
 import com.db.chart.model.Point
 import com.db.chart.renderer.AxisRenderer
+import io.realm.RealmResults
 
 
 class MeFragment : Fragment() {
@@ -53,37 +48,32 @@ class MeFragment : Fragment() {
         //Load weights
         val weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
 
-        var set = LineSet()
+        setupChart(weights)
+    }
 
+    private fun setupChart(weights: RealmResults<Weight>) {
+        var set = LineSet()
         for (weight in weights) {
             var p = Point("day",weight.weight.toFloat())
             p.radius = 20f
-            p.strokeColor = Color.WHITE
+            p.strokeColor = Color.parseColor("#C8C8C8")
             p.isVisible = true
-            p.color = Color.BLUE
+            p.color = Color.WHITE
             set.addPoint(p)
         }
 
-        set.setColor(Color.WHITE)
-                .setFill(Color.BLUE)
-
-
+        set.setColor(Color.parseColor("#279aff"))
+                .setFill(Color.parseColor("#D5EBFF"))
+        set.isSmooth =true
         weightChart.addData(set)
-
-        weightChart.setLabelsColor(Color.WHITE)
-        weightChart.setAxisLabelsSpacing(50)
         weightChart.setFontSize(60)
-        weightChart.setBackgroundColor(Color.parseColor("#279aff"))
+        weightChart.setBackgroundColor(Color.WHITE)
         weightChart.setXAxis(false)
         weightChart.setYAxis(false)
-        weightChart.setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
-        weightChart.setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
-        weightChart.setStep(10)
+        weightChart.setYLabels(AxisRenderer.LabelPosition.NONE)
+        weightChart.setXLabels(AxisRenderer.LabelPosition.NONE)
         var anim = Animation()
         weightChart.show(anim)
-
-
-
     }
 
     companion object {
