@@ -172,7 +172,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/round_background"
+        android:background="@drawable/round_background_image_buttons"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
         android:foreground="@drawable/ripple_circle"

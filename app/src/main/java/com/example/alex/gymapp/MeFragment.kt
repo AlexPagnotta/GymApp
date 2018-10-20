@@ -38,12 +38,6 @@ class MeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-
-        //Set colored title
-        val text = "<font color=#279AFF>Gym</font><font color=#757575>App</font>"
-        toolbar.setTitle(Html.fromHtml(text))
-
         val realm = Realm.getDefaultInstance()
         //Load weights
         val weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
