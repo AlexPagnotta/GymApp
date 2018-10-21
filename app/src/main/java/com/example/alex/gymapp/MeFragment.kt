@@ -17,7 +17,9 @@ import android.graphics.Color
 import com.db.chart.animation.Animation
 import com.db.chart.model.Point
 import com.db.chart.renderer.AxisRenderer
+import com.example.alex.gymapp.model.Exercise
 import io.realm.RealmResults
+import java.util.*
 
 
 class MeFragment : Fragment() {
@@ -57,6 +59,25 @@ class MeFragment : Fragment() {
 
             val lastWeight = weights.first()!!.weight
             weightTW.text =  String.format("%1$,.2f Kg",lastWeight)
+        }
+
+        //Get all days
+        val weekDaysArray = resources.getStringArray(R.array.days_of_week)
+        val c = Calendar.getInstance()
+        val today = c.get(Calendar.DAY_OF_WEEK) - 1 //+1 to adjust indexes
+        //Load today exercise
+        val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", today).findAll()
+
+        if(exercisesOfDayRealm.count() == 0){
+            goToScheduleFab.visibility = View.GONE
+            scheduleBannerTW.text = "No schedule for today"
+        }
+        else{
+            goToScheduleFab.visibility = View.VISIBLE
+            scheduleBannerTW.text = "Go to today schedule"
+
+            goToScheduleFab.setOnClickListener{
+            }
         }
     }
 
