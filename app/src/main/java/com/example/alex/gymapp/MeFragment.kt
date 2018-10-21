@@ -14,6 +14,8 @@ import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.fragment_me.*
 import android.graphics.Color
+import android.support.design.widget.BottomNavigationView
+import android.widget.TextView
 import com.db.chart.animation.Animation
 import com.db.chart.model.Point
 import com.db.chart.renderer.AxisRenderer
@@ -77,6 +79,10 @@ class MeFragment : Fragment() {
             scheduleBannerTW.text = "Go to today schedule"
 
             goToScheduleFab.setOnClickListener{
+                //Start the schedule of the selected day
+                (activity!! as MainActivity).startScheduleOnCurrentDay = true
+                val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
+                navigationView.setSelectedItemId(R.id.navigation_schedule)
             }
         }
     }

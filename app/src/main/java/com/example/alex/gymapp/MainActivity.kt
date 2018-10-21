@@ -9,10 +9,15 @@ import com.example.alex.gymapp.model.Weight
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import android.R.attr.fragment
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var toolbar: ActionBar
+
+    var startScheduleOnCurrentDay = false
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -24,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_schedule -> {
                 val scheduleFragment = ScheduleFragment.newInstance()
                 openFragment(scheduleFragment)
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_weights -> {
@@ -58,7 +64,17 @@ class MainActivity : AppCompatActivity() {
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        //transaction.addToBackStack(null) //TODO Check if add this back, and how to handle this
+
+        //Start the schedule of today
+        if(fragment is ScheduleFragment && startScheduleOnCurrentDay){
+            val arguments = Bundle()
+            val c = Calendar.getInstance()
+            val today = c.get(Calendar.DAY_OF_WEEK) - 1 //+1 to adjust indexes
+            arguments.putInt("currentDay", today)
+            fragment.setArguments(arguments)
+            startScheduleOnCurrentDay = false
+        }
+
         transaction.commit()
     }
 }

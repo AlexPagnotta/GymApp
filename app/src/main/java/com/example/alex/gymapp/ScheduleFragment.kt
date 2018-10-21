@@ -20,6 +20,7 @@ import android.content.Intent
 import android.support.v7.widget.helper.ItemTouchHelper
 import com.example.alex.gymapp.helpers.SimpleItemTouchHelperCallback
 import android.view.LayoutInflater
+import java.util.*
 
 class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAdapter.OnStartDragListener {
 
@@ -55,6 +56,12 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
         add_schedule_fab.setOnClickListener{
             val intent = Intent(context, EditExerciseActivity::class.java)
             this.startActivityForResult(intent, 1)
+        }
+
+        //Load schedule of a specific day
+        if(arguments != null){
+            val currentDay = arguments!!.getInt("currentDay")
+            loadScheduleOfDay(currentDay)
         }
     }
 
@@ -199,6 +206,17 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
             selectedExecutionDay = 0
         }
 
+        reloadSchedule()
+    }
+
+    private fun loadScheduleOfDay(scheduleDay: Int){
+        //Get existing days
+        val existingDays = getExistingDays()
+        //Get index from existing days
+        val dayIndex = existingDays.indexOf(scheduleDay)
+        //Set spinner position
+        days_spinner.setSelection(dayIndex)
+        //Reload Schedule
         reloadSchedule()
     }
 
