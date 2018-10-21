@@ -33,16 +33,31 @@ class MeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
         val realm = Realm.getDefaultInstance()
+
         //Load weights
         val weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
 
-        setupChart(weights)
+        if(weights.count() == 0){
+            noWeightTW.visibility = View.VISIBLE
+
+            weightTextTW.visibility = View.GONE
+            weightTW.visibility = View.GONE
+            weightChart.visibility = View.GONE
+        }
+        else{
+            noWeightTW.visibility = View.GONE
+
+            weightTextTW.visibility = View.VISIBLE
+            weightTW.visibility = View.VISIBLE
+            weightChart.visibility = View.VISIBLE
+
+
+            setupChart(weights)
+
+            val lastWeight = weights.first()!!.weight
+            weightTW.text =  String.format("%1$,.2f Kg",lastWeight)
+        }
     }
 
     private fun setupChart(weights: RealmResults<Weight>) {
