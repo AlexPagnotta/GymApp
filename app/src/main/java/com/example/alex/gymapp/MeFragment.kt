@@ -39,7 +39,9 @@ class MeFragment : Fragment() {
         val realm = Realm.getDefaultInstance()
 
         //Load weights
-        val weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
+        val weights = realm.where<Weight>().
+                findAll()
+                .sort("dateOfWeight",Sort.DESCENDING)
 
         //Check if there is at least one weight
         if(weights.count() == 0){
@@ -61,7 +63,7 @@ class MeFragment : Fragment() {
             val lastWeight = weights.first()!!.weight
             weightTW.text =  String.format("%1$,.2f Kg",lastWeight)
         }
-        
+
         //Get index of today
         val c = Calendar.getInstance()
         val today = c.get(Calendar.DAY_OF_WEEK) - 1 //+1 to adjust indexes
@@ -88,13 +90,23 @@ class MeFragment : Fragment() {
 
     private fun setupChart(weights: RealmResults<Weight>) {
         val set = LineSet()
+
+        //Get at max 10 weights to show in chart
+        val weightsLimit = 10
+        var weightsCount = 0
+
         for (weight in weights) {
+
+            if(weightsCount == weightsLimit) break
+
             val point = Point("day",weight.weight.toFloat())
             point.radius = 20f
             point.strokeColor = Color.parseColor("#C8C8C8")
             point.isVisible = true
             point.color = Color.WHITE
             set.addPoint(point)
+
+            weightsCount++
         }
 
         set.setColor(Color.parseColor("#279aff"))
