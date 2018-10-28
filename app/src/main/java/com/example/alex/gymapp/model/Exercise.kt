@@ -17,7 +17,7 @@ open class Exercise(
 
         var secondsOfRest: Int = 0,
 
-        var series: RealmList<Series>,
+        var series: RealmList<Series> = RealmList(),
 
         var executionDay : Int = 0,
 

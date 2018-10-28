@@ -267,8 +267,8 @@ class EditExerciseActivity : AppCompatActivity() {
                 exercise.weight = weightValue
                 exercise.minutesOfRest = minutesOfRestValue
                 exercise.secondsOfRest = secondOfRestValue
-                exercise.series = seriesValue
-                exercise.repetitions = repetitionsValue
+                //exercise.series = seriesValue
+               // exercise.repetitions = repetitionsValue
                 exercise.executionDay = selectedExecutionDay
 
                 realm.insertOrUpdate(exercise)
@@ -298,8 +298,8 @@ class EditExerciseActivity : AppCompatActivity() {
                 newExercise.weight = weightValue
                 newExercise.minutesOfRest = minutesOfRestValue
                 newExercise.secondsOfRest = secondOfRestValue
-                newExercise.series = seriesValue
-                newExercise.repetitions = repetitionsValue
+                //newExercise.series = seriesValue
+                //newExercise.repetitions = repetitionsValue
                 newExercise.executionDay = selectedExecutionDay
                 newExercise.position = nextPos
 

@@ -65,16 +65,16 @@ class ExerciseAdapter(
         holder.nameTV.text = name
 
         //Show Series Repetition
-        val seriesRepetitionsString = String.format("%dx%d", item.series, item.repetitions )
-        holder.seriesRepetitionTV.text = seriesRepetitionsString
+        //val seriesRepetitionsString = String.format("%dx%d", item.series, item.repetitions )
+        //holder.seriesRepetitionTV.text = seriesRepetitionsString
 
         //Show Weight
-        val restString = String.format("%d Min. %d Sec.", item.minutesOfRest, item.secondsOfRest)
-        holder.restTimeTV.text = restString
+        //val restString = String.format("%d Min. %d Sec.", item.minutesOfRest, item.secondsOfRest)
+        //holder.restTimeTV.text = restString
 
         //Show Weight
-        val weightString = String.format("%1$,.2f Kg", item.weight)
-        holder.weightTV.text = weightString
+        //val weightString = String.format("%1$,.2f Kg", item.weight)
+        //holder.weightTV.text = weightString
 
         //Manage Selection
         holder.itemView.setOnLongClickListener {
