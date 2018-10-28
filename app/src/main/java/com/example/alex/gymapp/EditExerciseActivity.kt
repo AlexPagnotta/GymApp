@@ -94,7 +94,7 @@ class EditExerciseActivity : AppCompatActivity() {
             cancelChanges()
             return
         }
-        
+
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Are you sure you want to discard these changes?")
                 .setCancelable(false)
