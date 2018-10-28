@@ -21,6 +21,8 @@ class EditExerciseActivity : AppCompatActivity() {
     lateinit var exercise: Exercise
     var selectedExecutionDay = 0
 
+    var hasPendingChanges = false
+
     //Bool to indicate if it's a new exercise on an existing one
     var isEditMode = false
 
@@ -35,13 +37,31 @@ class EditExerciseActivity : AppCompatActivity() {
             realm = Realm.getDefaultInstance()
             exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
 
-            //Set exercise data
+            //Set exercise data and add tag to avoid setting pending changes
+            nameET.tag = ""
             nameET.setText(exercise.name)
+            nameET.tag = null
+
+            weightET.tag = ""
             weightET.setText(exercise.weight.toString())
+            weightET.tag = null
+
+            minutesRestET.tag = ""
             minutesRestET.setText(exercise.minutesOfRest.toString())
+            minutesRestET.tag = null
+
+            secondsRestET.tag = ""
             secondsRestET.setText(exercise.secondsOfRest.toString())
+            secondsRestET.tag = null
+
+            seriesET.tag = ""
             seriesET.setText(exercise.series.toString())
+            seriesET.tag = null
+
+            repetitionsET.tag = ""
             repetitionsET.setText(exercise.repetitions.toString())
+            repetitionsET.tag = null
+
             selectedExecutionDay = exercise.executionDay
 
             isEditMode = true
@@ -53,7 +73,7 @@ class EditExerciseActivity : AppCompatActivity() {
         }
 
         setupExecutionDaySpinner()
-        setEditTextsMinMax()
+        setupEditTexts()
 
         cancelBtn.setOnClickListener {
             showConfirmDialog()
@@ -70,19 +90,27 @@ class EditExerciseActivity : AppCompatActivity() {
     }
 
     private fun showConfirmDialog(){
-        //TODO pending changes check
+        if(!hasPendingChanges){
+            cancelChanges()
+            return
+        }
+        
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Are you sure you want to discard these changes?")
                 .setCancelable(false)
                 .setPositiveButton("CONFIRM"
                 ) { _, _ ->
-                    val returnIntent = Intent()
-                    setResult(Activity.RESULT_CANCELED, returnIntent)
-                    finish()
-                    overridePendingTransition(0, 0)
+                    cancelChanges()
                 }
                 .setNegativeButton("CANCEL") { _, _ ->}
         builder.show()
+    }
+
+    private fun cancelChanges(){
+        val returnIntent = Intent()
+        setResult(Activity.RESULT_CANCELED, returnIntent)
+        finish()
+        overridePendingTransition(0, 0)
     }
 
     private fun setupExecutionDaySpinner(){
@@ -94,7 +122,10 @@ class EditExerciseActivity : AppCompatActivity() {
                 weekDays)
         dataAdapter.setDropDownViewResource(R.layout.spinner_toolbar_item_dropdown)
         executionDaySpinner.adapter = dataAdapter
+
         //Set spinner selected item
+        //Add a tag to avoid set pending changes
+        executionDaySpinner.tag = ""
         executionDaySpinner.setSelection(selectedExecutionDay)
 
         executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -105,6 +136,14 @@ class EditExerciseActivity : AppCompatActivity() {
                 }
 
                 selectedExecutionDay = position
+
+                //Set pending changes only if set by user not programmatically
+                if(executionDaySpinner.tag == null){
+                    hasPendingChanges = true
+                }
+                else{
+                    executionDaySpinner.tag = null
+                }
             }
             override fun onNothingSelected(parentView: AdapterView<*>) {
             }
@@ -112,7 +151,12 @@ class EditExerciseActivity : AppCompatActivity() {
     }
 
     //Set minimum and maximum value of edit texts
-    private fun setEditTextsMinMax(){
+    private fun setupEditTexts(){
+        //NameEt
+        nameET.onChange {
+            if (nameET.tag == null) hasPendingChanges = true
+        }
+
         //Weight ET
         weightET.onChange {
             if(!it.isEmpty()) {
@@ -121,6 +165,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     weightET.text!!.replace(0, it.length, "999", 0, 3)
                 }
             }
+            if (weightET.tag == null) hasPendingChanges = true
         }
 
         //MinutesRest ET
@@ -131,6 +176,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     minutesRestET.text!!.replace(0, it.length, "60", 0, 2)
                 }
             }
+            if (minutesRestET.tag == null) hasPendingChanges = true
         }
 
         //SecondsRest ET
@@ -141,6 +187,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     secondsRestET.text!!.replace(0, it.length, "59", 0, 2)
                 }
             }
+            if (secondsRestET.tag == null) hasPendingChanges = true
         }
 
         //series ET
@@ -154,6 +201,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     seriesET.text!!.replace(0, it.length, "1", 0, 1)
                 }
             }
+            if (seriesET.tag == null) hasPendingChanges = true
         }
 
         //repetitions ET
@@ -167,6 +215,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     repetitionsET.text!!.replace(0, it.length, "1", 0, 1)
                 }
             }
+            if (repetitionsET.tag == null)  hasPendingChanges = true
         }
     }
 
