@@ -2,8 +2,6 @@ package com.example.alex.gymapp
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,39 +35,40 @@ class MeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val realm = Realm.getDefaultInstance()
 
         //Load weights
         val weights = realm.where<Weight>().findAll().sort("dateOfWeight",Sort.DESCENDING)
 
+        //Check if there is at least one weight
         if(weights.count() == 0){
             noWeightTW.visibility = View.VISIBLE
-
             weightTextTW.visibility = View.GONE
             weightTW.visibility = View.GONE
             weightChart.visibility = View.GONE
         }
         else{
             noWeightTW.visibility = View.GONE
-
             weightTextTW.visibility = View.VISIBLE
             weightTW.visibility = View.VISIBLE
             weightChart.visibility = View.VISIBLE
 
-
+            //Load the weights chart
             setupChart(weights)
 
+            //Show the last weight
             val lastWeight = weights.first()!!.weight
             weightTW.text =  String.format("%1$,.2f Kg",lastWeight)
         }
-
-        //Get all days
-        val weekDaysArray = resources.getStringArray(R.array.days_of_week)
+        
+        //Get index of today
         val c = Calendar.getInstance()
         val today = c.get(Calendar.DAY_OF_WEEK) - 1 //+1 to adjust indexes
-        //Load today exercise
+        //Load today exercises
         val exercisesOfDayRealm = realm.where<Exercise>().equalTo("executionDay", today).findAll()
 
+        //If there are no schedule for today
         if(exercisesOfDayRealm.count() == 0){
             goToScheduleFab.visibility = View.GONE
             scheduleBannerTW.text = "No schedule for today"
@@ -79,23 +78,23 @@ class MeFragment : Fragment() {
             scheduleBannerTW.text = "Go to today schedule"
 
             goToScheduleFab.setOnClickListener{
-                //Start the schedule of the selected day
+                //Start the schedule of the selected day on fab click
                 (activity!! as MainActivity).startScheduleOnCurrentDay = true
                 val navigationView = activity!!.findViewById<TextView>(R.id.navigationView) as BottomNavigationView
-                navigationView.setSelectedItemId(R.id.navigation_schedule)
+                navigationView.selectedItemId = R.id.navigation_schedule
             }
         }
     }
 
     private fun setupChart(weights: RealmResults<Weight>) {
-        var set = LineSet()
+        val set = LineSet()
         for (weight in weights) {
-            var p = Point("day",weight.weight.toFloat())
-            p.radius = 20f
-            p.strokeColor = Color.parseColor("#C8C8C8")
-            p.isVisible = true
-            p.color = Color.WHITE
-            set.addPoint(p)
+            val point = Point("day",weight.weight.toFloat())
+            point.radius = 20f
+            point.strokeColor = Color.parseColor("#C8C8C8")
+            point.isVisible = true
+            point.color = Color.WHITE
+            set.addPoint(point)
         }
 
         set.setColor(Color.parseColor("#279aff"))
@@ -108,7 +107,7 @@ class MeFragment : Fragment() {
         weightChart.setYAxis(false)
         weightChart.setYLabels(AxisRenderer.LabelPosition.NONE)
         weightChart.setXLabels(AxisRenderer.LabelPosition.NONE)
-        var anim = Animation()
+        val anim = Animation()
         weightChart.show(anim)
     }
 
