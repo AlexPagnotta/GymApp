@@ -54,13 +54,13 @@ class EditExerciseActivity : AppCompatActivity() {
             secondsRestET.setText(exercise.secondsOfRest.toString())
             secondsRestET.tag = null
 
-            seriesET.tag = ""
-            seriesET.setText(exercise.series.toString())
-            seriesET.tag = null
+            //seriesET.tag = ""
+           //seriesET.setText(exercise.series.toString())
+           // seriesET.tag = null
 
-            repetitionsET.tag = ""
-            repetitionsET.setText(exercise.repetitions.toString())
-            repetitionsET.tag = null
+           // repetitionsET.tag = ""
+           // repetitionsET.setText(exercise.repetitions.toString())
+           // repetitionsET.tag = null
 
             selectedExecutionDay = exercise.executionDay
 
@@ -190,6 +190,7 @@ class EditExerciseActivity : AppCompatActivity() {
             if (secondsRestET.tag == null) hasPendingChanges = true
         }
 
+        /*
         //series ET
         seriesET.onChange {
             if (!it.isEmpty()) {
@@ -217,6 +218,7 @@ class EditExerciseActivity : AppCompatActivity() {
             }
             if (repetitionsET.tag == null)  hasPendingChanges = true
         }
+        */
     }
 
     private fun saveExercise(){
@@ -244,13 +246,13 @@ class EditExerciseActivity : AppCompatActivity() {
 
         var seriesValue = 1
         try{
-            seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
+           // seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
         }
         catch (e: Exception){ }
 
         var repetitionsValue = 1
         try{
-            repetitionsValue = java.lang.Integer.parseInt(repetitionsET.text.toString())
+          //  repetitionsValue = java.lang.Integer.parseInt(repetitionsET.text.toString())
         }
         catch (e: Exception){ }
 
