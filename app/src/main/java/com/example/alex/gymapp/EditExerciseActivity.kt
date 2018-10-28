@@ -46,6 +46,11 @@ class EditExerciseActivity : AppCompatActivity() {
 
             isEditMode = true
         }
+        //Set the schedule day as the current one on the schedule fragment
+        else if(intent.hasExtra("currentExecutionDay")) {
+            val executionDay = intent.getIntExtra("currentExecutionDay", 0)
+            selectedExecutionDay = executionDay
+        }
 
         setupExecutionDaySpinner()
         setEditTextsMinMax()

@@ -52,9 +52,10 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
         setupSpinner()
         reloadSchedule()
 
-        //Fab click
+        //Fab new exercise click
         add_schedule_fab.setOnClickListener{
             val intent = Intent(context, EditExerciseActivity::class.java)
+            intent.putExtra("currentExecutionDay",  selectedExecutionDay)
             this.startActivityForResult(intent, 1)
         }
 
