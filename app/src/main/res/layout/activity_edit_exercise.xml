@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
@@ -125,17 +125,7 @@
         android:text="Minutes Of Rest"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <TextView
-        android:id="@+id/weightTW2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="KG"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightET"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <ImageButton
         android:id="@+id/cancelBtn"
@@ -187,42 +177,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameET" />
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
-
-    <TextView
-        android:id="@+id/weightTW"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Weight"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/weightET"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="0"
-        android:inputType="numberDecimal"
-        android:textAlignment="textEnd"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
-        app:layout_constraintEnd_toStartOf="@+id/weightTW2" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/seriesRW"
