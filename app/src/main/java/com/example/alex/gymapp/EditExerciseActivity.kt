@@ -17,6 +17,9 @@ import com.example.alex.gymapp.adapters.SeriesAdapter
 import com.example.alex.gymapp.extensions.onChange
 import com.example.alex.gymapp.model.Series
 import io.realm.kotlin.createObject
+import android.widget.ScrollView
+
+
 
 class EditExerciseActivity : AppCompatActivity() {
 
@@ -79,7 +82,8 @@ class EditExerciseActivity : AppCompatActivity() {
         addSeriesBtn.setOnClickListener {
             var series = Series()
             seriesList.add(series)
-            adapter.notifyItemInserted(adapter.itemCount - 1)
+            adapter.notifyItemInserted(adapter.itemCount)
+            scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
         }
 
         cancelBtn.setOnClickListener {
@@ -125,6 +129,7 @@ class EditExerciseActivity : AppCompatActivity() {
         val lm = LinearLayoutManager(this)
         seriesRW.layoutManager = lm
         adapter = SeriesAdapter(seriesList, this)
+        seriesRW.isNestedScrollingEnabled = false
         seriesRW.adapter = adapter
     }
 

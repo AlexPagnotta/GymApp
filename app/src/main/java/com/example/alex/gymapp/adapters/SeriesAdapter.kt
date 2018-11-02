@@ -32,10 +32,10 @@ class SeriesAdapter(
         holder.repetitionsET.tag = null
 
         holder.removeBtn.setOnClickListener{
-            items.removeAt(position)
+            items.removeAt(holder.adapterPosition)
             //Not working correctly reimplement
-            //notifyItemRemoved(position)
-            notifyDataSetChanged()
+            notifyItemRemoved(holder.adapterPosition)
+            //notifyDataSetChanged()
         }
 
         //Weight ET
