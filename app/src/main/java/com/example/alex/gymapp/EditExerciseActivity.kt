@@ -20,7 +20,6 @@ import io.realm.kotlin.createObject
 import android.widget.ScrollView
 
 
-
 class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
@@ -42,10 +41,10 @@ class EditExerciseActivity : AppCompatActivity() {
 
         realm = Realm.getDefaultInstance()
 
-        seriesList =  mutableListOf()
+        seriesList = mutableListOf()
 
         //If the id is present is an existing note
-        if(intent.hasExtra("exerciseId")){
+        if (intent.hasExtra("exerciseId")) {
             //Get Exercise
             val exerciseId = intent.getLongExtra("exerciseId", 0)
             exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
@@ -70,7 +69,7 @@ class EditExerciseActivity : AppCompatActivity() {
             isEditMode = true
         }
         //Set the schedule day as the current one on the schedule fragment
-        else if(intent.hasExtra("currentExecutionDay")) {
+        else if (intent.hasExtra("currentExecutionDay")) {
             val executionDay = intent.getIntExtra("currentExecutionDay", 0)
             selectedExecutionDay = executionDay
         }
@@ -80,15 +79,20 @@ class EditExerciseActivity : AppCompatActivity() {
         setupEditTexts()
 
         addSeriesBtn.setOnClickListener {
-            var series = Series()
-            if(seriesList.count() != 0){
-                var lastSeries = seriesList.last();
+            //Create new series
+            val series = Series()
+            //If it's not the first series, add the data of the last series
+            if (seriesList.count() != 0) {
+                val lastSeries = seriesList.last();
                 series.weight = lastSeries.weight
                 series.repetitions = lastSeries.repetitions
             }
             seriesList.add(series)
+            //Update the adapter
             adapter.notifyItemInserted(adapter.itemCount)
+            //Scroll to bottom
             scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+
             hasPendingChanges = true
         }
 
@@ -99,15 +103,15 @@ class EditExerciseActivity : AppCompatActivity() {
         saveBtn.setOnClickListener {
             saveExercise()
             val returnIntent = Intent()
-            returnIntent.putExtra("executionDay",exercise.executionDay)
+            returnIntent.putExtra("executionDay", exercise.executionDay)
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
             overridePendingTransition(0, 0)
         }
     }
 
-    private fun showConfirmDialog(){
-        if(!hasPendingChanges){
+    private fun showConfirmDialog() {
+        if (!hasPendingChanges) {
             cancelChanges()
             return
         }
@@ -119,27 +123,29 @@ class EditExerciseActivity : AppCompatActivity() {
                 ) { _, _ ->
                     cancelChanges()
                 }
-                .setNegativeButton("CANCEL") { _, _ ->}
+                .setNegativeButton("CANCEL") { _, _ -> }
         builder.show()
     }
 
-    private fun cancelChanges(){
+    private fun cancelChanges() {
         val returnIntent = Intent()
         setResult(Activity.RESULT_CANCELED, returnIntent)
         finish()
         overridePendingTransition(0, 0)
     }
 
-    private fun setupSeriesRecyclerView(){
+    private fun setupSeriesRecyclerView() {
         //Load series into recycler view
         val lm = LinearLayoutManager(this)
         seriesRW.layoutManager = lm
         adapter = SeriesAdapter(seriesList, this, this)
+        //Remove scroll
         seriesRW.isNestedScrollingEnabled = false
+        //Set adapter
         seriesRW.adapter = adapter
     }
 
-    private fun setupExecutionDaySpinner(){
+    private fun setupExecutionDaySpinner() {
         //Set spinner items with strings
         val weekDays = resources.getStringArray(R.array.days_of_week)
         val dataAdapter = ArrayAdapter<String>(
@@ -157,27 +163,27 @@ class EditExerciseActivity : AppCompatActivity() {
         executionDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
 
-                if(selectedItemView == null){
+                if (selectedItemView == null) {
                     return
                 }
 
                 selectedExecutionDay = position
 
                 //Set pending changes only if set by user not programmatically
-                if(executionDaySpinner.tag == null){
+                if (executionDaySpinner.tag == null) {
                     hasPendingChanges = true
-                }
-                else{
+                } else {
                     executionDaySpinner.tag = null
                 }
             }
+
             override fun onNothingSelected(parentView: AdapterView<*>) {
             }
         }
     }
 
     //Set minimum and maximum value of edit texts
-    private fun setupEditTexts(){
+    private fun setupEditTexts() {
         //NameEt
         nameET.onChange {
             if (nameET.tag == null) hasPendingChanges = true
@@ -185,7 +191,7 @@ class EditExerciseActivity : AppCompatActivity() {
 
         //MinutesRest ET
         minutesRestET.onChange {
-            if(!it.isEmpty()){
+            if (!it.isEmpty()) {
                 val number = java.lang.Integer.parseInt(it)
                 if (number > 60) {
                     minutesRestET.text!!.replace(0, it.length, "60", 0, 2)
@@ -206,27 +212,27 @@ class EditExerciseActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveExercise(){
+    private fun saveExercise() {
 
         //Get data
         val name = nameET.text.toString()
 
         var minutesOfRestValue = 0
-        try{
+        try {
             minutesOfRestValue = java.lang.Integer.parseInt(minutesRestET.text.toString())
+        } catch (e: Exception) {
         }
-        catch (e: Exception){ }
 
         var secondOfRestValue = 0
-        try{
+        try {
             secondOfRestValue = java.lang.Integer.parseInt(secondsRestET.text.toString())
+        } catch (e: Exception) {
         }
-        catch (e: Exception){ }
 
         val realm = Realm.getDefaultInstance()
 
         //Update the edited exercise
-        if(isEditMode){
+        if (isEditMode) {
             //Update on DB
             realm.executeTransaction { realm ->
                 //Update Exercise
@@ -247,7 +253,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     nextId = lastId.toInt() + 1
                 }
 
-                for (series in seriesList){
+                for (series in seriesList) {
                     var realmSeries = realm.createObject<Series>(nextId)
                     realmSeries.repetitions = series.repetitions
                     realmSeries.weight = series.weight
@@ -259,7 +265,7 @@ class EditExerciseActivity : AppCompatActivity() {
             }
         }
         //Save the new exercise
-        else{
+        else {
             realm.executeTransaction { realm ->
                 val lastId = realm.where<Exercise>().max("id")
                 val nextId: Int
@@ -293,7 +299,7 @@ class EditExerciseActivity : AppCompatActivity() {
                     nextSeriesId = lastSeriesId.toInt() + 1
                 }
 
-                for (series in seriesList){
+                for (series in seriesList) {
                     val realmSeries = realm.createObject<Series>(nextSeriesId)
                     realmSeries.repetitions = series.repetitions
                     realmSeries.weight = series.weight

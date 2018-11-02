@@ -13,11 +13,10 @@ import com.example.alex.gymapp.model.Series
 import kotlinx.android.synthetic.main.series_item.view.*
 
 class SeriesAdapter(
-        private val items : MutableList<Series>,
+        private val items: MutableList<Series>,
         private val context: Context,
         private val parentActivity: EditExerciseActivity
-) : RecyclerView.Adapter<SeriesViewHolder>()
-{
+) : RecyclerView.Adapter<SeriesViewHolder>() {
     override fun getItemCount(): Int {
         return items.size
     }
@@ -34,24 +33,27 @@ class SeriesAdapter(
         holder.repetitionsET.setText(item.repetitions.toString())
         holder.repetitionsET.tag = null
 
-        holder.removeBtn.setOnClickListener{
+        holder.removeBtn.setOnClickListener {
+            //Remove series
             items.removeAt(holder.adapterPosition)
             notifyItemRemoved(holder.adapterPosition)
 
             parentActivity.hasPendingChanges = true
         }
 
+        //Set minimum and maximum value of edit texts
+
         //Weight ET
         holder.weightET.onChange {
-            if(!it.isEmpty()) {
+            if (!it.isEmpty()) {
                 val number = java.lang.Double.parseDouble(it)
                 if (number > 1000) {
                     holder.weightET.text!!.replace(0, it.length, "999", 0, 3)
                 }
-
                 item.weight = number
             }
 
+            //Set pending changes if tag is null, so it if not the first time loading
             if (holder.weightET.tag == null) parentActivity.hasPendingChanges = true
         }
         //repetitions ET
@@ -60,15 +62,15 @@ class SeriesAdapter(
                 val number = java.lang.Integer.parseInt(it)
                 if (number > 100) {
                     holder.repetitionsET.text!!.replace(0, it.length, "99", 0, 2)
-                }
-                else if(number < 1){
+                } else if (number < 1) {
                     holder.repetitionsET.text!!.replace(0, it.length, "1", 0, 1)
                 }
 
                 item.repetitions = number
             }
 
-            if (holder.repetitionsET.tag == null)  parentActivity.hasPendingChanges = true
+            //Set pending changes if tag is null, so it if not the first time loading
+            if (holder.repetitionsET.tag == null) parentActivity.hasPendingChanges = true
         }
     }
 
@@ -77,7 +79,7 @@ class SeriesAdapter(
     }
 }
 
-class SeriesViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+class SeriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val repetitionsET = view.repetitionsET!!
     val weightET = view.weightET!!
     val removeBtn = view.removeSeriesBtn!!
