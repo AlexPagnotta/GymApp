@@ -81,6 +81,11 @@ class EditExerciseActivity : AppCompatActivity() {
 
         addSeriesBtn.setOnClickListener {
             var series = Series()
+            if(seriesList.count() != 0){
+                var lastSeries = seriesList.last();
+                series.weight = lastSeries.weight
+                series.repetitions = lastSeries.repetitions
+            }
             seriesList.add(series)
             adapter.notifyItemInserted(adapter.itemCount)
             scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
