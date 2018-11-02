@@ -20,7 +20,7 @@ class SeriesAdapter(
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
-        val item = items[position]
+        val item = items[holder.adapterPosition]
 
         //Set series data and add tag to avoid setting pending changes
         holder.weightET.tag = ""
@@ -33,9 +33,7 @@ class SeriesAdapter(
 
         holder.removeBtn.setOnClickListener{
             items.removeAt(holder.adapterPosition)
-            //Not working correctly reimplement
             notifyItemRemoved(holder.adapterPosition)
-            //notifyDataSetChanged()
         }
 
         //Weight ET

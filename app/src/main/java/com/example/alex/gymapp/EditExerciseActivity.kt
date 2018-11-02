@@ -242,10 +242,10 @@ class EditExerciseActivity : AppCompatActivity() {
                 }
 
                 for (series in seriesList){
-                    val realmSeries = realm.createObject<Series>(nextId)
+                    var realmSeries = realm.createObject<Series>(nextId)
                     realmSeries.repetitions = series.repetitions
                     realmSeries.weight = series.weight
-                    exercise.series.add(series)
+                    exercise.series.add(realmSeries)
                     nextId++
                 }
 
