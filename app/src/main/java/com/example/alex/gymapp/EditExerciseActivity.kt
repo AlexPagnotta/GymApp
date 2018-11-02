@@ -23,7 +23,10 @@ class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
-    lateinit var series: RealmList<Series>
+    lateinit var seriesList: MutableList<Series>
+
+    lateinit var adapter: SeriesAdapter
+
     var selectedExecutionDay = 0
 
     var hasPendingChanges = false
@@ -35,14 +38,18 @@ class EditExerciseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exercise)
 
+        realm = Realm.getDefaultInstance()
+
+        seriesList =  mutableListOf<Series>()
+
         //If the id is present is an existing note
         if(intent.hasExtra("exerciseId")){
             //Get Exercise
             val exerciseId = intent.getLongExtra("exerciseId", 0)
-            realm = Realm.getDefaultInstance()
             exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
-            series = exercise.series
-            
+            //Get series of exercise
+            seriesList = realm.copyFromRealm(exercise.series)
+
             //Set exercise data and add tag to avoid setting pending changes
             nameET.tag = ""
             nameET.setText(exercise.name)
@@ -84,7 +91,8 @@ class EditExerciseActivity : AppCompatActivity() {
 
         addSeriesBtn.setOnClickListener {
             var series = Series()
-            exercise.series.add(series)
+            seriesList.add(series)
+            adapter.notifyDataSetChanged()
         }
 
         cancelBtn.setOnClickListener {
@@ -129,7 +137,7 @@ class EditExerciseActivity : AppCompatActivity() {
         //Load series into recycler view
         val lm = LinearLayoutManager(this)
         seriesRW.layoutManager = lm
-        val adapter = SeriesAdapter(exercise.series, this)
+        adapter = SeriesAdapter(seriesList, this)
         seriesRW.adapter = adapter
     }
 
@@ -287,9 +295,27 @@ class EditExerciseActivity : AppCompatActivity() {
                 exercise.weight = weightValue
                 exercise.minutesOfRest = minutesOfRestValue
                 exercise.secondsOfRest = secondOfRestValue
-                //exercise.series = seriesValue
-               // exercise.repetitions = repetitionsValue
                 exercise.executionDay = selectedExecutionDay
+
+                //Delete old series of the exercise
+                exercise.series.deleteAllFromRealm()
+
+                //Get last id of series
+                val lastId = realm.where<Series>().max("id")
+                var nextId: Int
+                if (lastId == null) {
+                    nextId = 1
+                } else {
+                    nextId = lastId.toInt() + 1
+                }
+
+                for (series in seriesList){
+                    val realmSeries = realm.createObject<Series>(nextId)
+                    realmSeries.repetitions = series.repetitions
+                    realmSeries.weight = series.weight
+                    exercise.series.add(series)
+                    nextId++
+                }
 
                 realm.insertOrUpdate(exercise)
             }
