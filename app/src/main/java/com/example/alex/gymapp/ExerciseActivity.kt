@@ -71,7 +71,7 @@ class ExerciseActivity : AppCompatActivity() {
         titleTw.text = name
         weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
         restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
-        seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
+        //seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
         val weekDays = resources.getStringArray(R.array.days_of_week)
         executionDayTw.text = weekDays[exercise.executionDay]
     }

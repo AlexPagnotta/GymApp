@@ -12,13 +12,23 @@ import kotlinx.android.synthetic.main.activity_edit_exercise.*
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import com.example.alex.gymapp.adapters.SeriesAdapter
 import com.example.alex.gymapp.extensions.onChange
+import com.example.alex.gymapp.model.Series
 import io.realm.kotlin.createObject
+import android.widget.ScrollView
+
+
 
 class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
+    private lateinit var seriesList: MutableList<Series>
+
+    lateinit var adapter: SeriesAdapter
+
     var selectedExecutionDay = 0
 
     var hasPendingChanges = false
@@ -30,21 +40,22 @@ class EditExerciseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exercise)
 
+        realm = Realm.getDefaultInstance()
+
+        seriesList =  mutableListOf()
+
         //If the id is present is an existing note
         if(intent.hasExtra("exerciseId")){
             //Get Exercise
             val exerciseId = intent.getLongExtra("exerciseId", 0)
-            realm = Realm.getDefaultInstance()
             exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
+            //Get series of exercise
+            seriesList = realm.copyFromRealm(exercise.series)
 
             //Set exercise data and add tag to avoid setting pending changes
             nameET.tag = ""
             nameET.setText(exercise.name)
             nameET.tag = null
-
-            weightET.tag = ""
-            weightET.setText(exercise.weight.toString())
-            weightET.tag = null
 
             minutesRestET.tag = ""
             minutesRestET.setText(exercise.minutesOfRest.toString())
@@ -53,14 +64,6 @@ class EditExerciseActivity : AppCompatActivity() {
             secondsRestET.tag = ""
             secondsRestET.setText(exercise.secondsOfRest.toString())
             secondsRestET.tag = null
-
-            seriesET.tag = ""
-            seriesET.setText(exercise.series.toString())
-            seriesET.tag = null
-
-            repetitionsET.tag = ""
-            repetitionsET.setText(exercise.repetitions.toString())
-            repetitionsET.tag = null
 
             selectedExecutionDay = exercise.executionDay
 
@@ -72,8 +75,17 @@ class EditExerciseActivity : AppCompatActivity() {
             selectedExecutionDay = executionDay
         }
 
+        setupSeriesRecyclerView()
         setupExecutionDaySpinner()
         setupEditTexts()
+
+        addSeriesBtn.setOnClickListener {
+            var series = Series()
+            seriesList.add(series)
+            adapter.notifyItemInserted(adapter.itemCount)
+            scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+            hasPendingChanges = true
+        }
 
         cancelBtn.setOnClickListener {
             showConfirmDialog()
@@ -111,6 +123,15 @@ class EditExerciseActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED, returnIntent)
         finish()
         overridePendingTransition(0, 0)
+    }
+
+    private fun setupSeriesRecyclerView(){
+        //Load series into recycler view
+        val lm = LinearLayoutManager(this)
+        seriesRW.layoutManager = lm
+        adapter = SeriesAdapter(seriesList, this, this)
+        seriesRW.isNestedScrollingEnabled = false
+        seriesRW.adapter = adapter
     }
 
     private fun setupExecutionDaySpinner(){
@@ -157,17 +178,6 @@ class EditExerciseActivity : AppCompatActivity() {
             if (nameET.tag == null) hasPendingChanges = true
         }
 
-        //Weight ET
-        weightET.onChange {
-            if(!it.isEmpty()) {
-                val number = java.lang.Double.parseDouble(it)
-                if (number > 1000) {
-                    weightET.text!!.replace(0, it.length, "999", 0, 3)
-                }
-            }
-            if (weightET.tag == null) hasPendingChanges = true
-        }
-
         //MinutesRest ET
         minutesRestET.onChange {
             if(!it.isEmpty()){
@@ -189,46 +199,12 @@ class EditExerciseActivity : AppCompatActivity() {
             }
             if (secondsRestET.tag == null) hasPendingChanges = true
         }
-
-        //series ET
-        seriesET.onChange {
-            if (!it.isEmpty()) {
-                val number = java.lang.Integer.parseInt(it)
-                if (number > 100) {
-                    seriesET.text!!.replace(0, it.length, "99", 0, 2)
-                }
-                else if(number < 1){
-                    seriesET.text!!.replace(0, it.length, "1", 0, 1)
-                }
-            }
-            if (seriesET.tag == null) hasPendingChanges = true
-        }
-
-        //repetitions ET
-        repetitionsET.onChange {
-            if (!it.isEmpty()) {
-                val number = java.lang.Integer.parseInt(it)
-                if (number > 100) {
-                    repetitionsET.text!!.replace(0, it.length, "99", 0, 2)
-                }
-                else if(number < 1){
-                    repetitionsET.text!!.replace(0, it.length, "1", 0, 1)
-                }
-            }
-            if (repetitionsET.tag == null)  hasPendingChanges = true
-        }
     }
 
     private fun saveExercise(){
 
         //Get data
         val name = nameET.text.toString()
-
-        var weightValue = 0.0
-        try{
-            weightValue = java.lang.Double.parseDouble(weightET.text.toString())
-        }
-        catch (e: Exception){ }
 
         var minutesOfRestValue = 0
         try{
@@ -242,18 +218,6 @@ class EditExerciseActivity : AppCompatActivity() {
         }
         catch (e: Exception){ }
 
-        var seriesValue = 1
-        try{
-            seriesValue = java.lang.Integer.parseInt(seriesET.text.toString())
-        }
-        catch (e: Exception){ }
-
-        var repetitionsValue = 1
-        try{
-            repetitionsValue = java.lang.Integer.parseInt(repetitionsET.text.toString())
-        }
-        catch (e: Exception){ }
-
         val realm = Realm.getDefaultInstance()
 
         //Update the edited exercise
@@ -262,12 +226,29 @@ class EditExerciseActivity : AppCompatActivity() {
             realm.executeTransaction { realm ->
                 //Update Exercise
                 exercise.name = name
-                exercise.weight = weightValue
                 exercise.minutesOfRest = minutesOfRestValue
                 exercise.secondsOfRest = secondOfRestValue
-                exercise.series = seriesValue
-                exercise.repetitions = repetitionsValue
                 exercise.executionDay = selectedExecutionDay
+
+                //Delete old series of the exercise
+                exercise.series.deleteAllFromRealm()
+
+                //Get last id of series
+                val lastId = realm.where<Series>().max("id")
+                var nextId: Int
+                if (lastId == null) {
+                    nextId = 1
+                } else {
+                    nextId = lastId.toInt() + 1
+                }
+
+                for (series in seriesList){
+                    var realmSeries = realm.createObject<Series>(nextId)
+                    realmSeries.repetitions = series.repetitions
+                    realmSeries.weight = series.weight
+                    exercise.series.add(realmSeries)
+                    nextId++
+                }
 
                 realm.insertOrUpdate(exercise)
             }
@@ -293,13 +274,27 @@ class EditExerciseActivity : AppCompatActivity() {
 
                 val newExercise = realm.createObject<Exercise>(nextId)
                 newExercise.name = name
-                newExercise.weight = weightValue
                 newExercise.minutesOfRest = minutesOfRestValue
                 newExercise.secondsOfRest = secondOfRestValue
-                newExercise.series = seriesValue
-                newExercise.repetitions = repetitionsValue
                 newExercise.executionDay = selectedExecutionDay
                 newExercise.position = nextPos
+
+                //Get last id of series
+                val lastSeriesId = realm.where<Series>().max("id")
+                var nextSeriesId: Int
+                if (lastSeriesId == null) {
+                    nextSeriesId = 1
+                } else {
+                    nextSeriesId = lastSeriesId.toInt() + 1
+                }
+
+                for (series in seriesList){
+                    val realmSeries = realm.createObject<Series>(nextSeriesId)
+                    realmSeries.repetitions = series.repetitions
+                    realmSeries.weight = series.weight
+                    newExercise.series.add(series)
+                    nextSeriesId++
+                }
 
                 exercise = newExercise
             }

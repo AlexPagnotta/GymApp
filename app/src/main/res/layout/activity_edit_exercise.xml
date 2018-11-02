@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView">
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,50 +15,15 @@
     tools:background="@color/white"
     tools:context=".EditExerciseActivity">
 
-    <Spinner
-        android:id="@+id/executionDaySpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toEndOf="@+id/executionDayTW"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
-
-    <TextView
-        android:id="@+id/executionDayTW"
+    <Button
+        android:id="@+id/addSeriesBtn"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Execution Day"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider4" />
-
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repetitionsET" />
-
-    <EditText
-        android:id="@+id/seriesET"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="1"
-        android:inputType="numberDecimal"
-        android:textAlignment="textEnd"
-        android:textSize="24sp"
+        android:layout_marginEnd="24dp"
+        android:text="Add"
         app:layout_constraintBaseline_toBaselineOf="@+id/seriesTW"
-        app:layout_constraintStart_toEndOf="@+id/seriesTW" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/seriesTW"
@@ -68,32 +34,27 @@
         android:text="Series"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <Spinner
+        android:id="@+id/executionDaySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
     <TextView
-        android:id="@+id/repetitionsTW"
+        android:id="@+id/executionDayTW"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Repetitions"
+        android:text="Execution Day"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seriesTW" />
-
-    <EditText
-        android:id="@+id/repetitionsET"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="1"
-        android:inputType="numberDecimal"
-        android:textAlignment="textEnd"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/repetitionsTW"
-        app:layout_constraintStart_toEndOf="@+id/repetitionsTW" />
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
     <View
         android:id="@+id/divider3"
@@ -105,6 +66,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondsRestTw" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/executionDayTW" />
 
     <TextView
         android:id="@+id/secondsRestTw"
@@ -121,7 +93,7 @@
         android:id="@+id/secondsRestET"
         android:layout_width="80dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="0"
@@ -129,13 +101,13 @@
         android:textAlignment="textEnd"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/secondsRestTw"
-        app:layout_constraintStart_toEndOf="@+id/secondsRestTw" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/minutesRestET"
-        android:layout_width="80dp"
+        android:layout_width="81dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="0"
@@ -143,7 +115,7 @@
         android:textAlignment="textEnd"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/minutesRestTw"
-        app:layout_constraintStart_toEndOf="@+id/minutesRestTw" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/minutesRestTw"
@@ -154,17 +126,7 @@
         android:text="Minutes Of Rest"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <TextView
-        android:id="@+id/weightTW2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="KG"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightET"
-        app:layout_constraintStart_toEndOf="@+id/weightET" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <ImageButton
         android:id="@+id/cancelBtn"
@@ -185,8 +147,8 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -195,9 +157,9 @@
         android:id="@+id/nameET"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="Name"
@@ -217,41 +179,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameET" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/seriesRW"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTW" />
+        app:layout_constraintTop_toBottomOf="@+id/seriesTW"
+        />
 
-    <TextView
-        android:id="@+id/weightTW"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Weight"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <EditText
-        android:id="@+id/weightET"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:hint="0"
-        android:inputType="numberDecimal"
-        android:textAlignment="textEnd"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightTW"
-        app:layout_constraintStart_toEndOf="@+id/weightTW" />
 </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
