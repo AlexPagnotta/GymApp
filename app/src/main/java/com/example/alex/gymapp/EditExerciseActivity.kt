@@ -79,7 +79,7 @@ class EditExerciseActivity : AppCompatActivity() {
         addSeriesBtn.setOnClickListener {
             var series = Series()
             seriesList.add(series)
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemInserted(adapter.itemCount - 1)
         }
 
         cancelBtn.setOnClickListener {
