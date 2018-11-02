@@ -81,7 +81,7 @@
         android:id="@+id/weightTW"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="Weight"
         android:textSize="24sp"

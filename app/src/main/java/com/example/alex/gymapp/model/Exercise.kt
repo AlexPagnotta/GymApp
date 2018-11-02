@@ -2,6 +2,8 @@ package com.example.alex.gymapp.model
 
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import java.text.FieldPosition
 

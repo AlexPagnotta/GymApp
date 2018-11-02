@@ -12,13 +12,18 @@ import kotlinx.android.synthetic.main.activity_edit_exercise.*
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import com.example.alex.gymapp.adapters.SeriesAdapter
 import com.example.alex.gymapp.extensions.onChange
+import com.example.alex.gymapp.model.Series
+import io.realm.RealmList
 import io.realm.kotlin.createObject
 
 class EditExerciseActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     lateinit var exercise: Exercise
+    lateinit var series: RealmList<Series>
     var selectedExecutionDay = 0
 
     var hasPendingChanges = false
@@ -36,7 +41,8 @@ class EditExerciseActivity : AppCompatActivity() {
             val exerciseId = intent.getLongExtra("exerciseId", 0)
             realm = Realm.getDefaultInstance()
             exercise = realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
-
+            series = exercise.series
+            
             //Set exercise data and add tag to avoid setting pending changes
             nameET.tag = ""
             nameET.setText(exercise.name)
@@ -72,8 +78,14 @@ class EditExerciseActivity : AppCompatActivity() {
             selectedExecutionDay = executionDay
         }
 
+        setupSeriesRecyclerView()
         setupExecutionDaySpinner()
         setupEditTexts()
+
+        addSeriesBtn.setOnClickListener {
+            var series = Series()
+            exercise.series.add(series)
+        }
 
         cancelBtn.setOnClickListener {
             showConfirmDialog()
@@ -111,6 +123,14 @@ class EditExerciseActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED, returnIntent)
         finish()
         overridePendingTransition(0, 0)
+    }
+
+    private fun setupSeriesRecyclerView(){
+        //Load series into recycler view
+        val lm = LinearLayoutManager(this)
+        seriesRW.layoutManager = lm
+        val adapter = SeriesAdapter(exercise.series, this)
+        seriesRW.adapter = adapter
     }
 
     private fun setupExecutionDaySpinner(){
