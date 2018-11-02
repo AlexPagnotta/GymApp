@@ -1,10 +1,12 @@
 package com.example.alex.gymapp.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.alex.gymapp.EditExerciseActivity
 import com.example.alex.gymapp.R
 import com.example.alex.gymapp.extensions.onChange
 import com.example.alex.gymapp.model.Series
@@ -12,7 +14,8 @@ import kotlinx.android.synthetic.main.series_item.view.*
 
 class SeriesAdapter(
         private val items : MutableList<Series>,
-        private val context: Context
+        private val context: Context,
+        private val parentActivity: EditExerciseActivity
 ) : RecyclerView.Adapter<SeriesViewHolder>()
 {
     override fun getItemCount(): Int {
@@ -34,6 +37,8 @@ class SeriesAdapter(
         holder.removeBtn.setOnClickListener{
             items.removeAt(holder.adapterPosition)
             notifyItemRemoved(holder.adapterPosition)
+
+            parentActivity.hasPendingChanges = true
         }
 
         //Weight ET
@@ -47,8 +52,7 @@ class SeriesAdapter(
                 item.weight = number
             }
 
-            //TODO Reimplement
-            //if (holder.weightET.tag == null) hasPendingChanges = true
+            if (holder.weightET.tag == null) parentActivity.hasPendingChanges = true
         }
         //repetitions ET
         holder.repetitionsET.onChange {
@@ -64,8 +68,7 @@ class SeriesAdapter(
                 item.repetitions = number
             }
 
-            //TODO Reimplement
-            //if (holder.repetitionsET.tag == null)  hasPendingChanges = true
+            if (holder.repetitionsET.tag == null)  parentActivity.hasPendingChanges = true
         }
     }
 

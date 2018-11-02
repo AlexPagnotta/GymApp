@@ -84,6 +84,7 @@ class EditExerciseActivity : AppCompatActivity() {
             seriesList.add(series)
             adapter.notifyItemInserted(adapter.itemCount)
             scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+            hasPendingChanges = true
         }
 
         cancelBtn.setOnClickListener {
@@ -128,7 +129,7 @@ class EditExerciseActivity : AppCompatActivity() {
         //Load series into recycler view
         val lm = LinearLayoutManager(this)
         seriesRW.layoutManager = lm
-        adapter = SeriesAdapter(seriesList, this)
+        adapter = SeriesAdapter(seriesList, this, this)
         seriesRW.isNestedScrollingEnabled = false
         seriesRW.adapter = adapter
     }
