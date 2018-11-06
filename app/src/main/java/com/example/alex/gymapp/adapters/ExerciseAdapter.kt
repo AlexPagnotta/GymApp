@@ -1,7 +1,6 @@
 package com.example.alex.gymapp.adapters
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
@@ -10,23 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.alex.gymapp.R
-import io.realm.RealmRecyclerViewAdapter
-import io.realm.RealmResults
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import com.example.alex.gymapp.ExerciseActivity
 import com.example.alex.gymapp.helpers.ItemTouchHelperAdapter
 import com.example.alex.gymapp.model.Exercise
 import kotlinx.android.synthetic.main.exercise_item.view.*
-import java.util.*
-import java.util.Collections.swap
 import android.view.MotionEvent
 import android.support.v4.view.MotionEventCompat
 import android.view.View.OnTouchListener
 import io.realm.Realm
 import kotlin.collections.ArrayList
-import java.util.Collections.swap
-import android.content.ClipData.Item
 import io.realm.kotlin.where
 
 class ExerciseAdapter(
@@ -65,16 +57,9 @@ class ExerciseAdapter(
         holder.nameTV.text = name
 
         //Show Series Repetition
-        //val seriesRepetitionsString = String.format("%dx%d", item.series, item.repetitions )
-        //holder.seriesRepetitionTV.text = seriesRepetitionsString
+        val seriesString = String.format("%d Series", item.series.count())
+        holder.seriesTV.text = seriesString
 
-        //Show Weight
-        //val restString = String.format("%d Min. %d Sec.", item.minutesOfRest, item.secondsOfRest)
-        //holder.restTimeTV.text = restString
-
-        //Show Weight
-        //val weightString = String.format("%1$,.2f Kg", item.weight)
-        //holder.weightTV.text = weightString
 
         //Manage Selection
         holder.itemView.setOnLongClickListener {
@@ -203,8 +188,7 @@ class ExerciseViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     // Holds the TextViews
     val nameTV = view.nameTV!!
     val restTimeTV = view.restTimeTV!!
-    val seriesRepetitionTV = view.seriesRepetitionsTV!!
-    val weightTV = view.weightTV!!
+    val seriesTV = view.seriesTV!!
     val handleImg = view.handleImg!!
 }
 

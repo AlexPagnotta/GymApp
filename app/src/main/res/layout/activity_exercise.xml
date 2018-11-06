@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView">
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,46 +15,25 @@
     tools:background="@color/white"
     tools:context=".ExerciseActivity">
 
-
     <TextView
         android:id="@+id/restTw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginEnd="24dp"
         android:text="1 Min. 32 sec."
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/restTextTw"
-        app:layout_constraintStart_toEndOf="@+id/restTextTw" />
-
-    <TextView
-        android:id="@+id/weightTw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="30 Kg"
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightTextTw"
-        app:layout_constraintStart_toEndOf="@+id/weightTextTw" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/executionDayTw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginEnd="24dp"
         android:text="Monday"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/executionDayTextTw"
-        app:layout_constraintStart_toEndOf="@+id/executionDayTextTw" />
-
-    <TextView
-        android:id="@+id/seriesTw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="2 Series 10 Rep."
-        android:textSize="24sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/seriesTextTw"
-        app:layout_constraintStart_toEndOf="@+id/seriesTextTw" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/executionDayTextTw"
@@ -55,17 +42,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="Execution Day"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seriesTextTw" />
-
-    <TextView
-        android:id="@+id/seriesTextTw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Series"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restTextTw" />
@@ -77,17 +53,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="Rest Time"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTextTw" />
-
-    <TextView
-        android:id="@+id/weightTextTw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Weight"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTw" />
@@ -148,4 +113,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_outline_delete_24px" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/seriesRW"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/executionDayTextTw" />
+
 </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

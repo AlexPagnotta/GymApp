@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.activity_exercise.*
 import android.support.v7.app.AlertDialog
 import android.content.Intent
 import android.app.Activity
+import android.support.v7.widget.LinearLayoutManager
+import com.example.alex.gymapp.adapters.SeriesAdapter
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -69,11 +71,22 @@ class ExerciseActivity : AppCompatActivity() {
             name = "No Exercise Name"
         }
         titleTw.text = name
-        weightTw.text = String.format("%1$,.2f Kg", exercise.weight)
         restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
-        //seriesTw.text =String.format("%dx%d ", exercise.series,exercise.repetitions )
         val weekDays = resources.getStringArray(R.array.days_of_week)
         executionDayTw.text = weekDays[exercise.executionDay]
+
+        setupSeriesRecyclerView();
+    }
+
+    private fun setupSeriesRecyclerView() {
+        //Load series into recycler view
+        val lm = LinearLayoutManager(this)
+        seriesRW.layoutManager = lm
+        val adapter = SeriesAdapter(exercise.series, this)
+        //Remove scroll
+        seriesRW.isNestedScrollingEnabled = false
+        //Set adapter
+        seriesRW.adapter = adapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

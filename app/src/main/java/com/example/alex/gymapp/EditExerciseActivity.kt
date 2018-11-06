@@ -13,11 +13,11 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import com.example.alex.gymapp.adapters.SeriesAdapter
 import com.example.alex.gymapp.extensions.onChange
 import com.example.alex.gymapp.model.Series
 import io.realm.kotlin.createObject
 import android.widget.ScrollView
+import com.example.alex.gymapp.adapters.SeriesEditAdapter
 
 
 class EditExerciseActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class EditExerciseActivity : AppCompatActivity() {
     lateinit var exercise: Exercise
     private lateinit var seriesList: MutableList<Series>
 
-    lateinit var adapter: SeriesAdapter
+    lateinit var adapter: SeriesEditAdapter
 
     var selectedExecutionDay = 0
 
@@ -138,7 +138,7 @@ class EditExerciseActivity : AppCompatActivity() {
         //Load series into recycler view
         val lm = LinearLayoutManager(this)
         seriesRW.layoutManager = lm
-        adapter = SeriesAdapter(seriesList, this, this)
+        adapter = SeriesEditAdapter(seriesList, this, this)
         //Remove scroll
         seriesRW.isNestedScrollingEnabled = false
         //Set adapter

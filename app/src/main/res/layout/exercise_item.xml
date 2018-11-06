@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
     <TextView
-        android:id="@+id/seriesRepetitionsTV"
+        android:id="@+id/seriesTV"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginBottom="16dp"
@@ -50,22 +50,6 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/restTimeTV"
-        app:layout_constraintTop_toBottomOf="@+id/nameTV" />
-
-    <TextView
-        android:id="@+id/weightTV"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical|start"
-        android:text="50.25kg"
-        android:textAlignment="viewStart"
-        android:textColor="@color/colorAccent"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seriesRepetitionsTV"
         app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
     <ImageView
