@@ -12,6 +12,7 @@ import android.content.Intent
 import android.app.Activity
 import android.support.v7.widget.LinearLayoutManager
 import com.example.alex.gymapp.adapters.SeriesAdapter
+import com.example.alex.gymapp.utilities.Utilities
 
 class ExerciseActivity : AppCompatActivity() {
 
@@ -72,10 +73,9 @@ class ExerciseActivity : AppCompatActivity() {
         }
         titleTw.text = name
         restTw.text =String.format("%dM %dS", exercise.minutesOfRest, exercise.secondsOfRest)
-        val weekDays = resources.getStringArray(R.array.days_of_week)
-        executionDayTw.text = weekDays[exercise.executionDay]
-
-        setupSeriesRecyclerView();
+        val executionDayString = Utilities.getExecutionDayString(this, exercise.executionDay)
+        executionDayTw.text = executionDayString
+        setupSeriesRecyclerView()
     }
 
     private fun setupSeriesRecyclerView() {

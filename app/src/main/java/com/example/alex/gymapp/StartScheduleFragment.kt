@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.alex.gymapp.utilities.Utilities
+import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.fragment_start_schedule.*
 
 class StartScheduleFragment : Fragment() {
@@ -27,7 +29,8 @@ class StartScheduleFragment : Fragment() {
     }
 
     private fun reloadUi(executionDay:Int){
-        scheduleTitleTw.text = String.format("Schedule of %s",executionDay)
+        val executionDayString = Utilities.getExecutionDayString(context as StartScheduleActivity, executionDay)
+        scheduleTitleTw.text = String.format("Schedule of %s",executionDayString)
     }
 
     companion object {
