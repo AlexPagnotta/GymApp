@@ -59,6 +59,14 @@ class ScheduleFragment : Fragment() , ExerciseAdapter.OnClickAction, ExerciseAda
             this.startActivityForResult(intent, 1)
         }
 
+        //Start schedule
+        start_schedule_fab.setOnClickListener{
+            val intent = Intent(context, StartScheduleActivity::class.java)
+            //intent.putExtra("currentExecutionDay",  selectedExecutionDay)
+            //this.startActivityForResult(intent, 1)
+            this.startActivity(intent)
+        }
+
         //Load schedule of a specific day
         if(arguments != null){
             val currentDay = arguments!!.getInt("currentDay")

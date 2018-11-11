@@ -14,4 +14,8 @@ class RunningExerciseFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_running_exercise, container, false)
     }
 
+    companion object {
+        fun newInstance(): MeFragment = MeFragment()
+    }
+
 }

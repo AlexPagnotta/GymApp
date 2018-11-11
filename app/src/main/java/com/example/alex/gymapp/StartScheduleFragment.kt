@@ -14,6 +14,7 @@ class StartScheduleFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_start_schedule, container, false)
     }
 
-
-
+    companion object {
+        fun newInstance(): StartScheduleFragment = StartScheduleFragment()
+    }
 }

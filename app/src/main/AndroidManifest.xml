@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".ExerciseActivity" />
         <activity android:name=".EditExerciseActivity" />
-        <activity android:name=".ScheduleStartActivity"></activity>
+        <activity android:name=".StartScheduleActivity"></activity>
     </application>
 
 </manifest>
