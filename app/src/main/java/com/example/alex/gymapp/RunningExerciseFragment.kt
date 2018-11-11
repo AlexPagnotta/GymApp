@@ -15,7 +15,7 @@ class RunningExerciseFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): MeFragment = MeFragment()
+        fun newInstance(): RunningExerciseFragment = RunningExerciseFragment()
     }
 
 }

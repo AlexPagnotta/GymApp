@@ -2,6 +2,7 @@ package com.example.alex.gymapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
 import io.realm.RealmResults
@@ -47,6 +48,14 @@ class StartScheduleActivity : AppCompatActivity() {
 
         //Show fragment
         transaction.replace(R.id.fragmentContainer, startScheduleFragment)
+        transaction.commit()
+    }
+
+    fun startSchedule(){
+        //Start fragment
+        val runningExerciseFragment = RunningExerciseFragment.newInstance()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragmentContainer, runningExerciseFragment)
         transaction.commit()
     }
 }

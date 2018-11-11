@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.alex.gymapp.utilities.Utilities
-import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.fragment_start_schedule.*
 
 class StartScheduleFragment : Fragment() {
@@ -25,6 +24,11 @@ class StartScheduleFragment : Fragment() {
             val executionDay = arguments!!.getInt("currentExecutionDay")
 
             reloadUi(executionDay)
+        }
+
+        startScheduleBtn.setOnClickListener {
+            val parentActivity = activity as StartScheduleActivity
+            parentActivity.startSchedule()
         }
     }
 
