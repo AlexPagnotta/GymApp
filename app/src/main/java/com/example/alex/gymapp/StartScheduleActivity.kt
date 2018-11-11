@@ -7,6 +7,8 @@ import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.where
+import java.util.*
+import kotlin.concurrent.schedule
 
 class StartScheduleActivity : AppCompatActivity() {
 
@@ -52,9 +54,27 @@ class StartScheduleActivity : AppCompatActivity() {
     }
 
     fun startSchedule(){
+        //Put exercises in a stack
+        var exercisesStack = Stack<Exercise>()
+        for (exercise in exercises){
+            //Add copied exercise to stack, copy beacuse cannot use realm object on different threads
+            exercisesStack.push( realm.copyFromRealm(exercise))
+        }
+
+        //TODO Load exercise every X Seconds
+
+    }
+
+    fun loadNextExercise(exercise:Exercise){
         //Start fragment
         val runningExerciseFragment = RunningExerciseFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
+
+        //Pass the current exercise id to fragment
+        val arguments = Bundle()
+        arguments.putLong("exerciseId", exercise.id)
+        runningExerciseFragment.arguments = arguments
+
         transaction.replace(R.id.fragmentContainer, runningExerciseFragment)
         transaction.commit()
     }
