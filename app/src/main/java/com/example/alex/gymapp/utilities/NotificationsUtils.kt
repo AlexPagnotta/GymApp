@@ -16,7 +16,7 @@ class GetScheduleServiceNotification(
         private val context: Context, private var myService: ScheduleService?) : AsyncTask<Long, Void, Any>() {
 
     private lateinit var mNotification: Notification
-    
+
     companion object {
         const val CHANNEL_ID = "1"
         const val CHANNEL_NAME = "Sample Notification"

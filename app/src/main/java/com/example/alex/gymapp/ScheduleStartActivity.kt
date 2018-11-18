@@ -52,7 +52,7 @@ class ScheduleStartActivity : AppCompatActivity() {
             } catch (e: IllegalArgumentException) {
                 Log.w("", "Error Unbinding Service.")
             }
-            // If the service is not running then start it
+            // If the service is running stop it
             if (isServiceRunning(ScheduleService::class.java)) {
                 // Stop the service
                 stopService(serviceIntent)
@@ -66,9 +66,9 @@ class ScheduleStartActivity : AppCompatActivity() {
         try {
             unbindService(serviceConnection)
         } catch (e: IllegalArgumentException) {
-            Log.w("MainActivity", "Error Unbinding Service.")
+            Log.w("Schedule Start Activity", "Error Unbinding Service.")
         }
-
+        // If the service is running stop it
         if (isServiceRunning(ScheduleService::class.java)) {
             stopService(serviceIntent)
         }
