@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service
             android:name=".services.ScheduleService"
             android:enabled="true"
@@ -26,7 +25,8 @@
         </activity>
         <activity android:name=".ExerciseActivity" />
         <activity android:name=".EditExerciseActivity" />
-        <activity android:name=".StartScheduleActivity"></activity>
+        <activity android:name=".StartScheduleActivity" />
+        <activity android:name=".ScheduleStartActivity"></activity>
     </application>
 
 </manifest>
