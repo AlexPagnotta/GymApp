@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.alex.gymapp.utilities.Utilities
 import kotlinx.android.synthetic.main.fragment_start_schedule.*
+import android.support.v4.view.accessibility.AccessibilityEventCompat.setAction
+import android.content.Intent
+import com.example.alex.gymapp.services.ScheduleService
 
 class StartScheduleFragment : Fragment() {
 
@@ -27,6 +30,11 @@ class StartScheduleFragment : Fragment() {
         }
 
         startScheduleBtn.setOnClickListener {
+            //Start service
+            val intent = Intent(activity, ScheduleService::class.java)
+            intent.action = "ACTION_START_FOREGROUND_SERVICE"
+            activity!!.startService(intent)
+
             val parentActivity = activity as StartScheduleActivity
             parentActivity.loadNextExercise()
         }
