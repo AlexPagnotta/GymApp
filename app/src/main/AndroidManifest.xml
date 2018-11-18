@@ -12,8 +12,14 @@
         <service
             android:name=".services.ScheduleService"
             android:enabled="true"
-            android:exported="true" />
-
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="SCHEDULE_START"/>
+                <action
+                    android:name="NEXT_EXERCISE"/>
+            </intent-filter>
+            </service>
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize">
@@ -25,7 +31,6 @@
         </activity>
         <activity android:name=".ExerciseActivity" />
         <activity android:name=".EditExerciseActivity" />
-        <activity android:name=".StartScheduleActivity" />
         <activity android:name=".ScheduleStartActivity"></activity>
     </application>
 

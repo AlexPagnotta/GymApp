@@ -10,27 +10,34 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import com.example.alex.gymapp.model.Exercise
 import com.example.alex.gymapp.services.ScheduleService
 import com.example.alex.gymapp.utilities.GetScheduleServiceNotification
+import io.realm.Realm
+import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_schedule_start.*
+import kotlin.collections.ArrayList
 
 class ScheduleStartActivity : AppCompatActivity() {
 
+    val ACTION_START = "SCHEDULE_START"
+    val ACTION_NEXT = "NEXT_EXERCISE"
+
     var scheduleService: ScheduleService? = null
-    var isBound = false
+    var isBoundToService = false
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName,
                                         service: IBinder) {
             val binder = service as ScheduleService.MyLocalBinder
             scheduleService = binder.getService()
-            isBound = true
+            isBoundToService = true
 
             GetScheduleServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            isBound = false
+            isBoundToService = false
         }
     }
 
@@ -38,9 +45,15 @@ class ScheduleStartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_start)
 
+        //Get executionDay
+        val executionDay = intent.getIntExtra("currentExecutionDay",0)
+
+        //Setup service intent and pass executionDay
         val serviceIntent = Intent(applicationContext, ScheduleService::class.java)
+        serviceIntent.putExtra("currentExecutionDay",  executionDay)
 
         startScheduleBtn.setOnClickListener {
+            serviceIntent.action = ACTION_START
             startService(serviceIntent)
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
@@ -58,6 +71,11 @@ class ScheduleStartActivity : AppCompatActivity() {
                 stopService(serviceIntent)
             }
         }
+
+        nextExerciseBtn.setOnClickListener {
+            serviceIntent.action = ACTION_NEXT
+            startService(serviceIntent)
+        }
     }
 
     override fun onDestroy() {
@@ -74,6 +92,8 @@ class ScheduleStartActivity : AppCompatActivity() {
         }
         super.onDestroy()
     }
+
+
 
     // Custom method to determine whether a service is running
     private fun isServiceRunning(serviceClass: Class<*>): Boolean {
