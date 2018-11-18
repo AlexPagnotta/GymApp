@@ -6,22 +6,25 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.media.RemoteControlClient
 import android.os.AsyncTask
 import android.os.Build
-import android.util.Log
 import com.example.alex.gymapp.R
 import com.example.alex.gymapp.services.ScheduleService
 
-class getBackgroundNotification(private val context: Context, private var myService: ScheduleService?) : AsyncTask<Long, Void, Any>() {
+class GetScheduleServiceNotification(
+        private val context: Context, private var myService: ScheduleService?) : AsyncTask<Long, Void, Any>() {
+
     private lateinit var mNotification: Notification
-    private val mNotificationId: Int = 1000
+    
+    companion object {
+        const val CHANNEL_ID = "1"
+        const val CHANNEL_NAME = "Sample Notification"
+    }
+
     override fun doInBackground(vararg params: Long?): Any? {
         //Create Channel
         createChannel(context)
-        var notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notifyIntent = Intent(context, ScheduleService::class.java)
         val title = "Sample Notification"
         val message = "You have received a sample notification. This notification will take you to the details page."
@@ -34,7 +37,7 @@ class getBackgroundNotification(private val context: Context, private var myServ
             mNotification = Notification.Builder(context, CHANNEL_ID)
                     // Set the intent that will fire when the user taps the notification
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setAutoCancel(true)
                     .setContentTitle(title)
                     .setStyle(Notification.BigTextStyle()
@@ -44,7 +47,7 @@ class getBackgroundNotification(private val context: Context, private var myServ
             mNotification = Notification.Builder(context)
                     // Set the intent that will fire when the user taps the notification
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setAutoCancel(true)
                     .setPriority(Notification.PRIORITY_MAX)
                     .setContentTitle(title)
@@ -52,13 +55,8 @@ class getBackgroundNotification(private val context: Context, private var myServ
                             .bigText(message))
                     .setContentText(message).build()
         }
-        myService?.startForeground(999, mNotification)
+        myService?.startForeground(1, mNotification)
         return null
-    }
-
-    companion object {
-        const val CHANNEL_ID = "1337"
-        const val CHANNEL_NAME = "Sample Notification"
     }
 
     private fun createChannel(context: Context) {
@@ -66,11 +64,12 @@ class getBackgroundNotification(private val context: Context, private var myServ
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
             val notificationChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
-            notificationChannel.enableVibration(true)
-            notificationChannel.setShowBadge(true)
-            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(false)
+            notificationChannel.setSound(null, null)
+            notificationChannel.setShowBadge(false)
+            notificationChannel.enableLights(false)
             notificationChannel.lightColor = Color.parseColor("#e8334a")
             notificationChannel.description = "notification channel description"
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC

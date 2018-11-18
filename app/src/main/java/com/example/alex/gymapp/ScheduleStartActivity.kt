@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import com.example.alex.gymapp.services.ScheduleService
-import com.example.alex.gymapp.utilities.getBackgroundNotification
+import com.example.alex.gymapp.utilities.GetScheduleServiceNotification
 import kotlinx.android.synthetic.main.activity_schedule_start.*
 
 class ScheduleStartActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class ScheduleStartActivity : AppCompatActivity() {
             scheduleService = binder.getService()
             isBound = true
 
-            getBackgroundNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            GetScheduleServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
