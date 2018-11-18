@@ -28,7 +28,7 @@ class StartScheduleFragment : Fragment() {
 
         startScheduleBtn.setOnClickListener {
             val parentActivity = activity as StartScheduleActivity
-            parentActivity.startSchedule()
+            parentActivity.loadNextExercise()
         }
     }
 

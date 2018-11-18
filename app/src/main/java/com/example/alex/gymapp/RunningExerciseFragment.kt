@@ -23,6 +23,11 @@ class RunningExerciseFragment : Fragment() {
 
         val exerciseId = arguments!!.getLong("exerciseId")
         nameTw.text = exerciseId.toString()
+
+        nextBtn.setOnClickListener {
+            val parentActivity = activity as StartScheduleActivity
+            parentActivity.loadNextExercise()
+        }
     }
 
     companion object {

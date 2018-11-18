@@ -2,19 +2,16 @@ package com.example.alex.gymapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.example.alex.gymapp.model.Exercise
 import io.realm.Realm
-import io.realm.RealmResults
 import io.realm.kotlin.where
 import java.util.*
-import kotlin.concurrent.schedule
 
 class StartScheduleActivity : AppCompatActivity() {
 
     lateinit var realm: Realm
     private var executionDay: Int = 0
-    lateinit var exercises: RealmResults<Exercise>
+    lateinit var exercisesStack: Stack<Exercise>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +23,24 @@ class StartScheduleActivity : AppCompatActivity() {
         //Instance realm
         realm = Realm.getDefaultInstance()
 
-        //Get exercises
-        exercises = getExercisesOfSchedule()
+        //Get exercises stack
+        exercisesStack = getExercisesStackOfSchedule()
 
         //Show the startScheduleFragments
         showStartScheduleFragment()
     }
 
-    private fun getExercisesOfSchedule() : RealmResults<Exercise> {
+    private fun getExercisesStackOfSchedule() : Stack<Exercise> {
         //Get exercises of the selected schedule
-        return realm.where<Exercise>().equalTo("executionDay", executionDay).findAll().sort("position")
+        val exercises = realm.where<Exercise>().equalTo("executionDay", executionDay).findAll().sort("position")
+
+        val exercisesStack = Stack<Exercise>()
+        for (exercise in exercises){
+            //Add copied exercise to stack, copy because cannot use realm object on different threads
+            exercisesStack.push( realm.copyFromRealm(exercise))
+        }
+
+        return exercisesStack
     }
 
     private fun showStartScheduleFragment(){
@@ -53,19 +58,17 @@ class StartScheduleActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun startSchedule(){
-        //Put exercises in a stack
-        var exercisesStack = Stack<Exercise>()
-        for (exercise in exercises){
-            //Add copied exercise to stack, copy beacuse cannot use realm object on different threads
-            exercisesStack.push( realm.copyFromRealm(exercise))
+    fun loadNextExercise(){
+        if(exercisesStack.count() == 0){
+            //Refill stack
+            exercisesStack = getExercisesStackOfSchedule()
+            
+            showStartScheduleFragment()
+            return
         }
+        //Get next exercise
+        val exercise = exercisesStack.pop()
 
-        //TODO Load exercise every X Seconds
-
-    }
-
-    fun loadNextExercise(exercise:Exercise){
         //Start fragment
         val runningExerciseFragment = RunningExerciseFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
