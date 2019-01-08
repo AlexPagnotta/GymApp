@@ -11,30 +11,35 @@ import android.os.AsyncTask
 import android.os.Build
 import com.example.alex.gymapp.R
 import com.example.alex.gymapp.services.ScheduleService
+import android.support.v4.content.ContextCompat.getSystemService
 
-class GetScheduleServiceNotification(
+class ServiceNotification(
         private val context: Context, private var myService: ScheduleService?) : AsyncTask<Long, Void, Any>() {
-
-    private lateinit var mNotification: Notification
 
     companion object {
         const val CHANNEL_ID = "1"
-        const val CHANNEL_NAME = "Sample Notification"
+        const val CHANNEL_NAME = "Gym App Service Notification Channel"
+        const val NOTIF_ID = 1
     }
 
     override fun doInBackground(vararg params: Long?): Any? {
         //Create Channel
         createChannel(context)
+
+        var notification = BuildNotification("test", "message")
+        myService?.startForeground(NOTIF_ID , notification)
+        return null
+    }
+
+    private fun BuildNotification(title: String, message: String): Notification? {
         val notifyIntent = Intent(context, ScheduleService::class.java)
-        val title = "Sample Notification"
-        val message = "You have received a sample notification. This notification will take you to the details page."
         notifyIntent.putExtra("title", title)
         notifyIntent.putExtra("message", message)
         notifyIntent.putExtra("notification", true)
         notifyIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mNotification = Notification.Builder(context, CHANNEL_ID)
+            return Notification.Builder(context, CHANNEL_ID)
                     // Set the intent that will fire when the user taps the notification
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -44,7 +49,7 @@ class GetScheduleServiceNotification(
                             .bigText(message))
                     .setContentText(message).build()
         } else {
-            mNotification = Notification.Builder(context)
+            return  Notification.Builder(context)
                     // Set the intent that will fire when the user taps the notification
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -55,8 +60,6 @@ class GetScheduleServiceNotification(
                             .bigText(message))
                     .setContentText(message).build()
         }
-        myService?.startForeground(1, mNotification)
-        return null
     }
 
     private fun createChannel(context: Context) {
@@ -75,5 +78,16 @@ class GetScheduleServiceNotification(
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(notificationChannel)
         }
+    }
+
+    /**
+     * This is the method that can be called to update the Notification
+     */
+   fun updateNotification(title: String, message: String) {
+
+        var notification = BuildNotification(title, message)
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIF_ID, notification)
     }
 }

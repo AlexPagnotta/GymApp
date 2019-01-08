@@ -10,13 +10,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
-import com.example.alex.gymapp.model.Exercise
 import com.example.alex.gymapp.services.ScheduleService
-import com.example.alex.gymapp.utilities.GetScheduleServiceNotification
-import io.realm.Realm
-import io.realm.kotlin.where
+import com.example.alex.gymapp.utilities.ServiceNotification
 import kotlinx.android.synthetic.main.activity_schedule_start.*
-import kotlin.collections.ArrayList
 
 class ScheduleStartActivity : AppCompatActivity() {
 
@@ -33,7 +29,7 @@ class ScheduleStartActivity : AppCompatActivity() {
             scheduleService = binder.getService()
             isBoundToService = true
 
-            GetScheduleServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            ServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -92,8 +88,6 @@ class ScheduleStartActivity : AppCompatActivity() {
         }
         super.onDestroy()
     }
-
-
 
     // Custom method to determine whether a service is running
     private fun isServiceRunning(serviceClass: Class<*>): Boolean {

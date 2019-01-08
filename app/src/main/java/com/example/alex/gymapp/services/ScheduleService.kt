@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import com.example.alex.gymapp.model.Exercise
+import com.example.alex.gymapp.utilities.ServiceNotification
 import io.realm.Realm
 import io.realm.kotlin.where
 import java.util.*
@@ -79,9 +80,11 @@ class ScheduleService : Service() {
             stopForeground(true)
             return
         }
-
         var exercise = exercisesStack.pop()
+
+        ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
+
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         stopSelf()
