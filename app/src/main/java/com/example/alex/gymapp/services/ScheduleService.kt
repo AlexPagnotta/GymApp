@@ -71,7 +71,7 @@ class ScheduleService : Service() {
         val exercises = realm.where<Exercise>().equalTo("executionDay", executionDay).findAll().sort("position")
 
         //Create iterator
-        val exercisesIterator = exercises.toList().listIterator()
+        exercisesIterator = exercises.toList().listIterator()
     }
 
     private fun nextExercise(){

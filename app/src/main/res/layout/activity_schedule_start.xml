@@ -10,19 +10,21 @@
         android:id="@+id/previousExerciseBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Previous Exercise"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="565dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/startScheduleBtn"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Start Schedule"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="566dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/stopScheduleBtn"
@@ -41,11 +43,12 @@
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Next Exercise"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previousExerciseBtn"
-        tools:layout_editor_absoluteX="277dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previousExerciseBtn" />
 
     <TextView
         android:id="@+id/textView"

@@ -69,7 +69,7 @@ class ScheduleStartActivity : AppCompatActivity() {
             }
         }
 
-        nextExerciseBtn.setOnClickListener {
+        previousExerciseBtn.setOnClickListener {
             serviceIntent.action = ACTION_PREVIOUS
             startService(serviceIntent)
         }
