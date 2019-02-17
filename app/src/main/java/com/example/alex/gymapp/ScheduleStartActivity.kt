@@ -18,6 +18,7 @@ class ScheduleStartActivity : AppCompatActivity() {
 
     val ACTION_START = "SCHEDULE_START"
     val ACTION_NEXT = "NEXT_EXERCISE"
+    val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
 
     var scheduleService: ScheduleService? = null
     var isBoundToService = false
@@ -66,6 +67,11 @@ class ScheduleStartActivity : AppCompatActivity() {
                 // Stop the service
                 stopService(serviceIntent)
             }
+        }
+
+        nextExerciseBtn.setOnClickListener {
+            serviceIntent.action = ACTION_PREVIOUS
+            startService(serviceIntent)
         }
 
         nextExerciseBtn.setOnClickListener {

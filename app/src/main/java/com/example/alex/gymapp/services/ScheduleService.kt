@@ -13,7 +13,7 @@ import java.util.*
 class ScheduleService : Service() {
 
     lateinit var realm: Realm
-    lateinit var exercisesStack: Stack<Exercise>
+    lateinit var exercisesIterator: ListIterator<Exercise>
 
     private val myBinder = MyLocalBinder()
 
@@ -26,6 +26,8 @@ class ScheduleService : Service() {
     // AndroidManifest.xml.
     val ACTION_START = "SCHEDULE_START"
     val ACTION_NEXT = "NEXT_EXERCISE"
+    val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
+
 
     override fun onBind(intent: Intent): IBinder? {
         return myBinder
@@ -43,6 +45,9 @@ class ScheduleService : Service() {
         if(action == ACTION_NEXT){
             nextExercise()
         }
+        else if (action == ACTION_PREVIOUS){
+            previousExercise()
+        }
         else if (action == ACTION_START){
             val executionDay = intent.getIntExtra("currentExecutionDay",0)
 
@@ -50,7 +55,7 @@ class ScheduleService : Service() {
             realm = Realm.getDefaultInstance()
 
             //Get exercises stack of the selected day
-            exercisesStack = getExercisesOfSchedule(executionDay)
+            getExercisesOfSchedule(executionDay)
         }
 
         return Service.START_STICKY
@@ -61,26 +66,29 @@ class ScheduleService : Service() {
         stopForeground(true)
     }
 
-    private fun getExercisesOfSchedule(executionDay:Int) : Stack<Exercise> {
+    private fun getExercisesOfSchedule(executionDay:Int) {
         //Get exercises of the selected schedule
         val exercises = realm.where<Exercise>().equalTo("executionDay", executionDay).findAll().sort("position")
 
-        //Create stack
-        val exercisesStack = Stack<Exercise>()
-        for (exercise in exercises){
-            //Add copied exercise to stack, copy because cannot use realm object on different threads
-            exercisesStack.push(realm.copyFromRealm(exercise))
-        }
-
-        return exercisesStack
+        //Create iterator
+        val exercisesIterator = exercises.toList().listIterator()
     }
 
     private fun nextExercise(){
-        if(exercisesStack.count() == 0){
+        if(!exercisesIterator.hasNext()){
             stopForeground(true)
             return
         }
-        var exercise = exercisesStack.pop()
+        val exercise = exercisesIterator.next()
+
+        ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
+    }
+
+    private fun previousExercise(){
+        if(!exercisesIterator.hasPrevious()){
+            return
+        }
+        val exercise = exercisesIterator.previous()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
