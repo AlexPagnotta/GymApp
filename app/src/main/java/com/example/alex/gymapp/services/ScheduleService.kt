@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import com.example.alex.gymapp.model.Exercise
+import com.example.alex.gymapp.model.ExercisesIteratorCustom
 import com.example.alex.gymapp.utilities.ServiceNotification
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -13,7 +14,8 @@ import java.util.*
 class ScheduleService : Service() {
 
     lateinit var realm: Realm
-    lateinit var exercisesIterator: ListIterator<Exercise>
+    lateinit var exerciseIteratorCustom: ExercisesIteratorCustom
+    private var exerciseCounter: Int = 0
 
     private val myBinder = MyLocalBinder()
 
@@ -49,7 +51,10 @@ class ScheduleService : Service() {
             previousExercise()
         }
         else if (action == ACTION_START){
+
             val executionDay = intent.getIntExtra("currentExecutionDay",0)
+
+            exerciseCounter = 0
 
             //Instance realm
             realm = Realm.getDefaultInstance()
@@ -71,24 +76,27 @@ class ScheduleService : Service() {
         val exercises = realm.where<Exercise>().equalTo("executionDay", executionDay).findAll().sort("position")
 
         //Create iterator
-        exercisesIterator = exercises.toList().listIterator()
+        exerciseIteratorCustom = ExercisesIteratorCustom(exercises.toList())
     }
 
     private fun nextExercise(){
-        if(!exercisesIterator.hasNext()){
+        val exercise = exerciseIteratorCustom.next()
+
+        if(exercise == null){
             stopForeground(true)
             return
         }
-        val exercise = exercisesIterator.next()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
 
     private fun previousExercise(){
-        if(!exercisesIterator.hasPrevious()){
+
+        val exercise = exerciseIteratorCustom.previous()
+
+        if(exercise == null){
             return
         }
-        val exercise = exercisesIterator.previous()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
