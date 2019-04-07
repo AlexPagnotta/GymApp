@@ -19,6 +19,8 @@ class ScheduleService : Service() {
 
     private val myBinder = MyLocalBinder()
 
+    private var isServiceJustStarted = true
+
     // These are the Intent actions that we are prepared to handle. Notice that
     // the fact these
     // constants exist in our class is a mere convenience: what really defines
@@ -56,6 +58,8 @@ class ScheduleService : Service() {
 
             exerciseCounter = 0
 
+            isServiceJustStarted = true
+
             //Instance realm
             realm = Realm.getDefaultInstance()
 
@@ -80,23 +84,32 @@ class ScheduleService : Service() {
     }
 
     private fun nextExercise(){
-        val exercise = exerciseIteratorCustom.next()
 
-        if(exercise == null){
-            stopForeground(true)
-            return
+        if(isServiceJustStarted){
+            isServiceJustStarted = false
         }
+        else{
+            val res  = exerciseIteratorCustom.next()
+
+            if(res){
+                stopForeground(true)
+                return
+            }
+        }
+
+        val exercise = exerciseIteratorCustom.current()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
 
     private fun previousExercise(){
+        val res = exerciseIteratorCustom.previous()
 
-        val exercise = exerciseIteratorCustom.previous()
-
-        if(exercise == null){
+        if(res){
             return
         }
+
+        val exercise = exerciseIteratorCustom.current()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }

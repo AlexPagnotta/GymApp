@@ -4,22 +4,21 @@ class ExercisesIteratorCustom internal constructor(private val exercises: List<E
 {
     private var counter:Int = 0
 
-   fun next() : Exercise?{
+    fun current() : Exercise{
+       return exercises[counter]
+    }
 
-       if(counter>exercises.count()) return null
-
-       val exercise = exercises[counter]
+   fun next() : Boolean {
+       if(counter>=exercises.count() - 1) return true
        counter++
-       return exercise
+       return false
    }
 
-    fun previous() : Exercise?{
+    fun previous() : Boolean{
+
+        if(counter == 0) return true
         counter--
-
-        if(counter == 0) return null
-
-        val exercise = exercises[counter]
-        return exercise
+        return false
     }
 
 }
