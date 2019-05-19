@@ -78,6 +78,12 @@ class ScheduleStartActivity : AppCompatActivity() {
             serviceIntent.action = ACTION_NEXT
             startService(serviceIntent)
         }
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragment = ServiceExerciseFragment()
+        fragmentTransaction.add(R.id.serviceExerciseFrameLayout, fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onDestroy() {
