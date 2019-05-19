@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import com.example.alex.gymapp.model.Exercise
 import com.example.alex.gymapp.services.ScheduleService
 import com.example.alex.gymapp.utilities.ServiceNotification
 import kotlinx.android.synthetic.main.activity_schedule_start.*
@@ -53,6 +54,10 @@ class ScheduleStartActivity : AppCompatActivity() {
             serviceIntent.action = ACTION_START
             startService(serviceIntent)
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+
+            if(scheduleService!= null){
+                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
+            }
         }
 
         stopScheduleBtn.setOnClickListener {
@@ -72,18 +77,22 @@ class ScheduleStartActivity : AppCompatActivity() {
         previousExerciseBtn.setOnClickListener {
             serviceIntent.action = ACTION_PREVIOUS
             startService(serviceIntent)
+
+            if(scheduleService!= null){
+                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
+            }
         }
 
         nextExerciseBtn.setOnClickListener {
             serviceIntent.action = ACTION_NEXT
             startService(serviceIntent)
+
+            if(scheduleService!= null){
+                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
+            }
         }
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        val fragment = ServiceExerciseFragment()
-        fragmentTransaction.add(R.id.serviceExerciseFrameLayout, fragment)
-        fragmentTransaction.commit()
+
     }
 
     override fun onDestroy() {
@@ -115,4 +124,14 @@ class ScheduleStartActivity : AppCompatActivity() {
         return false
     }
 
+    private fun LoadExerciseFragment(exercise: Exercise){
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val exerciseFragment = ServiceExerciseFragment.newInstance(exercise.id)
+
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.serviceExerciseFrameLayout, exerciseFragment)
+                .commit()
+    }
 }
