@@ -13,13 +13,15 @@ import android.util.Log
 import com.example.alex.gymapp.model.Exercise
 import com.example.alex.gymapp.services.ScheduleService
 import com.example.alex.gymapp.utilities.ServiceNotification
+import com.example.alex.gymapp.utilities.Utilities
+import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.activity_schedule_start.*
 
 class ScheduleStartActivity : AppCompatActivity() {
 
-    val ACTION_START = "SCHEDULE_START"
-    val ACTION_NEXT = "NEXT_EXERCISE"
-    val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
+    private val ACTION_START = "SCHEDULE_START"
+    private val ACTION_NEXT = "NEXT_EXERCISE"
+    private val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
 
     var scheduleService: ScheduleService? = null
     var isBoundToService = false
@@ -45,6 +47,11 @@ class ScheduleStartActivity : AppCompatActivity() {
 
         //Get executionDay
         val executionDay = intent.getIntExtra("currentExecutionDay",0)
+
+        //Set text view with execution day
+        val executionDayString = Utilities.getExecutionDayString(this, executionDay)
+        var executionDayText = String.format("%s Schedule",executionDayString )
+        executionDayTW.text = executionDayText
 
         //Setup service intent and pass executionDay
         val serviceIntent = Intent(applicationContext, ScheduleService::class.java)

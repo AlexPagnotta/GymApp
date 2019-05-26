@@ -25,9 +25,6 @@ class ServiceNotification(
     override fun doInBackground(vararg params: Long?): Any? {
         //Create Channel
         createChannel(context)
-
-        var notification = BuildNotification("test", "message")
-        myService?.startForeground(NOTIF_ID , notification)
         return null
     }
 

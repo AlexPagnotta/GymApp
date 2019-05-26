@@ -65,6 +65,8 @@ class ScheduleService : Service() {
 
             //Get exercises stack of the selected day
             getExercisesOfSchedule(executionDay)
+
+            nextExercise()
         }
 
         return Service.START_STICKY
