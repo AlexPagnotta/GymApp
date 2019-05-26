@@ -50,17 +50,15 @@ class ScheduleStartActivity : AppCompatActivity() {
         val serviceIntent = Intent(applicationContext, ScheduleService::class.java)
         serviceIntent.putExtra("currentExecutionDay",  executionDay)
 
-        startScheduleBtn.setOnClickListener {
-            serviceIntent.action = ACTION_START
-            startService(serviceIntent)
-            bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        serviceIntent.action = ACTION_START
+        startService(serviceIntent)
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
 
-            if(scheduleService!= null){
-                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
-            }
+        if(scheduleService!= null){
+            LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
         }
 
-        stopScheduleBtn.setOnClickListener {
+        stopServiceBtn.setOnClickListener {
             //Unbind Service
             try {
                 unbindService(serviceConnection)

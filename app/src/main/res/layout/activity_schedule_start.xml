@@ -6,53 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleStartActivity">
 
+    <ImageButton
+        android:id="@+id/stopServiceBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/round_background_image_buttons"
+        android:backgroundTint="@color/colorAccent"
+        android:clickable="true"
+        android:foreground="@drawable/ripple_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close_black_24dp" />
+
     <Button
         android:id="@+id/previousExerciseBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="228dp"
         android:text="Previous Exercise"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/startScheduleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Start Schedule"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/stopScheduleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Stop Schedule"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startScheduleBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/serviceExerciseFrameLayout" />
 
     <Button
         android:id="@+id/nextExerciseBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="126dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
         android:text="Next Exercise"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previousExerciseBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/serviceExerciseFrameLayout" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/scheduleNameTW"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="128dp"
         android:text="TextView"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,15 +58,16 @@
     <FrameLayout
         android:id="@+id/serviceExerciseFrameLayout"
         android:layout_width="395dp"
-        android:layout_height="698dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nextExerciseBtn">
+        app:layout_constraintTop_toBottomOf="@+id/scheduleNameTW">
 
     </FrameLayout>
 
