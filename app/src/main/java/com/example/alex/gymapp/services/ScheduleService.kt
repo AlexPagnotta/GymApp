@@ -9,7 +9,10 @@ import com.example.alex.gymapp.model.ExercisesIteratorCustom
 import com.example.alex.gymapp.utilities.ServiceNotification
 import io.realm.Realm
 import io.realm.kotlin.where
-import java.util.*
+
+interface ServiceCallbacks {
+    fun LoadExerciseFragment(exercise: Exercise)
+}
 
 class ScheduleService : Service() {
 
@@ -18,6 +21,8 @@ class ScheduleService : Service() {
     private var exerciseCounter: Int = 0
 
     private val myBinder = MyLocalBinder()
+
+    lateinit var serviceCallbacks:ServiceCallbacks
 
     private var isServiceJustStarted = true
 
@@ -32,6 +37,9 @@ class ScheduleService : Service() {
     val ACTION_NEXT = "NEXT_EXERCISE"
     val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
 
+    fun setCallbacks(callbacks: ServiceCallbacks?) {
+        serviceCallbacks = callbacks!!
+    }
 
     override fun onBind(intent: Intent): IBinder? {
         return myBinder
@@ -66,7 +74,7 @@ class ScheduleService : Service() {
             //Get exercises stack of the selected day
             getExercisesOfSchedule(executionDay)
 
-            nextExercise()
+            //nextExercise() //TODO Reimplement
         }
 
         return Service.START_STICKY
@@ -101,6 +109,8 @@ class ScheduleService : Service() {
 
         val exercise = exerciseIteratorCustom.current()
 
+        serviceCallbacks.LoadExerciseFragment(exercise)
+
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
     }
 
@@ -114,6 +124,10 @@ class ScheduleService : Service() {
         val exercise = exerciseIteratorCustom.current()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
+
+
+        serviceCallbacks.LoadExerciseFragment(exercise)
+
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {

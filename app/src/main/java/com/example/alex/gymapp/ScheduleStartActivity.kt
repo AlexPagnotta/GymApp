@@ -12,12 +12,12 @@ import android.os.IBinder
 import android.util.Log
 import com.example.alex.gymapp.model.Exercise
 import com.example.alex.gymapp.services.ScheduleService
+import com.example.alex.gymapp.services.ServiceCallbacks
 import com.example.alex.gymapp.utilities.ServiceNotification
 import com.example.alex.gymapp.utilities.Utilities
-import kotlinx.android.synthetic.main.activity_exercise.*
 import kotlinx.android.synthetic.main.activity_schedule_start.*
 
-class ScheduleStartActivity : AppCompatActivity() {
+class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
 
     private val ACTION_START = "SCHEDULE_START"
     private val ACTION_NEXT = "NEXT_EXERCISE"
@@ -26,17 +26,19 @@ class ScheduleStartActivity : AppCompatActivity() {
     var scheduleService: ScheduleService? = null
     var isBoundToService = false
 
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName,
                                         service: IBinder) {
             val binder = service as ScheduleService.MyLocalBinder
             scheduleService = binder.getService()
             isBoundToService = true
-
+            scheduleService?.setCallbacks(this@ScheduleStartActivity)
             ServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
+            scheduleService?.setCallbacks(null)// unregister
             isBoundToService = false
         }
     }
@@ -82,19 +84,11 @@ class ScheduleStartActivity : AppCompatActivity() {
         previousExerciseBtn.setOnClickListener {
             serviceIntent.action = ACTION_PREVIOUS
             startService(serviceIntent)
-
-            if(scheduleService!= null){
-                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
-            }
         }
 
         nextExerciseBtn.setOnClickListener {
             serviceIntent.action = ACTION_NEXT
             startService(serviceIntent)
-
-            if(scheduleService!= null){
-                LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
-            }
         }
 
 
@@ -129,7 +123,7 @@ class ScheduleStartActivity : AppCompatActivity() {
         return false
     }
 
-    private fun LoadExerciseFragment(exercise: Exercise){
+    public override fun LoadExerciseFragment(exercise: Exercise){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val exerciseFragment = ServiceExerciseFragment.newInstance(exercise.id)
