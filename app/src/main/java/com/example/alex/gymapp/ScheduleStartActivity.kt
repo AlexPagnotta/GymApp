@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_schedule_start.*
 
 class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
 
+    lateinit var  serviceIntent : Intent
     private val ACTION_START = "SCHEDULE_START"
     private val ACTION_NEXT = "NEXT_EXERCISE"
     private val ACTION_PREVIOUS = "PREVIOUS_EXERCISE"
@@ -35,6 +36,8 @@ class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
             isBoundToService = true
             scheduleService?.setCallbacks(this@ScheduleStartActivity)
             ServiceNotification(applicationContext, scheduleService).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            serviceIntent.action = ACTION_START
+            startService(serviceIntent)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -55,17 +58,11 @@ class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
         var executionDayText = String.format("%s Schedule",executionDayString )
         executionDayTW.text = executionDayText
 
+
         //Setup service intent and pass executionDay
-        val serviceIntent = Intent(applicationContext, ScheduleService::class.java)
+        serviceIntent = Intent(applicationContext, ScheduleService::class.java)
         serviceIntent.putExtra("currentExecutionDay",  executionDay)
-
-        serviceIntent.action = ACTION_START
-        startService(serviceIntent)
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-
-        if(scheduleService!= null){
-            LoadExerciseFragment(scheduleService!!.exerciseIteratorCustom.current())
-        }
 
         stopServiceBtn.setOnClickListener {
             //Unbind Service
@@ -79,19 +76,12 @@ class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
                 // Stop the service
                 stopService(serviceIntent)
             }
+
+            finish()
         }
 
-        previousExerciseBtn.setOnClickListener {
-            serviceIntent.action = ACTION_PREVIOUS
-            startService(serviceIntent)
-        }
-
-        nextExerciseBtn.setOnClickListener {
-            serviceIntent.action = ACTION_NEXT
-            startService(serviceIntent)
-        }
-
-
+        //serviceIntent.action = ACTION_NEXT
+        //startService(serviceIntent)
     }
 
     override fun onDestroy() {
@@ -121,6 +111,17 @@ class ScheduleStartActivity : AppCompatActivity() , ServiceCallbacks {
             }
         }
         return false
+    }
+
+    public override fun LoadStartFragment(){
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val startFragment = ServiceStartFragment.newInstance()
+
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.serviceExerciseFrameLayout, startFragment)
+                .commit()
     }
 
     public override fun LoadExerciseFragment(exercise: Exercise){

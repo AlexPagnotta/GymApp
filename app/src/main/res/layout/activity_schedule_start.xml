@@ -20,28 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_close_black_24dp" />
 
-    <Button
-        android:id="@+id/previousExerciseBtn"
-        android:layout_width="157dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="228dp"
-        android:text="Previous Exercise"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serviceExerciseFrameLayout" />
-
-    <Button
-        android:id="@+id/nextExerciseBtn"
-        android:layout_width="126dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:text="Next Exercise"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serviceExerciseFrameLayout" />
-
     <TextView
         android:id="@+id/executionDayTW"
         android:layout_width="0dp"

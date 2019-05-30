@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_service_exercise.*
 import kotlinx.android.synthetic.main.fragment_service_exercise.view.*
 
 
-class ServiceExerciseFragment : Fragment() {
+class ServiceStartFragment : Fragment() {
 
     lateinit var exercise:Exercise
 
@@ -26,25 +26,16 @@ class ServiceExerciseFragment : Fragment() {
             exercise =
                     realm.where<Exercise>().equalTo("id", exerciseId).findFirst()!!
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_service_exercise, container, false)
-
-        root.exerciseNameTW.text = exercise.name
-
+        val root = inflater.inflate(R.layout.fragment_service_start, container, false)
         return root
     }
-
     companion object {
-        fun newInstance(exerciseId: Long): ServiceExerciseFragment {
-
-            val args = Bundle()
-            args.putLong("exerciseId", exerciseId)
-            val fragment = ServiceExerciseFragment()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance(): ServiceStartFragment = ServiceStartFragment()
     }
+
 }

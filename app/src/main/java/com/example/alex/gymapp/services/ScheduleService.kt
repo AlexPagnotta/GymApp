@@ -12,6 +12,7 @@ import io.realm.kotlin.where
 
 interface ServiceCallbacks {
     fun LoadExerciseFragment(exercise: Exercise)
+    fun LoadStartFragment()
 }
 
 class ScheduleService : Service() {
@@ -74,7 +75,7 @@ class ScheduleService : Service() {
             //Get exercises stack of the selected day
             getExercisesOfSchedule(executionDay)
 
-            //nextExercise() //TODO Reimplement
+            loadStartFragment()
         }
 
         return Service.START_STICKY
@@ -91,6 +92,10 @@ class ScheduleService : Service() {
 
         //Create iterator
         exerciseIteratorCustom = ExercisesIteratorCustom(exercises.toList())
+    }
+
+    private fun loadStartFragment(){
+        serviceCallbacks.LoadStartFragment()
     }
 
     private fun nextExercise(){
@@ -124,7 +129,6 @@ class ScheduleService : Service() {
         val exercise = exerciseIteratorCustom.current()
 
         ServiceNotification(applicationContext, this).updateNotification(exercise.name,"message")
-
 
         serviceCallbacks.LoadExerciseFragment(exercise)
 
