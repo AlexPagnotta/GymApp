@@ -11,6 +11,6 @@ GymApp includes the following features:
 
 [Download GymApp apk] WIP
 
-<img src="http://i.imgur.com/ns5Z2KZ.png" width="372" heigth="217">
-                                                                  
+<br><br>
+<img src="https://drive.google.com/uc?export=view&id=1lfCT-d0_KHhHsLpVTolS8AVqog_SsXVB" width="372" heigth="217">                                         
 # Developed by Alex Pagnotta
